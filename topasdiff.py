@@ -1,7 +1,5 @@
 #!/usr/bin/env python2.7
 
-# Template generated using /Users/smeets/bin/blender version 05-06-2014
-
 import sys
 import argparse
 from blender import *
