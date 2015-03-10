@@ -69,9 +69,9 @@ if not oto_vals: oto_vals = [0]
 print "Parsed {} lines".format(n_lines)
 print "{} restraints - tot: {}, oto: {}, to: {}".format(n_tot+n_oto+n_to, n_tot, n_oto, n_to)
 print ""
-print '        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'avg', 'max')
-print ' T-O-T  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(tot, min(tot_vals), sum(tot_vals)/len(tot_vals), max(tot_vals))
-print ' O-T-O  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(oto, min(oto_vals), sum(oto_vals)/len(oto_vals), max(oto_vals))
-print '   T-O  {:10.2f} {:10.3f} {:10.3f} {:10.3f} '.format( to, min( to_vals), sum( to_vals)/len( to_vals), max( to_vals))
+print '        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'max', 'avg')
+print ' T-O-T  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(tot, min(tot_vals), max(tot_vals), sum(tot_vals)/len(tot_vals))
+print ' O-T-O  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(oto, min(oto_vals), max(oto_vals), sum(oto_vals)/len(oto_vals))
+print '   T-O  {:10.2f} {:10.3f} {:10.3f} {:10.3f} '.format( to, min( to_vals), max( to_vals), sum( to_vals)/len( to_vals))
 
 

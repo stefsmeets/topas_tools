@@ -2,7 +2,7 @@
 
 import sys
 import argparse
-from blender import *
+from blender_mini import *
 
 __version__ = "2014-10-16"
 
@@ -166,8 +166,11 @@ df['fdiff'] = df['fobs']/scale - df['fcalc']
 df['sfphase'] = df['phases'] / (2*np.pi)
 
 sel = df['fdiff'] <= 0
-df['fdiff'][sel] = abs(df['fdiff'][sel])
-df['sfphase'][sel] += 0.5
+
+df = df[sel]
+
+df['fdiff'] = abs(df['fdiff'])
+df['sfphase'] += 0.5
 
 cols = ('fdiff','sfphase')
 write_hkl(df, cols=cols, out='fdiff.out')

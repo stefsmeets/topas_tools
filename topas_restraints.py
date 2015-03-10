@@ -44,7 +44,7 @@ if not organic:
 	oto_ang = 109.5
 	
 	# tolerance for T--O bond detection
-	to_tol  = 0.4
+	to_tol  = 0.8
 if organic:
 	# ideal distances/angles
 	to_dist = 1.61

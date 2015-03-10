@@ -1,17 +1,30 @@
 #!/usr/bin/env python
 
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
+
+
+
 import re
+import sys
+
+
 pat = re.compile('[a-zA-Z]+')
 
-import sys
-args = sys.argv[1:]
+
+if len(sys.argv) == 1:
+	print "Usage: fh2topas.py output.fh [n]"
+	exit()
+
+
+args = sys.argv[2:]
 
 moltotal = 1
 if args:
 	moltotal = int(args[0])
 molnum = 1
 
-fin = open('/Users/smeets/Desktop/output.fh','r')
+fin = open(sys.argv[1])
 
 
 lines = fin.readlines()
