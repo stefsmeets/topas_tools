@@ -115,7 +115,7 @@ for direction, number in enumerate((expand_x,expand_y,expand_z)):
 		continue
 	out += "_{}{}".format(number, 'xyz'[direction]) 
 if expand_x * expand_y * expand_z == 1:
-	out += "_P1"
+	out += "_"+spgr
 out += ext
 
 cell = s.unit_cell().parameters()
