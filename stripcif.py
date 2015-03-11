@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env 
-
 import argparse
 
 from cctbx import xray
@@ -13,7 +11,7 @@ from IPython.terminal.embed import InteractiveShellEmbed
 InteractiveShellEmbed.confirm_exit = False
 ipshell = InteractiveShellEmbed(banner1='')
 
-__version__ = "10-03-2015"
+__version__ = "11-03-2015"
 
 def read_cif(f):
 	"""opens cif and returns cctbx data object"""
