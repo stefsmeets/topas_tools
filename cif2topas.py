@@ -118,7 +118,7 @@ for cif in cifs:
 		'fourier_map 1
 		'	fourier_map_formula = Fobs - Fcalc;"""
 		print
-		print '		space_group "{}"'.format(sg.type().universal_hermann_mauguin_symbol())
+		print '		space_group "{}"'.format(sg.type().universal_hermann_mauguin_symbol().replace(" ",""))
 		print
 		a,b,c,al,be,ga = uc.parameters()
 		if sg.crystal_system() == 'Cubic':
