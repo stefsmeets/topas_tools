@@ -3,7 +3,7 @@
 import sys
 cifs = sys.argv[1:]
 
-__version__ = "12-03-2015"
+__version__ = "19-03-2015"
 
 help = """cif2strudat - tool for converting cif files to Topas format (.inp)
 Takes any number of cif files and writes to stdout
@@ -134,15 +134,15 @@ for cif in cifs:
 			string = "		Rhombohedral(@ {a}, @ {al})"
 
 		else:
-			refal = "" if al == 90 else "@"
-			refbe = "" if be == 90 else "@"
-			refga = "" if ga == 90 else "@"
 			string = """		a  @  {a:8.5f}
 		b  @  {b:8.5f}
 		c  @  {c:8.5f}
 		al {refal:1}  {al}
 		be {refbe:1}  {be}
 		ga {refga:1}  {ga}"""
+		refal = "" if al == 90 else "@"
+		refbe = "" if be == 90 else "@"
+		refga = "" if ga == 90 else "@"
 		print string.format(a=a,b=b,c=c,refal=refal,al=al,refbe=refbe,be=be,refga=refga,ga=ga)
 		print
 		print "		volume {:.2f}".format(uc.volume())

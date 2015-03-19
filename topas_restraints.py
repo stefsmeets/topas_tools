@@ -35,7 +35,7 @@ atom2 = [10,33]
 bondl = [33,41]
 
 
-organic = False
+organic = True
 
 if not organic:
 	# ideal distances/angles
