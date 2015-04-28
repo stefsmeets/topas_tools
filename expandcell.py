@@ -9,9 +9,9 @@ from cctbx import crystal
 from cctbx.array_family import flex
 import os
 
-# from IPython.terminal.embed import InteractiveShellEmbed
-# InteractiveShellEmbed.confirm_exit = False
-# ipshell = InteractiveShellEmbed(banner1='')
+from IPython.terminal.embed import InteractiveShellEmbed
+InteractiveShellEmbed.confirm_exit = False
+ipshell = InteractiveShellEmbed(banner1='')
 
 __version__ = "11-03-2015"
 
@@ -201,8 +201,7 @@ if spgr != "P1":
 	fy = lambda y: eval(asu_y)
 	fz = lambda z: eval(asu_z)
 	
-	box_min = map(float, s.direct_space_asu().box_min()) # gives the min xyz coordinate for the asymmetric unit (asu)
-	if any([val < 0 for val in box_min]):
+	if '-' in asu:
 		print "Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)"
 		print ""
 		print "Remove a,b,c etc from atom labels in cif, then run:"
