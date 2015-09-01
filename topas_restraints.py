@@ -1,5 +1,25 @@
 #!/usr/bin/env python
 
+#    topas_tools - set of scripts to help using Topas
+#    Copyright (C) 2015 Stef Smeets
+#    
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License along
+#    with this program; if not, write to the Free Software Foundation, Inc.,
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
+
 from itertools import combinations
 
 """
@@ -14,8 +34,6 @@ x. Setting up restraints with topas_restraints.py
 
 	Note: There is no filtering of duplicate or symmetry related bonds, so these should be filtered out manually
 """
-
-
 
 distdat = {
 ('T',  'O') : (1.610,    0.01),
@@ -35,7 +53,7 @@ atom2 = [10,33]
 bondl = [33,41]
 
 
-organic = True
+organic = False
 
 if not organic:
 	# ideal distances/angles
@@ -44,15 +62,15 @@ if not organic:
 	oto_ang = 109.5
 	
 	# tolerance for T--O bond detection
-	to_tol  = 0.8
+	to_tol  = 0.2
 if organic:
 	# ideal distances/angles
-	to_dist = 1.61
+	to_dist = 1.81
 	tot_ang = 145.0
 	oto_ang = 109.5
 
 	# tolerance for T--O bond detection
-	to_tol  = 0.4
+	to_tol  = 0.8
 
 
 

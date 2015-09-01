@@ -13,7 +13,7 @@ pat = re.compile('[a-zA-Z]+')
 
 
 if len(sys.argv) == 1:
-	print "Usage: fh2topas.py output.fh [n]"
+	print "Usage: fh2topas.py ~/path/to/output.fh [n]"
 	exit()
 
 
