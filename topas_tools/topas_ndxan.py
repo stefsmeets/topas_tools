@@ -322,69 +322,7 @@ def gen_filter(iterator,args):
 
 
 
-def main(options,args):
-	print options,args
-
-
-
-	f = open(options.index_out,'r')
-
-	print f.name, 'opened'
-
-	lines = gen_lines(f)
-	lines = get_lines(lines)
-	lines = (parse_str_int_float(line) for line in lines)
-
-
-	if options.zero_corr:
-		colnames = ('num','spgr','status','unindexed','volume','zero_corr','gof','a','b','c','A','B','C')
-	else:
-		colnames = ('num','spgr','status','unindexed','volume','gof','a','b','c','A','B','C')
-
-	dicts = (dict(zip(colnames,line)) for line in lines)
-
-	#for d in dicts:
-	#	pprint(d)
-	#	raw_input()	
-
-	iterator = dicts
-
-	if options.show is not None:
-		for x in xrange(options.show):
-			iterator.next()
-		pprint(iterator.next()) 
-
-	elif options.table:
-		table_out(iterator,args)
-
-	elif options.count:
-		counter(iterator,args[0])
-
-	elif options.hist:
-		histogram(iterator, args[0])
-
-	elif len(args) == 1:
-		plot_1d(iterator,args[0])
-
-	elif len(args) == 2:
-		plot_2d(iterator, args[0], args[1])
-
-	elif len(args) == 3:
-		plot_3d(iterator, args[0], args[1], args[2])
-
-	elif len(args) > 3:
-		table_out(iterator,args)
-
-	else:
-		s = 0
-		for item in iterator:
-			s += 1
-		print s
-
-
-
-if __name__ == '__main__':
-	
+def main():
 	usage = """superanalyser [KEYWORD ...]
                      [-h] [-v] [-c] [-s N] [-t] [-m] [-i] [-o]
                      [-e KW OP VAL] [-x FILE]"""
@@ -461,9 +399,66 @@ if __name__ == '__main__':
 	
 	options = parser.parse_args()
 	args = options.keywords
+	print options,args
+
+	f = open(options.index_out,'r')
+
+	print f.name, 'opened'
+
+	lines = gen_lines(f)
+	lines = get_lines(lines)
+	lines = (parse_str_int_float(line) for line in lines)
 
 
-	main(options,args)
+	if options.zero_corr:
+		colnames = ('num','spgr','status','unindexed','volume','zero_corr','gof','a','b','c','A','B','C')
+	else:
+		colnames = ('num','spgr','status','unindexed','volume','gof','a','b','c','A','B','C')
+
+	dicts = (dict(zip(colnames,line)) for line in lines)
+
+	#for d in dicts:
+	#	pprint(d)
+	#	raw_input()	
+
+	iterator = dicts
+
+	if options.show is not None:
+		for x in xrange(options.show):
+			iterator.next()
+		pprint(iterator.next()) 
+
+	elif options.table:
+		table_out(iterator,args)
+
+	elif options.count:
+		counter(iterator,args[0])
+
+	elif options.hist:
+		histogram(iterator, args[0])
+
+	elif len(args) == 1:
+		plot_1d(iterator,args[0])
+
+	elif len(args) == 2:
+		plot_2d(iterator, args[0], args[1])
+
+	elif len(args) == 3:
+		plot_3d(iterator, args[0], args[1], args[2])
+
+	elif len(args) > 3:
+		table_out(iterator,args)
+
+	else:
+		s = 0
+		for item in iterator:
+			s += 1
+		print s
+
+
+
+if __name__ == '__main__':
+	main()
 
 
 
