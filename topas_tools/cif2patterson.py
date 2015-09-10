@@ -17,10 +17,10 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from __future__ import division
+
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mat.ethz.ch"
-
-from __future__ import division
 
 import argparse
 

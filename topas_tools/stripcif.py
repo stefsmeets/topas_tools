@@ -27,9 +27,9 @@ from cctbx import crystal
 from cctbx.array_family import flex
 import os
 
-from IPython.terminal.embed import InteractiveShellEmbed
-InteractiveShellEmbed.confirm_exit = False
-ipshell = InteractiveShellEmbed(banner1='')
+# from IPython.terminal.embed import InteractiveShellEmbed
+# InteractiveShellEmbed.confirm_exit = False
+# ipshell = InteractiveShellEmbed(banner1='')
 
 __version__ = "11-03-2015"
 

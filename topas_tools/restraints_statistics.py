@@ -31,8 +31,8 @@ def pbpaste():
 	outf.close()
 	return content
 
-from IPython.terminal.embed import InteractiveShellEmbed
-ipshell = InteractiveShellEmbed(banner1='')
+# from IPython.terminal.embed import InteractiveShellEmbed
+# ipshell = InteractiveShellEmbed(banner1='')
 
 text = pbpaste()
 
@@ -79,8 +79,6 @@ for line in re.split('\r|\n',text):
 		n_to  += 1
 	else:
 		print line + ' -- FAIL'
-
-# ipshell();exit()
 
 if not tot_vals: tot_vals = [0]
 if not  to_vals:  to_vals = [0]
