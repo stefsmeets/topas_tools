@@ -17,13 +17,13 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
 
 import sys
 import argparse
 from blender_mini import *
 
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 __version__ = "2014-10-16"
 
 def print_superflip(sgi, uc, fout, fdiff_file = None):
@@ -187,10 +187,8 @@ df['sfphase'] = df['phases'] / (2*np.pi)
 
 sel = df['fdiff'] <= 0
 
-df = df[sel]
-
-df['fdiff'] = abs(df['fdiff'])
-df['sfphase'] += 0.5
+df.loc[sel, 'fdiff'] = abs(df.loc[sel, 'fdiff'])
+df.loc[sel, 'sfphase'] += 0.5
 
 cols = ('fdiff','sfphase')
 write_hkl(df, cols=cols, out='fdiff.out')

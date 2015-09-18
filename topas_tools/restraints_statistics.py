@@ -17,12 +17,12 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
-
 import sys
 import os
 import re
+
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 
 def pbpaste():
 	"""Mac only: paste text from clipboard"""
@@ -31,41 +31,13 @@ def pbpaste():
 	outf.close()
 	return content
 
-
 def equals_about(val, compare_to):
 	return compare_to * 0.9 <= val <= compare_to*1.1
-
-
-for line in re.split('\r|\n',text):
-	n_lines += 1
-
-	line = line.strip()
-
-	if line.startswith("'"):
-		continue
-	if not "Restrain" in line:
-		continue
-
-	stuff, restraint, measured, box, weight = line.split(',')
-
-	restraint = float(restraint)
-	measured  = float(measured.replace('`',''))
-
-	if equals_about(restraint, oto):
-		oto_vals.append(measured)
-		n_oto += 1
-	elif equals_about(restraint, tot):
-		tot_vals.append(measured)
-		n_tot += 1
-	elif equals_about(restraint, to):
-		to_vals.append(measured)
-		n_to  += 1
-	else:
-		print line + ' -- FAIL'
 
 def main():
 	text = pbpaste()
 	
+
 	oto =  109.5
 	tot =  145.0
 	to  =  1.61
@@ -78,6 +50,33 @@ def main():
 	n_oto = 0
 	n_tot = 0
 	n_to  = 0
+
+	for line in re.split('\r|\n',text):
+		n_lines += 1
+	
+		line = line.strip()
+	
+		if line.startswith("'"):
+			continue
+		if not "Restrain" in line:
+			continue
+	
+		stuff, restraint, measured, box, weight = line.split(',')
+	
+		restraint = float(restraint)
+		measured  = float(measured.replace('`',''))
+	
+		if equals_about(restraint, oto):
+			oto_vals.append(measured)
+			n_oto += 1
+		elif equals_about(restraint, tot):
+			tot_vals.append(measured)
+			n_tot += 1
+		elif equals_about(restraint, to):
+			to_vals.append(measured)
+			n_to  += 1
+		else:
+			print line + ' -- FAIL'
 	
 	if not tot_vals: tot_vals = [0]
 	if not  to_vals:  to_vals = [0]

@@ -17,12 +17,11 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
-
 import sys
 cifs = sys.argv[1:]
 
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 __version__ = "19-03-2015"
 
 help = """cif2strudat - tool for converting cif files to Topas format (.inp)

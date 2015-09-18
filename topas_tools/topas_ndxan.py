@@ -17,8 +17,6 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
 
 import os
 import fnmatch
@@ -28,6 +26,8 @@ import argparse
 
 from ast import literal_eval
 
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 __version__ = '02-04-2012'
 
 

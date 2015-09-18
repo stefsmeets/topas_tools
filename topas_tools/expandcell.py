@@ -17,9 +17,6 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
-
 from __future__ import division
 
 import argparse
@@ -29,10 +26,12 @@ from cctbx import crystal
 from cctbx.array_family import flex
 import os
 
-from IPython.terminal.embed import InteractiveShellEmbed
-InteractiveShellEmbed.confirm_exit = False
-ipshell = InteractiveShellEmbed(banner1='')
+#from IPython.terminal.embed import InteractiveShellEmbed
+#InteractiveShellEmbed.confirm_exit = False
+#ipshell = InteractiveShellEmbed(banner1='')
 
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 __version__ = "11-03-2015"
 
 def read_cif(f):

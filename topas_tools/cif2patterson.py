@@ -19,9 +19,6 @@
 
 from __future__ import division
 
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
-
 import argparse
 
 from cctbx import xray
@@ -29,7 +26,8 @@ from cctbx import crystal
 from cctbx.array_family import flex
 import os
 
-
+__author__ = "Stef Smeets"
+__email__ = "stef.smeets@mat.ethz.ch"
 __version__ = "28-04-2015"
 
 def read_cif(f):

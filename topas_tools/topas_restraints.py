@@ -52,7 +52,6 @@ atom1 = [0,10]
 atom2 = [10,33]
 bondl = [33,41]
 
-
 organic = False
 
 if not organic:
