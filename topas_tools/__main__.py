@@ -62,7 +62,7 @@ def cif2patterson():
 	platform = sys.platform
 
 	if platform == "darwin":
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	elif platform == "win32":
 		setpaths_windows()
 
@@ -70,7 +70,7 @@ def cif2patterson():
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "cif2patterson.sh")
 
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	else:
 		print "Operating system not supported!"
 
@@ -82,7 +82,7 @@ def cif2topas():
 	if platform == "darwin":
 		path = os.path.join(drc, "osx", "cif2topas.sh")
 		
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	elif platform == "win32":
 		setpaths_windows()
 
@@ -90,7 +90,7 @@ def cif2topas():
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "cif2topas.sh")
 
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	else:
 		print "Operating system not supported!"
 
@@ -102,7 +102,7 @@ def expandcell():
 	if platform == "darwin":
 		path = os.path.join(drc, "osx", "expandcell.sh")
 		
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	elif platform == "win32":
 		setpaths_windows()
 
@@ -110,7 +110,7 @@ def expandcell():
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "expandcell.sh")
 
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	else:
 		print "Operating system not supported!"
 
@@ -122,7 +122,7 @@ def stripcif():
 	if platform == "darwin":
 		path = os.path.join(drc, "osx", "stripcif.sh")
 		
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	elif platform == "win32":
 		setpaths_windows()
 
@@ -130,7 +130,7 @@ def stripcif():
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "stripcif.sh")
 
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	else:
 		print "Operating system not supported!"
 
@@ -142,7 +142,7 @@ def topasdiff():
 	if platform == "darwin":
 		path = os.path.join(drc, "osx", "topasdiff.sh")
 	
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	elif platform == "win32":
 		setpaths_windows()
 
@@ -150,7 +150,7 @@ def topasdiff():
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "topasdiff.sh")
 
-		sp.call(path, *sys.argv[1:])
+		sp.call([path] + sys.argv[1:])
 	else:
 		print "Operating system not supported!"
 

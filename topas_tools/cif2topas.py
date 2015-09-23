@@ -24,7 +24,7 @@ __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mat.ethz.ch"
 __version__ = "19-03-2015"
 
-help = """cif2strudat - tool for converting cif files to Topas format (.inp)
+help = """cif2topas - tool for converting cif files to Topas format (.inp)
 Takes any number of cif files and writes to stdout
 
 usage: cif2topas cif1 [cif2 ...]"""
