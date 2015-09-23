@@ -87,6 +87,7 @@ def cif2topas():
 		setpaths_windows()
 
 		import cif2topas
+		cif2topas.main()
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "cif2topas.sh")
 
@@ -127,6 +128,7 @@ def stripcif():
 		setpaths_windows()
 
 		import stripcif
+		stripcif.main()
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "stripcif.sh")
 
@@ -147,6 +149,7 @@ def topasdiff():
 		setpaths_windows()
 
 		import topasdiff
+		topasdiff.main()
 	elif platform == "linux2":
 		path = os.path.join(drc, "linux", "topasdiff.sh")
 
@@ -154,6 +157,26 @@ def topasdiff():
 	else:
 		print "Operating system not supported!"
 
+def make_superflip():
+	drc = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
+	
+	platform = sys.platform
+
+	if platform == "darwin":
+		path = os.path.join(drc, "osx", "make_superflip.sh")
+	
+		sp.call([path] + sys.argv[1:])
+	elif platform == "win32":
+		setpaths_windows()
+
+		import make_superflip
+		make_superflip.main()
+	elif platform == "linux2":
+		path = os.path.join(drc, "linux", "make_superflip.sh")
+
+		sp.call([path] + sys.argv[1:])
+	else:
+		print "Operating system not supported!"
 
 if __name__ == '__main__':
 	print "Running..."

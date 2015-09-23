@@ -51,36 +51,39 @@ def read_cif(f):
 		val.show_summary().show_scatterers()
 	return structures
 
-
-
-usage = """"""
-
-description = """Notes:
-"""	
+def main():
+	usage = """"""
 	
-epilog = 'Updated: {}'.format(__version__)
+	description = """Notes:
+	"""	
+		
+	epilog = 'Updated: {}'.format(__version__)
+		
+	parser = argparse.ArgumentParser(#usage=usage,
+									description=description,
+									epilog=epilog, 
+									formatter_class=argparse.RawDescriptionHelpFormatter,
+									version=__version__)
+		
+		
+	parser.add_argument("args", 
+							type=str, metavar="FILE",
+							help="Path to input cif")
 	
-parser = argparse.ArgumentParser(#usage=usage,
-								description=description,
-								epilog=epilog, 
-								formatter_class=argparse.RawDescriptionHelpFormatter,
-								version=__version__)
+		
+	options = parser.parse_args()
 	
+	cif = options.args
+	s = read_cif(cif).values()[0]
 	
-parser.add_argument("args", 
-						type=str, metavar="FILE",
-						help="Path to input cif")
-
+	#s = s.expand_to_p1()
 	
-options = parser.parse_args()
+	root,ext = os.path.splitext(cif)
+	out = root + "_simple" + ext
+	
+	s.as_cif_simple(out=open(out,'w'))
+	print " >> Wrote file {}".format(out)
 
-cif = options.args
-s = read_cif(cif).values()[0]
-
-#s = s.expand_to_p1()
-
-root,ext = os.path.splitext(cif)
-out = root + "_simple" + ext
-
-s.as_cif_simple(out=open(out,'w'))
-print " >> Wrote file {}".format(out)
+if __name__ == '__main__':
+	main()
+	
