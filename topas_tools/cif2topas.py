@@ -22,7 +22,7 @@ cifs = sys.argv[1:]
 
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mat.ethz.ch"
-__version__ = "19-03-2015"
+__version__ = "2015-09-23"
 
 # from IPython.terminal.embed import InteractiveShellEmbed
 # InteractiveShellEmbed.confirm_exit = False
