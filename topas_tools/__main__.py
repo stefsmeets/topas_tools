@@ -37,20 +37,27 @@ def set_environment_variables_osx():
 		os.environ['DYLD_LIBRARY_PATH'] += ":" + os.path.join(BASE, "lib") + ":" + os.path.join(BASE, "base", "lib")
 
 
-def setpaths_linux():
+def set_environment_variables_linux():
 	""" This doesn't work =( """
 
-	BASE = os.path.join(os.path.expanduser("~"), "cctbx", "cctbx_build") # assuming ~/cctbx/cctbx_build
+	BASE = os.environ.get('LIBTBX_BUILD', None)
+	if not BASE:
+		BASE = find_LIBTBX_BUILD()
+		os.environ['LIBTBX_BUILD'] = BASE
+	if not BASE:
+		raise ImportError("Could not locate CCTBX, please ensure that LIBTBX_BUILD environment variable points at cctbx/cctbx_build")
 	
-	os.environ["LIBTBX_BUILD"] = BASE
-	
+	# cannot use sys.path here, because it is not persistent when calling child process
+	PYTHONPATH = os.environ.get("PYTHONPATH", "")
 	for src in ["../cctbx_sources",
 				"../cctbx_sources/clipper_adaptbx",
 				"../cctbx_sources/docutils",
 				"../cctbx_sources/boost_adaptbx",
-				"../cctbx_sources/libtbx\pythonpath",
+				"../cctbx_sources/libtbx/pythonpath",
 				"lib" ]:
-		sys.path.insert(1, os.path.abspath(os.path.join(BASE, src)))
+		# sys.path.insert(1, os.path.abspath(os.path.join(BASE, src)))
+		PYTHONPATH = os.path.abspath(os.path.join(BASE, src)) + ":" + PYTHONPATH
+	os.environ["PYTHONPATH"] = PYTHONPATH
 	
 	clib1 = os.path.join(BASE, "lib") # ~/cctbx/cctbx_build/lib
 	clib2 = "/usr/lib"
@@ -61,10 +68,16 @@ def setpaths_linux():
 		LD_LIBRARY_PATH = clib1 + ":" + clib2
 	else:
 		LD_LIBRARY_PATH = clib1 + ":" + clib2 + ":" + LD_LIBRARY_PATH
-
+	
 	os.environ["LD_LIBRARY_PATH"] = LD_LIBRARY_PATH
 
-def setpaths_windows():
+	if not "LD_LIBRARY_PATH" in os.environ:
+		os.environ['LD_LIBRARY_PATH'] = os.path.join(BASE, "lib") + ":/usr/lib" # + os.path.join(BASE, "base", "lib")
+	else:
+		os.environ['LD_LIBRARY_PATH'] += ":" + os.path.join(BASE, "lib") + ":/usr/lib" # + os.path.join(BASE, "base", "lib")
+
+
+def set_environment_variables_windows():
 	# on Windows this seems to work though
 	if os.environ.has_key('LIBTBX_BUILD'):
 		BASE = os.environ['LIBTBX_BUILD']
@@ -98,13 +111,14 @@ def cif2patterson():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'cif2patterson.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import cif2patterson
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "cif2patterson.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'cif2patterson.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
@@ -119,14 +133,15 @@ def cif2topas():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'cif2topas.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import cif2topas
 		cif2topas.main()
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "cif2topas.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'cif2topas.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
@@ -141,13 +156,14 @@ def expandcell():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'expandcell.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import expandcell
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "expandcell.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'expandcell.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
@@ -162,14 +178,15 @@ def stripcif():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'stripcif.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import stripcif
 		stripcif.main()
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "stripcif.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'stripcif.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
@@ -184,14 +201,15 @@ def topasdiff():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'topasdiff.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import topasdiff
 		topasdiff.main()
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "topasdiff.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'topasdiff.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
@@ -206,14 +224,15 @@ def make_superflip():
 		import subprocess as sp
 		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'make_superflip.py')] + sys.argv[1:]) # call self
 	elif platform == "win32":
-		setpaths_windows()
+		set_environment_variables_windows()
 
 		import make_superflip
 		make_superflip.main()
 	elif platform == "linux2":
-		path = os.path.join(drc, "linux", "make_superflip.sh")
+		set_environment_variables_linux()
 
-		sp.call([path] + sys.argv[1:])
+		import subprocess as sp
+		sp.call([sys.executable, os.path.join(os.path.dirname(__file__), 'make_superflip.py')] + sys.argv[1:]) # call self
 	else:
 		print "Operating system not supported!"
 
