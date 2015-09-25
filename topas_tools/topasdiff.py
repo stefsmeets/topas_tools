@@ -105,8 +105,8 @@ def print_superflip(sgi, uc, fout, fdiff_file = None):
 def main():
 	usage = """"""
 	
-	# description = """Notes:
-	# """	
+	description = """Notes:
+	"""	
 		
 	epilog = 'Updated: {}'.format(__version__)
 		
