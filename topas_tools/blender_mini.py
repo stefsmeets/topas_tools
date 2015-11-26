@@ -548,7 +548,7 @@ def reduce_all(df,cell,spgr,dmin=None,reindex=True, verbose=True):
 
 	print "\nReduced/merged data to dmin = {}, {} refs".format(dmin,len(dfm))
 
-	return dfm.sort_index(by='d',ascending=False)
+	return dfm.sort_values(by='d',ascending=False)
 
 def write_hkl(df,cols=None,out=None,no_hkl=False,pre=None,post=None,data_fmt=None,hkl_fmt=None):
 	"""Function for writing indices + selected columns to specified file/file object or terminal."""

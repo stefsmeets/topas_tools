@@ -25,7 +25,7 @@ from cctbx import crystal
 
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mat.ethz.ch"
-__version__ = '2015-09-23'
+__version__ = '2015-11-07'
 
 
 centering_vectors = {
@@ -136,47 +136,7 @@ def print_superflip(fcalc,fout, fdiff_file = None):
 #				h,k,l, abs(f.data()[i]), phase(f.data()[i]) / (2*pi) )
 		print >> fout, 'endf'
 
-
-def main(filename='sf.inflip'):
-	"""Creates a basic superflip input file for structure solution by asking a few simple questions"""
-
-	for x in xrange(3):
-		cell = raw_input("Enter cell parameters:\n >> ")
-
-		cell = cell.split()
-		if len(cell) != 6:
-			print 'Expecting 6 parameters: a b c alpha beta gamma'
-			continue
-		else:
-			try:
-				cell = tuple(map(float,cell))
-			except ValueError, e:
-				print 'ValueError:', e
-				continue
-			else:
-				break
-
-	for x in xrange(3):
-		spgr = raw_input('Enter space group:\n >> ')
-
-		if not spgr.split():
-			continue
-		else:
-			break		
-	
-	wavelength  = raw_input('Enter wavelength\n >> [1.54056] ') or '1.54056'
-	composition = raw_input('Enter composition:\n >> [skip] ') or ''
-	datafile    = raw_input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
-
-	for x in xrange(3):
-		dataformat = raw_input('Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
-		if not all(i in ('intensity','amplitude','amplitude difference','a','b','phase','group','dummy','fwhm','m91','m90','shelx')
-					for i in dataformat.split()):
-			print 'Unknown dataformat, please enter any of\n intensity/amplitude/amplitude difference/a/b/phase/group/dummy/fwhm/m91/m90/shelx\n'
-			continue
-		else:
-			break
-
+def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, filename='sf.inflip'):
 	sps = make_special_position_settings(cell,spgr)
 	sg = sps.space_group()
 	uc = sps.unit_cell()
@@ -253,6 +213,49 @@ def main(filename='sf.inflip'):
 	print >> fout
 	print >> fout, 'dataformat', dataformat
 	print >> fout, 'fbegin {}\n'.format(datafile)
+
+
+def main(filename='sf.inflip'):
+	"""Creates a basic superflip input file for structure solution by asking a few simple questions"""
+
+	for x in xrange(3):
+		cell = raw_input("Enter cell parameters:\n >> ")
+
+		cell = cell.split()
+		if len(cell) != 6:
+			print 'Expecting 6 parameters: a b c alpha beta gamma'
+			continue
+		else:
+			try:
+				cell = tuple(map(float,cell))
+			except ValueError, e:
+				print 'ValueError:', e
+				continue
+			else:
+				break
+
+	for x in xrange(3):
+		spgr = raw_input('Enter space group:\n >> ')
+
+		if not spgr.split():
+			continue
+		else:
+			break		
+	
+	wavelength  = raw_input('Enter wavelength\n >> [1.54056] ') or '1.54056'
+	composition = raw_input('Enter composition:\n >> [skip] ') or ''
+	datafile    = raw_input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
+
+	for x in xrange(3):
+		dataformat = raw_input('Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
+		if not all(i in ('intensity','amplitude','amplitude difference','a','b','phase','group','dummy','fwhm','m91','m90','shelx')
+					for i in dataformat.split()):
+			print 'Unknown dataformat, please enter any of\n intensity/amplitude/amplitude difference/a/b/phase/group/dummy/fwhm/m91/m90/shelx\n'
+			continue
+		else:
+			break
+
+	make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, filename=filename)
 
 
 if __name__ == '__main__':

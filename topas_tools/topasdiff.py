@@ -24,7 +24,7 @@ from blender_mini import *
 
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mat.ethz.ch"
-__version__ = "2015-09-23"
+__version__ = "2015-11-26"
 
 def print_superflip(sgi, uc, fout, fdiff_file = None):
 	"""Prints an inflip file that can directly be used with superflip for difference fourier maps
