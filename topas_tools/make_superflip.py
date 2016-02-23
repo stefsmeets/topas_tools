@@ -22,7 +22,7 @@ from cctbx import crystal
 # from cmath import phase, polar, pi
 
 __author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
+__email__ = "stef.smeets@mmk.su.se"
 __version__ = '2015-11-07'
 
 

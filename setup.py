@@ -9,7 +9,7 @@ setup(
     description="Set of tools to aid structure refinement with TOPAS",
 
     author="Stef Smeets",
-    author_email="stef.smeets@mat.ethz.ch",
+    author_email="stef.smeets@mmk.su.se",
     license="GPL",
     url="https://github.com/stefsmeets/topas_tools",
 

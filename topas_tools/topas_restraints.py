@@ -18,7 +18,7 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 __author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
+__email__ = "stef.smeets@mmk.su.se"
 
 from itertools import combinations
 

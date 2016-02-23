@@ -22,7 +22,7 @@ import argparse
 from blender_mini import *
 
 __author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
+__email__ = "stef.smeets@mmk.su.se"
 __version__ = "2015-11-26"
 
 

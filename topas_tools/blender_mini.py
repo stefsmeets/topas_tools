@@ -37,7 +37,7 @@ from cctbx.miller import index_generator
 from cctbx import uctbx
 
 __author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
+__email__ = "stef.smeets@mmk.su.se"
 
 centering_vectors = {
     'P': (['0.0', '0.0', '0.0'],),

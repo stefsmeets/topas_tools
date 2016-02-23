@@ -24,7 +24,7 @@ import argparse
 from ast import literal_eval
 
 __author__ = "Stef Smeets"
-__email__ = "stef.smeets@mat.ethz.ch"
+__email__ = "stef.smeets@mmk.su.se"
 __version__ = '02-04-2012'
 
 
