@@ -20,4 +20,4 @@ Install:
 
 Uninstall:
 
-    pip uninstall scatter
+    pip uninstall topas_tools

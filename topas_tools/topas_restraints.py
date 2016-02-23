@@ -64,12 +64,12 @@ if not organic:
     to_tol = 0.2
 if organic:
     # ideal distances/angles
-    to_dist = 1.81
+    to_dist = 1.70
     tot_ang = 145.0
     oto_ang = 109.5
 
-    # tolerance for T--O bond detection
-
+    # tolerance for X--O bond detection
+    to_tol = 0.4
 
 def gen_section(f):
     part = []
@@ -97,7 +97,6 @@ def gen_section(f):
         part = [item.replace(':', ' ') for item in part]
         print
         yield part
-    to_tol = 0.8
 
 
 def main():

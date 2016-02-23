@@ -266,6 +266,6 @@ if (not shift) and (spgr == "P1"):
     print
     print "Run Platon, and then the Addsym routine"
     print "Select NoSubCell in sidebar, then run ADDSYMExact"
-    print "Not the space group, and Origin shift"
+    print "Note the space group, and Origin shift"
     print
     print "Rerun expandcell with --shift X Y Z --spgr SPGR"
