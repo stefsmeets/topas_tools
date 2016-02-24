@@ -287,7 +287,11 @@ class crystal_structure_builder(crystal_symmetry_builder):
       scatterers.append(xray.scatterer(**kwds))
     scatterers.set_sites(atom_sites_frac)
 
-    self.structure = xray.structure(crystal_symmetry=self.crystal_symmetry,
+    special_position_settings = crystal.special_position_settings(
+      crystal_symmetry=self.crystal_symmetry,
+      min_distance_sym_equiv=0.0)
+
+    self.structure = xray.structure(special_position_settings=special_position_settings,
                                     scatterers=scatterers)
 
 class miller_array_builder(crystal_symmetry_builder):
