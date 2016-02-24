@@ -42,7 +42,7 @@ centering_vectors = {
 }
 
 
-def make_special_position_settings(cell, space_group, min_dist_sym_equiv=0.5):
+def make_special_position_settings(cell, space_group, min_dist_sym_equiv=0.000001):
     """Takes cell and space group, returns cctbx structure
     input:  cell: (a b c alpha beta gamma) as a tuple
             space_group: 'space_group' like a string

@@ -289,7 +289,7 @@ class crystal_structure_builder(crystal_symmetry_builder):
 
     special_position_settings = crystal.special_position_settings(
       crystal_symmetry=self.crystal_symmetry,
-      min_distance_sym_equiv=0.0)
+      min_distance_sym_equiv=0.000001)
 
     self.structure = xray.structure(special_position_settings=special_position_settings,
                                     scatterers=scatterers)

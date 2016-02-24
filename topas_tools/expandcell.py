@@ -55,7 +55,6 @@ def read_cif(f):
         val.show_summary().show_scatterers()
     return structures
 
-
 usage = """"""
 
 description = """Notes:
@@ -205,10 +204,14 @@ for direction, number in enumerate((expand_x, expand_y, expand_z)):
 print " >> Applying spacegroup {}".format(spgr)
 print
 
-s = xray.structure(
+sps = crystal.special_position_settings(
     crystal_symmetry=crystal.symmetry(
         unit_cell=new_cell,
         space_group_symbol=spgr),
+    min_distance_sym_equiv=0.00001)
+
+s = xray.structure(
+    special_position_settings=sps,
     scatterers=flex.xray_scatterer(scatterers))
 
 if shift:
@@ -247,13 +250,17 @@ if spgr != "P1":
 
             if fx(x) and fy(y) and fz(z):
                 scatterers.append(atom)
-
-        s = xray.structure(
+        
+        sps = crystal.special_position_settings(
             crystal_symmetry=crystal.symmetry(
                 unit_cell=new_cell,
                 space_group_symbol=spgr),
+            min_distance_sym_equiv=0.00001)
+        
+        s = xray.structure(
+            special_position_settings=sps,
             scatterers=flex.xray_scatterer(scatterers))
-
+        
         print " >> Removing duplicate atoms, reduced number to {} atoms".format(s.scatterers().size())
         print
 
