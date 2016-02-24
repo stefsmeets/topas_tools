@@ -35,15 +35,16 @@ def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
         if isinstance(f, file):
-            structures = reader(file_object=f).build_crystal_structures()
+            r = reader(file_object=f)
         elif isinstance(f, str):
-            structures = reader(file_path=f).build_crystal_structures()
+            r = reader(file_path=f)
         else:
             raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
         exit()
+    structures = r.build_crystal_structures()
     for key, val in structures.items():
         print "\nstructure:", key
         val.show_summary().show_scatterers()
