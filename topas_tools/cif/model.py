@@ -77,7 +77,7 @@ class cif(DictMixin):
 
   def validate(self, dictionary, show_warnings=True, error_handler=None, out=None):
     if out is None: out = sys.stdout
-    from iotbx.cif import validation
+    import validation
     errors = {}
     if error_handler is None:
       error_handler = validation.ErrorHandler()

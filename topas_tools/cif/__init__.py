@@ -17,7 +17,7 @@ ext = boost.python.import_ext("iotbx_cif_ext")
 from cctbx.array_family import flex
 from cctbx import adptbx, miller
 from cctbx import covariance
-from iotbx.cif import model, builders, geometry
+import model, builders, geometry
 from libtbx.containers import OrderedDict
 from libtbx.utils import format_float_with_standard_uncertainty \
      as format_float_with_su

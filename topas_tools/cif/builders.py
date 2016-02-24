@@ -1,8 +1,7 @@
 from __future__ import division
 from cctbx import adptbx, crystal, miller, sgtbx, uctbx, xray
 from cctbx.array_family import flex
-import iotbx.cif
-from iotbx.cif import model
+import model
 from libtbx.utils import Sorry
 from libtbx.containers import OrderedDict, OrderedSet
 

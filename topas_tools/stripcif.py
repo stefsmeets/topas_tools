@@ -18,8 +18,9 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import argparse
-
 import os
+
+from cif import reader, CifParserError
 
 # from IPython.terminal.embed import InteractiveShellEmbed
 # InteractiveShellEmbed.confirm_exit = False
@@ -32,7 +33,6 @@ __version__ = "11-03-2015"
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
-    from iotbx.cif import reader, CifParserError
     try:
         if isinstance(f, file):
             structures = reader(file_object=f).build_crystal_structures()

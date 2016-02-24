@@ -23,6 +23,8 @@ import argparse
 
 import os
 
+from cif import reader, CifParserError
+
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mmk.su.se"
 __version__ = "28-04-2015"
@@ -30,7 +32,6 @@ __version__ = "28-04-2015"
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
-    from iotbx.cif import reader, CifParserError
     try:
         if isinstance(f, file):
             structures = reader(file_object=f).build_crystal_structures()

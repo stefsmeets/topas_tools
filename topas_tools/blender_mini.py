@@ -36,6 +36,8 @@ from cctbx.sgtbx import space_group_type
 from cctbx.miller import index_generator
 from cctbx import uctbx
 
+from cif import reader, CifParserError
+
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mmk.su.se"
 
@@ -57,7 +59,6 @@ centering_vectors = {
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
-    from iotbx.cif import reader, CifParserError
     try:
         if isinstance(f, file):
             structures = reader(file_object=f).build_crystal_structures()
