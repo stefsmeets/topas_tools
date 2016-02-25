@@ -19,6 +19,7 @@
 
 import os
 import re
+import sys
 
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mmk.su.se"
@@ -37,7 +38,11 @@ def equals_about(val, compare_to):
 
 
 def main():
-    text = pbpaste()
+    if sys.argv > 0:
+        text = open(sys.argv[1], "r").read()
+    else:
+        if sys.platform == "darwin":
+            text = pbpaste()
 
     oto = 109.5
     tot = 145.0
@@ -61,11 +66,13 @@ def main():
             continue
         if "Restrain" not in line:
             continue
+        if "Si" not in line:
+            continue
 
         stuff, restraint, measured, box, weight = line.split(',')
 
         restraint = float(restraint)
-        measured = float(measured.replace('`', ''))
+        measured = float(measured.replace('`', '').split("_")[0])
 
         if equals_about(restraint, oto):
             oto_vals.append(measured)
