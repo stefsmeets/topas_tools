@@ -20,6 +20,7 @@
 
 import argparse
 from blender_mini import *
+import sys
 
 __author__ = "Stef Smeets"
 __email__ = "stef.smeets@mmk.su.se"
@@ -103,7 +104,7 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
         print >> fout, 'endf'
 
 
-def main():
+def run_script(options=None):
     description = """Notes:
     """
 
@@ -131,15 +132,21 @@ def main():
                         help="maximum resolution")
 
     parser.set_defaults(
-        algorithm="automatic",
         dmin=None,
         diff=None,
+        gui=False,
+        superflip_path=None,
+        run_superflip=False,
+        scale=None
     )
 
-    options = parser.parse_args()
+    if not options:
+        options = parser.parse_args()
+
+    print options
 
     cif = options.args
-    topas_scale = None
+    topas_scale = options.scale
     fobs_file = options.diff
     dmin = options.dmin
 
@@ -195,6 +202,16 @@ def main():
     print_superflip(
         sgi, uc, fout=open('sf.inflip', 'w'), fdiff_file='fdiff.out')
 
+    if options.run_superflip:
+        import subprocess as sp
+        sp.call("{} sf.inflip".format(options.superflip_path))
+
+def main(options=None):
+    if sys.argv[1] == "gui":
+        import topasdiff_gui
+        topasdiff_gui.run()
+    else:
+        run_script()
 
 if __name__ == '__main__':
     main()
