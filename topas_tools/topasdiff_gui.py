@@ -28,7 +28,7 @@ def which(program):
 
 class topasdiffDialog(Tk, object):
 
-    """Dialog that provide settings window for crystal parameters"""
+    """Dialog that provide settings window for Topasdiff"""
 
     def __init__(self, parent, drc='.'):
         super(topasdiffDialog, self).__init__()

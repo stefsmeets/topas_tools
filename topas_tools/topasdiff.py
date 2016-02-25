@@ -207,7 +207,7 @@ def run_script(options=None):
         sp.call("{} sf.inflip".format(options.superflip_path))
 
 def main(options=None):
-    if sys.argv[1] == "gui":
+    if len(sys.argv) > 1 and sys.argv[1] == "gui":
         import topasdiff_gui
         topasdiff_gui.run()
     else:
