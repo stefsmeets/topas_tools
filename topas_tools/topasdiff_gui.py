@@ -6,7 +6,7 @@ import os
 
 from collections import namedtuple
 
-from topasdiff import run_script
+import topasdiff
 
 def which(program):
     def is_exe(fpath):
@@ -150,14 +150,14 @@ class topasdiffDialog(Tk, object):
         return 1  # override
 
     def apply(self):
-        Options = namedtuple("Options", [ "args", "diff", "superflip_path", "run_superflip", "scale", "dmin" ] )
-        options = Options(self.cif_file.get(),
-                            self.fobs_file.get(),
-                            self.superflip_path.get(),
-                            self.run_superflip.get(),
-                            self.scale.get(),
-                            None )
-        run_script(options)
+        gui_options = {
+            "args": self.cif_file.get(),
+            "diff": self.fobs_file.get(),
+            "superflip_path": self.superflip_path.get(),
+            "run_superflip": self.run_superflip.get(),
+            "scale": self.scale.get()
+        }
+        topasdiff.run_script(gui_options=gui_options)
 
     def load_cif_file(self):
 

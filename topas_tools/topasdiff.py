@@ -104,7 +104,7 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
         print >> fout, 'endf'
 
 
-def run_script(options=None):
+def run_script(gui_options=None):
     description = """Notes:
     """
 
@@ -140,10 +140,11 @@ def run_script(options=None):
         scale=None
     )
 
-    if not options:
-        options = parser.parse_args()
+    options = parser.parse_args()
 
-    print options
+    if gui_options:
+        for k,v in gui_options.items():
+            setattr(options, k, v)
 
     cif = options.args
     topas_scale = options.scale
