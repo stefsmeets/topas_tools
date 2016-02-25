@@ -1,0 +1,2 @@
+@setlocal
+@topasdiff.exe gui
