@@ -150,13 +150,6 @@ class topasdiffDialog(Tk, object):
         return 1  # override
 
     def apply(self):
-        print "cif_file", self.cif_file.get()
-        print "fobs_file", self.fobs_file.get()
-        print "scale", self.scale.get()
-
-        print "superflip_path", self.superflip_path.get(), which(self.superflip_path.get())
-        print "run_superflip", self.run_superflip.get()
-
         Options = namedtuple("Options", [ "args", "diff", "superflip_path", "run_superflip", "scale", "dmin" ] )
         options = Options(self.cif_file.get(),
                             self.fobs_file.get(),
