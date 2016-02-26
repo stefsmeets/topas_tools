@@ -164,11 +164,13 @@ class topasdiffDialog(Tk, object):
         f = askopenfilename(initialdir=self.drc)
         if f:
             self.cif_file.set(str(f))
+            self.drc = os.path.dirname(f)
 
     def load_fobs_file(self):
         f = askopenfilename(initialdir=self.drc)
         if f:
             self.fobs_file.set(str(f))
+            self.drc = os.path.dirname(f)
 
     def set_superflip_path(self):
         f = askopenfilename(initialdir=self.drc)
