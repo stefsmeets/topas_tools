@@ -150,6 +150,7 @@ class topasdiffDialog(Tk, object):
         return 1  # override
 
     def apply(self):
+        os.chdir(self.drc)
         gui_options = {
             "args": self.cif_file.get(),
             "diff": self.fobs_file.get(),
