@@ -17,13 +17,12 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
 
-    packages=["topas_tools"],
+    packages=["", "topas_tools", "topas_tools.cif"],
 
     install_requires=["numpy", "pandas", "matplotlib"],
 
     package_data={
-        "": ["LICENCE", "readme.md"],
-        "topas_tools": ["*.py"]
+        "": ["LICENCE", "readme.md"]
     },
 
     entry_points={
