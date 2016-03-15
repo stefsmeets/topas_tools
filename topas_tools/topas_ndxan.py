@@ -56,7 +56,7 @@ def gen_lines(f):
         yield line
 
 
-def get_lines(lines):
+def get_lines(lines, options):
     # Indexing_Solutions_With_Zero_Error_2
     # Indexing_Solutions_2
 
@@ -83,7 +83,7 @@ def cosort(*lsts):
     return zip(*tmp)
 
 
-def plot_3d(iterator, x_key, y_key, z_key, picker=['spgr', 'num']):
+def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num']):
     """3d plot: takes 3 keys and an iterator and will plot the values of the keys given"""
     args = [x_key, y_key, z_key] + picker
 
@@ -128,7 +128,7 @@ def plot_3d(iterator, x_key, y_key, z_key, picker=['spgr', 'num']):
     ax.set_xlabel(x_key)
     ax.set_ylabel(y_key)
     ax.set_zlabel(z_key)
-    ax.set_title(options.title)
+    ax.set_title(title)
 
     ax.scatter(x, y, z, c='r', marker='.', picker=True)
     plt.show()
@@ -168,13 +168,13 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
     ax = fig.add_subplot(111)
     ax.set_xlabel(x_key)
     ax.set_ylabel(y_key)
-    ax.set_title(options.title)
+    ax.set_title(title)
 
     ax.scatter(x, y, c='r', marker='.', picker=True)
     plt.show()
 
 
-def plot_1d(iterator, x_key, picker=['spgr', 'num']):
+def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
     """plots given keys in a 2D scatter"""
     args = [x_key] + picker
 
@@ -182,7 +182,7 @@ def plot_1d(iterator, x_key, picker=['spgr', 'num']):
 
     x, spgr, num = zip(*x_gen)
 
-    if options.sort:
+    if sort:
         x, num, spgr = cosort(x, num, spgr)
 
     import numpy as np
@@ -210,13 +210,13 @@ def plot_1d(iterator, x_key, picker=['spgr', 'num']):
     ax = fig.add_subplot(111)
     ax.set_ylabel(x_key)
     ax.set_xlabel('idx')
-    ax.set_title(options.title)
+    ax.set_title(title)
 
     ax.plot(x, c='r', marker='.', linewidth=0, picker=True)
     plt.show()
 
 
-def histogram(iterator, x_key):
+def histogram(iterator, x_key, title="Histogram"):
     """plots a histogram of the specified keyword"""
     x = [d[x_key] for d in iterator]
 
@@ -235,7 +235,7 @@ def histogram(iterator, x_key):
     y = mlab.normpdf(bins, mu, sigma)
 
     ax.plot(bins, y, 'r', linewidth=1)
-    ax.set_title(options.title)
+    ax.set_title(title)
 
     # print '{:12} - {:12} : {:12}'.format('begin','end','val')
     # for i in range(len(n)):
@@ -376,7 +376,7 @@ def main():
     print f.name, 'opened'
 
     lines = gen_lines(f)
-    lines = get_lines(lines)
+    lines = get_lines(lines, options)
     lines = (parse_str_int_float(line) for line in lines)
 
     if options.zero_corr:
@@ -415,7 +415,7 @@ def main():
         plot_2d(iterator, args[0], args[1])
 
     elif len(args) == 3:
-        plot_3d(iterator, args[0], args[1], args[2])
+        plot_3d(iterator, args[0], args[1], args[2], title=title)
 
     elif len(args) > 3:
         table_out(iterator, args)
