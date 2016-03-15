@@ -132,7 +132,10 @@ def cif2patterson():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'cif2patterson.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
 
         import cif2patterson
     elif platform == "linux2":
@@ -155,7 +158,10 @@ def cif2topas():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'cif2topas.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
 
         import cif2topas
         cif2topas.main()
@@ -179,7 +185,10 @@ def expandcell():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'expandcell.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
 
         import expandcell
     elif platform == "linux2":
@@ -203,8 +212,10 @@ def stripcif():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'stripcif.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
-
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
         import stripcif
         stripcif.main()
     elif platform == "linux2":
@@ -229,7 +240,10 @@ def topasdiff():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'topasdiff.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
 
         import topasdiff
         topasdiff.main()
@@ -255,7 +269,10 @@ def make_superflip():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'make_superflip.py')] + sys.argv[1:])  # call self
     elif platform == "win32":
-        set_environment_variables_windows()
+        try:
+            import cctbx
+        except ImportError:
+            set_environment_variables_windows()
 
         import make_superflip
         make_superflip.main()

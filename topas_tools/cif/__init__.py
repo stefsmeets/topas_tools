@@ -11,8 +11,8 @@ http://cctbx.sourceforge.net/iotbx_cif
 """
 from __future__ import division
 
-import boost.python
-ext = boost.python.import_ext("iotbx_cif_ext")
+import boost_adaptbx.boost.python
+ext = boost_adaptbx.boost.python.import_ext("iotbx_cif_ext")
 
 from cctbx.array_family import flex
 from cctbx import adptbx, miller
