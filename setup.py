@@ -17,7 +17,7 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
 
-    packages=["", "topas_tools", "topas_tools.cif"],
+    packages=["topas_tools", "topas_tools.cif"],
 
     install_requires=["numpy", "pandas", "matplotlib"],
 
