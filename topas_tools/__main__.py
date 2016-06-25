@@ -31,15 +31,24 @@ def set_environment_variables_osx():
     # cannot use sys.path here, because it is not persistent when calling
     # child process
     PYTHONPATH = os.environ.get("PYTHONPATH", "")
-    for src in ["../cctbx_sources",
+    for src in ["lib",
+                # old style paths
+                "../cctbx_sources", 
                 "../cctbx_sources/clipper_adaptbx",
                 "../cctbx_sources/docutils",
                 "../cctbx_sources/boost_adaptbx",
                 "../cctbx_sources/libtbx/pythonpath",
-                "lib"]:
-        # sys.path.insert(1, os.path.abspath(os.path.join(BASE, src)))
-        PYTHONPATH = os.path.abspath(
-            os.path.join(BASE, src)) + ":" + PYTHONPATH
+                # new style paths
+                "../modules", 
+                "../modules/cctbx_project",
+                "../modules/cctbx_project/boost_adaptbx",
+                "../modules/cctbx_project/libtbx/pythonpath"]:
+
+        module_path = os.path.abspath(os.path.join(BASE, src))
+
+        if os.path.exists(module_path):
+            # sys.path.insert(1, module_path)
+            PYTHONPATH = module_path + ":" + PYTHONPATH
     os.environ["PYTHONPATH"] = PYTHONPATH
 
     if "DYLD_LIBRARY_PATH" not in os.environ:
@@ -64,15 +73,24 @@ def set_environment_variables_linux():
     # cannot use sys.path here, because it is not persistent when calling
     # child process
     PYTHONPATH = os.environ.get("PYTHONPATH", "")
-    for src in ["../cctbx_sources",
+    for src in ["lib",
+                # old style paths
+                "../cctbx_sources", 
                 "../cctbx_sources/clipper_adaptbx",
                 "../cctbx_sources/docutils",
                 "../cctbx_sources/boost_adaptbx",
                 "../cctbx_sources/libtbx/pythonpath",
-                "lib"]:
-        # sys.path.insert(1, os.path.abspath(os.path.join(BASE, src)))
-        PYTHONPATH = os.path.abspath(
-            os.path.join(BASE, src)) + ":" + PYTHONPATH
+                # new style paths
+                "../modules", 
+                "../modules/cctbx_project",
+                "../modules/cctbx_project/boost_adaptbx",
+                "../modules/cctbx_project/libtbx/pythonpath"]:
+
+        module_path = os.path.abspath(os.path.join(BASE, src))
+
+        if os.path.exists(module_path):
+            # sys.path.insert(1, module_path)
+            PYTHONPATH = module_path + ":" + PYTHONPATH
     os.environ["PYTHONPATH"] = PYTHONPATH
 
     clib1 = os.path.join(BASE, "lib")  # ~/cctbx/cctbx_build/lib
