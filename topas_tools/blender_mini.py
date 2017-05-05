@@ -17,7 +17,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import os
+import os, sys
 
 import numpy as np
 import pandas as pd
@@ -69,7 +69,7 @@ def read_cif(f):
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
-        exit()
+        sys.exit()
     for key, val in structures.items():
         print "\nstructure:", key
         val.show_summary().show_scatterers()

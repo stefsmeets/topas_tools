@@ -43,7 +43,7 @@ def read_cif(f):
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
-        exit()
+        sys.exit()
     structures = r.build_crystal_structures()
     for key, val in structures.items():
         print "\nstructure:", key

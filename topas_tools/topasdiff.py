@@ -153,7 +153,7 @@ def run_script(gui_options=None):
 
     if not cif or not fobs_file:
         print "Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)"
-        exit()
+        sys.exit()
 
     s = read_cif(cif).values()[0]
 

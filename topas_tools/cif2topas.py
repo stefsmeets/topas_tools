@@ -44,7 +44,7 @@ def read_cif(f, verbose=False):
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
-        exit()
+        sys.exit()
     if verbose:
         for key, val in structures.items():
             print "\nstructure:", key
@@ -60,7 +60,7 @@ def main():
         print "usage: cif2topas cif1 [cif2 ...]"
         print
         print "version", __version__
-        exit()
+        sys.exit()
 
     for cif in cifs:
         # print 'Reading file: {}'.format(cif)

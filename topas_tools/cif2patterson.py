@@ -21,7 +21,7 @@ from __future__ import division
 
 import argparse
 
-import os
+import os, sys
 
 from cif import reader, CifParserError
 
@@ -42,7 +42,7 @@ def read_cif(f):
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
-        exit()
+        sys.exit()
     for key, val in structures.items():
         print "\nstructure:", key
         val.show_summary().show_scatterers()

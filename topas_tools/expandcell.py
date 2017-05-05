@@ -24,7 +24,7 @@ import argparse
 from cctbx import xray
 from cctbx import crystal
 from cctbx.array_family import flex
-import os
+import os, sys
 
 #from IPython.terminal.embed import InteractiveShellEmbed
 #InteractiveShellEmbed.confirm_exit = False
@@ -49,7 +49,7 @@ def read_cif(f):
     except CifParserError as e:
         print e
         print "Error parsing cif file, check if the data tag does not contain any spaces."
-        exit()
+        sys.exit()
     for key, val in structures.items():
         print "\nstructure:", key
         val.show_summary().show_scatterers()
