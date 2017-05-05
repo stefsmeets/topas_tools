@@ -56,7 +56,7 @@ Usage:
 
     fh2topas.py zmatrix.fh [n]
 
-Here, is an optional parameter to give the number of molecules to generate. fh2topas will automatically number them to avoid naming conflicts.
+Here, `n` is an optional parameter to give the number of molecules to generate. fh2topas will automatically number them to avoid naming conflicts.
 
 
 ## topasrestraints
