@@ -1,6 +1,6 @@
 # Topas_tools
 
-These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program TOPAS (http://topas-academic.net/).
+These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
 
 ## topasdiff
 
@@ -56,7 +56,7 @@ Usage:
 
     fh2topas zmatrix.fh [n]
 
-Here, is an optional parameter to give the number of molecules to generate. fh2topas will automatically number them to avoid naming conflicts.
+Here, `n` is an optional parameter to give the number of molecules to generate. fh2topas will automatically number them to avoid naming conflicts.
 
 
 ## topasrestraints
@@ -79,14 +79,14 @@ This generates a file called restraints.out that contains the restraints that ca
 - matplotlib
 - pandas
 - CCTBX
-- superflip (http://superflip.fzu.cz/)
+- superflip ([superflip.fzu.cz/](http://superflip.fzu.cz/))
 
 
 ## Installation
 
 Download and extract:
 
-https://github.com/stefsmeets/topas_tools/archive/master.zip
+[github.com/stefsmeets/topas_tools/archive/master.zip](https://github.com/stefsmeets/topas_tools/archive/master.zip)
 
 Install:
 
@@ -95,3 +95,25 @@ Install:
 Uninstall:
 
     pip uninstall topas_tools
+
+### Windows
+
+See Windows-specific instructions here: [github.com/stefsmeets/topas_tools/releases](https://github.com/stefsmeets/topas_tools/releases)
+
+### Linux/MacOS
+
+Download and install the latest CCTBX build from here: [cci.lbl.gov/cctbx_build/](http://cci.lbl.gov/cctbx_build/)
+
+Before running the programs listed here, you must run `cctbx_env.sh` / `cctbx_env.csh` to ensure CCTBX modules can be found.
+
+If you use bash:
+
+    source /usr/local/cctbx-dev-715/cctbx_env.sh
+
+If you use tcsh/csh:
+
+    source /usr/local/cctbx-dev-715/cctbx_env.sh
+
+
+
+
