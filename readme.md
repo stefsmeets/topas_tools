@@ -54,7 +54,7 @@ fh2topas is a script that converts from Fenske-Hall z-matrix to TOPAS code
 
 Usage:
 
-    fh2topas.py zmatrix.fh [n]
+    fh2topas zmatrix.fh [n]
 
 Here, is an optional parameter to give the number of molecules to generate. fh2topas will automatically number them to avoid naming conflicts.
 
