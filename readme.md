@@ -2,6 +2,10 @@
 
 These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
 
+Install development version:
+
+    pip install https://github.com/stefsmeets/topas_tools/archive/master.zip
+
 ## topasdiff
 
 Topasdiff is a tool to generate nice looking difference maps. First, output the observed structure factors, and structure in cif format from Topas:
