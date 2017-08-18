@@ -121,7 +121,7 @@ def main():
 
         match = 0
 
-        if 'Si' in main:
+        if 'Si' in main or 'Al' in main or 'P' in main:
             match += 1
             if nbonds != 4:
                 print '*** Warning: More/less than _4_ bonds detected for {}... bonds = {}\n'.format(main, nbonds)
