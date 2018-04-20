@@ -132,7 +132,7 @@ def run_script(gui_options=None):
                         help="maximum resolution")
 
     parser.add_argument("-t", "--table",
-                        type=float, metavar="TABLE", dest="table",
+                        type=str, metavar="TABLE", dest="table",
                         help="Choose scattering factor table [x-ray, neutron, electron], default=X-ray")
 
     parser.set_defaults(
