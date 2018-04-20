@@ -131,13 +131,18 @@ def run_script(gui_options=None):
                         type=float, metavar="d_min", dest="dmin",
                         help="maximum resolution")
 
+    parser.add_argument("-t", "--table",
+                        type=float, metavar="TABLE", dest="table",
+                        help="Choose scattering factor table [x-ray, neutron, electron], default=X-ray")
+
     parser.set_defaults(
         dmin=None,
         diff=None,
         gui=False,
         superflip_path=None,
         run_superflip=False,
-        scale=None
+        scale=None,
+        table="x-ray"
     )
 
     options = parser.parse_args()
@@ -150,6 +155,7 @@ def run_script(gui_options=None):
     topas_scale = options.scale
     fobs_file = options.diff
     dmin = options.dmin
+    table = options.table
 
     if not cif or not fobs_file:
         print "Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)"
@@ -170,7 +176,8 @@ def run_script(gui_options=None):
     if not dmin:
         dmin = calc_dspacing(df, cell, inplace=False).min()
 
-    fcalc = calc_structure_factors(cif, dmin=dmin).values()[0]
+    fcalc = calc_structure_factors(cif, dmin=dmin, table=table).values()[0]
+
     df = df.combine_first(fcalc)
 
     df = reduce_all(df, cell, spgr)
