@@ -148,11 +148,11 @@ def load_hkl(fin, labels=None, shelx=False, savenpy=False, verbose=True):
     k = map(int, inp[:, 1])
     l = map(int, inp[:, 2])
 
-    index = izip(h, k, l)
+    index = list(zip(h, k, l))
 
     labels = (label for label in labels if label not in skipcols)
 
-    d = dict(izip(labels, inp[:, 3:].T))
+    d = dict(zip(labels, inp[:, 3:].T))
 
     df = pd.DataFrame(d, index=index)
 
