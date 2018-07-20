@@ -142,7 +142,7 @@ def run_script(gui_options=None):
         superflip_path=None,
         run_superflip=False,
         scale=None,
-        table="x-ray"
+        table="xray"
     )
 
     options = parser.parse_args()
