@@ -492,12 +492,15 @@ def df2m(df, cell, spgr, data=None, sigmas=None):
     anomalous_flag = False
 
     if isinstance(df, pd.DataFrame):
-        try:
-            sel = df[data].notnull()  # select notnull data items for index
-        except ValueError:
-            index = df.index
+        if data:
+            try:
+                sel = df[data].notnull()  # select notnull data items for index
+            except ValueError:
+                index = df.index
+            else:
+                index = df.index[sel]
         else:
-            index = df.index[sel]
+            index = df.index
     else:
         index = df
 
