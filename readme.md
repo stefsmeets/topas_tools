@@ -2,7 +2,21 @@
 
 These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
 
-Install development version:
+Recommended installation instructions:
+
+If you use [conda](https://docs.conda.io/en/latest/miniconda.html), you can setup a python 2.7 environment like this:
+    
+    conda create -n topas_tools python=2.7
+    conda activate topas_tools
+
+(Alternatively, install [python2.7 from here](https://www.python.org/downloads/release/python-2716/))
+
+Install CCTBX:
+
+    Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
+    Run setup_win.bat or run python setup.py install
+
+Install topas_tools:
 
     pip install https://github.com/stefsmeets/topas_tools/archive/master.zip
 
