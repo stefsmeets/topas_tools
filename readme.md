@@ -13,8 +13,8 @@ If you use [conda](https://docs.conda.io/en/latest/miniconda.html), you can setu
 
 Install CCTBX:
 
-    Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
-    Run setup_win.bat or run python setup.py install
+1. Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
+2. Go into the directory and run `python setup.py install`
 
 Install topas_tools:
 
