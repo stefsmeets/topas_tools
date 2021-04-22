@@ -19,7 +19,16 @@ setup(
 
     packages=["topas_tools", "topas_tools.cif"],
 
-    install_requires=["numpy", "pandas", "matplotlib"],
+    install_requires=[
+        # "backports.functools-lru-cache==1.6.4",
+        "cycler==0.10.0",
+        "kiwisolver==1.1.0",
+        "matplotlib<3.0",
+        "numpy==1.12", 
+        "pandas==0.24", 
+        "scipy==0.16",
+        "pyparsing==2.4.7",
+    ],
 
     package_data={
         "": ["LICENCE", "readme.md"]
