@@ -2,7 +2,7 @@
 
 These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
 
-Recommended installation instructions:
+## Recommended installation instructions
 
 If you use [conda](https://docs.conda.io/en/latest/miniconda.html), you can setup a python 2.7 environment like this:
     
