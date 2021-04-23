@@ -20,12 +20,11 @@ setup(
     packages=["topas_tools", "topas_tools.cif"],
 
     install_requires=[
-        # "backports.functools-lru-cache==1.6.4",
         "cycler==0.10.0",
         "kiwisolver==1.1.0",
         "matplotlib<3.0",
-        "numpy==1.12", 
-        "pandas==0.24", 
+        "numpy==1.10", 
+        "pandas==0.23", 
         "scipy==0.16",
         "pyparsing==2.4.7",
     ],
