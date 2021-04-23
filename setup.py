@@ -25,7 +25,6 @@ setup(
         "matplotlib<3.0",
         "numpy==1.10", 
         "pandas==0.23", 
-        "scipy==0.16",
         "pyparsing==2.4.7",
     ],
 
