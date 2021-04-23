@@ -1,0 +1,6 @@
+name: topas_tools
+dependencies:
+  - python=2.7
+  - matplotlib
+  - numpy
+  - pandas

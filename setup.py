@@ -5,11 +5,11 @@ from os import path
 
 setup(
     name="topas_tools",
-    version="0.1.2",
+    version="0.1.3",
     description="Set of tools to aid structure refinement with TOPAS",
 
     author="Stef Smeets",
-    author_email="stef.smeets@mmk.su.se",
+    author_email="s.smeets@esciencecenter.nl",
     license="GPL",
     url="https://github.com/stefsmeets/topas_tools",
 
@@ -20,12 +20,9 @@ setup(
     packages=["topas_tools", "topas_tools.cif"],
 
     install_requires=[
-        "cycler==0.10.0",
-        "kiwisolver==1.1.0",
         "matplotlib<3.0",
-        "numpy==1.10", 
-        "pandas==0.23", 
-        "pyparsing==2.4.7",
+        "numpy>=1.10", 
+        "pandas>=0.23", 
     ],
 
     package_data={

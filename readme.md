@@ -1,24 +1,6 @@
-# Topas_tools
+# topas_tools
 
 These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
-
-## Recommended installation instructions
-
-If you use [conda](https://docs.conda.io/en/latest/miniconda.html), you can setup a python 2.7 environment like this:
-    
-    conda create -n topas_tools python=2.7
-    conda activate topas_tools
-
-(Alternatively, install [python2.7 from here](https://www.python.org/downloads/release/python-2716/))
-
-Install CCTBX:
-
-1. Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
-2. Go into the directory and run `python setup.py install`
-
-Install topas_tools:
-
-    pip install https://github.com/stefsmeets/topas_tools/archive/master.zip
 
 ## topasdiff
 
@@ -99,24 +81,29 @@ This generates a file called restraints.out that contains the restraints that ca
 - CCTBX
 - superflip ([superflip.fzu.cz/](http://superflip.fzu.cz/))
 
-
 ## Installation
 
-Download and extract:
+1. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (pick the one suitable for your platform, Python version does not matter here).
 
-[github.com/stefsmeets/topas_tools/archive/master.zip](https://github.com/stefsmeets/topas_tools/archive/master.zip)
+2. Download and extract: https://github.com/stefsmeets/lines/archive/master.zip
 
-Install:
+3. Install using:
+    
+```bash
+    conda create env -f environment.yml
+    conda activate topas_tools
+    python setup.py develop
+```
 
-    python setup.py install
+(note that every time you want to use `topas_tools`, you must activate the environment using `conda activate topas_tools`)
 
-Uninstall:
-
-    pip uninstall topas_tools
+4. Follow instructions for your platform to install CCTBX below.
 
 ### Windows
 
-See Windows-specific instructions here: [github.com/stefsmeets/topas_tools/releases](https://github.com/stefsmeets/topas_tools/releases)
+Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
+
+Go into the directory and run `python setup.py install`
 
 ### Linux/MacOS
 
@@ -126,11 +113,11 @@ Before running the programs listed here, you must run `cctbx_env.sh` / `cctbx_en
 
 If you use bash:
 
-    source /usr/local/cctbx-dev-715/cctbx_env.sh
+    source /usr/local/cctbx-dev-xxx/cctbx_env.sh
 
 If you use tcsh/csh:
 
-    source /usr/local/cctbx-dev-715/cctbx_env.sh
+    source /usr/local/cctbx-dev-xxx/cctbx_env.sh
 
 
 
