@@ -92,10 +92,10 @@ This generates a file called restraints.out that contains the restraints that ca
 
 ## Requirements
 
-- Python2.7
-- numpy
-- matplotlib
-- pandas
+- Python==2.7
+- numpy==1.10
+- matplotlib<3.0
+- pandas==0.23
 - CCTBX
 - superflip ([superflip.fzu.cz/](http://superflip.fzu.cz/))
 
