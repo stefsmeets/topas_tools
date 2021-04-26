@@ -1,4 +1,6 @@
-# topas_tools
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4719228.svg)](https://doi.org/10.5281/zenodo.4719228)
+
+# Topas tools
 
 These are set of small scripts and tools that were developed to help with structure refinement (of zeolites in particular) using the program [TOPAS](http://topas-academic.net/).
 
