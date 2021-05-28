@@ -87,12 +87,12 @@ This generates a file called restraints.out that contains the restraints that ca
 
 1. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (pick the one suitable for your platform, Python version does not matter here).
 
-2. Download and extract: https://github.com/stefsmeets/lines/archive/master.zip
+2. Download and extract: https://github.com/stefsmeets/topas_tools/archive/master.zip
 
 3. Install using:
     
 ```bash
-    conda create env -f environment.yml
+    conda env create -f environment.yml
     conda activate topas_tools
     python setup.py develop
 ```
