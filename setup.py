@@ -10,11 +10,11 @@ setup(
 
     author="Stef Smeets",
     author_email="s.smeets@esciencecenter.nl",
-    license="GPL",
     url="https://github.com/stefsmeets/topas_tools",
 
     classifiers=[
         'Programming Language :: Python :: 2.7',
+        'License :: OSI Approved :: MIT License',
     ],
 
     packages=["topas_tools", "topas_tools.cif"],
