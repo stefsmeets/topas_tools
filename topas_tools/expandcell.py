@@ -1,11 +1,12 @@
 import argparse
-
-from cctbx import xray
-from cctbx import crystal
-from cctbx.array_family import flex
-import os, sys
 import io
-from iotbx.cif import reader, CifParserError
+import os
+import sys
+
+from cctbx import crystal, xray
+from cctbx.array_family import flex
+from iotbx.cif import CifParserError, reader
+
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""

@@ -1,7 +1,9 @@
 import argparse
-import os, sys
 import io
-from iotbx.cif import reader, CifParserError
+import os
+import sys
+
+from iotbx.cif import CifParserError, reader
 
 
 def read_cif(f):

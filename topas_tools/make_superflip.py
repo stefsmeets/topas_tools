@@ -1,6 +1,5 @@
 from cctbx import crystal
 
-
 centering_vectors = {
     'P': (['0.0', '0.0', '0.0'],),
     'A': (['0.0', '0.0', '0.0'], ['0.0', '0.5', '0.5']),

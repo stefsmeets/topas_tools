@@ -1,7 +1,7 @@
-import json
 import argparse
-
+import json
 from ast import literal_eval
+
 
 def parse_str_int_float(item):
     """returns string, int or float either from a list or not"""
@@ -64,8 +64,8 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
     xyz_gen = (tuple([d[arg] for arg in args]) for d in iterator)
     x, y, z, spgr, num = list(zip(*xyz_gen))
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
     from mpl_toolkits.mplot3d import Axes3D
 
     def onpick(event):
@@ -116,8 +116,8 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
 
     x, y, spgr, num = list(zip(*xy_gen))
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
 
     def onpick(event):
         ind = event.ind
@@ -159,8 +159,8 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
     if sort:
         x, num, spgr = cosort(x, num, spgr)
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
 
     def onpick(event):
         ind = event.ind
@@ -194,9 +194,9 @@ def histogram(iterator, x_key, title="Histogram"):
     """plots a histogram of the specified keyword"""
     x = [d[x_key] for d in iterator]
 
-    import numpy as np
     import matplotlib.mlab as mlab
     import matplotlib.pyplot as plt
+    import numpy as np
 
     fig = plt.figure()
     ax = fig.add_subplot(111)

@@ -1,6 +1,7 @@
 import argparse
-from .blender_mini import *
 import sys
+
+from .blender_mini import *
 
 
 def print_superflip(sgi, uc, fout, fdiff_file=None):

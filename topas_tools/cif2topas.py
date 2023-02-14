@@ -1,8 +1,8 @@
-import sys
-cifs = sys.argv[1:]
-
-from iotbx.cif import reader, CifParserError
 import io
+import sys
+
+from iotbx.cif import CifParserError, reader
+
 
 def read_cif(f, verbose=False):
     """opens cif and returns cctbx data object"""
@@ -26,6 +26,8 @@ def read_cif(f, verbose=False):
 
 
 def main():
+    cifs = sys.argv[1:]
+
     if len(cifs) == 0:
         print("cif2topas - tool for converting cif files to Topas format (.inp)")
         print("Takes any number of cif files and writes to stdout")

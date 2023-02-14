@@ -1,25 +1,16 @@
-from future.utils import raise_
-import os, sys
 import io
+import math
+import os
+import sys
+
 import numpy as np
 import pandas as pd
-
-import math
-
-
-
+from cctbx import crystal, miller, uctbx, xray
 from cctbx.array_family import flex
-
-from cctbx import miller
-from cctbx import xray
-from cctbx import crystal
-
-from cctbx.sgtbx import space_group_type
 from cctbx.miller import index_generator
-from cctbx import uctbx
-
-from iotbx.cif import reader, CifParserError
-
+from cctbx.sgtbx import space_group_type
+from future.utils import raise_
+from iotbx.cif import CifParserError, reader
 
 centering_vectors = {
     'P': (['0.0', '0.0', '0.0'],),

@@ -1,14 +1,14 @@
 from future import standard_library
+
 standard_library.install_aliases()
+import os
+from collections import namedtuple
 from tkinter import *
 from tkinter.filedialog import *
 from tkinter.ttk import *
 
-import os
-
-from collections import namedtuple
-
 from . import topasdiff
+
 
 def which(program):
     def is_exe(fpath):
