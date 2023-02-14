@@ -4,13 +4,13 @@ from cctbx import xray
 from cctbx import crystal
 from cctbx.array_family import flex
 import os, sys
-
-from .cif import reader, CifParserError
+import io
+from iotbx.cif import reader, CifParserError
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             structures = reader(file_object=f).build_crystal_structures()
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
@@ -25,13 +25,14 @@ def read_cif(f):
         val.show_summary().show_scatterers()
     return structures
 
-usage = """"""
+
+
 
 description = """Notes:
 """
 
 
-parser = argparse.ArgumentParser(  # usage=usage,
+parser = argparse.ArgumentParser(
     description=description,
     formatter_class=argparse.RawDescriptionHelpFormatter)
 
@@ -244,3 +245,5 @@ if (not shift) and (spgr == "P1"):
     print("Note the space group, and Origin shift")
     print()
     print("Rerun expandcell with --shift X Y Z --spgr SPGR")
+
+sys.exit()

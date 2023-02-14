@@ -1,13 +1,13 @@
 import sys
 cifs = sys.argv[1:]
 
-from .cif import reader, CifParserError
-
+from iotbx.cif import reader, CifParserError
+import io
 
 def read_cif(f, verbose=False):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             structures = reader(file_object=f).build_crystal_structures()
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()

@@ -1,13 +1,13 @@
 import argparse
 import os, sys
-
-from .cif import reader, CifParserError
+import io
+from iotbx.cif import reader, CifParserError
 
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             r = reader(file_object=f)
         elif isinstance(f, str):
             r = reader(file_path=f)

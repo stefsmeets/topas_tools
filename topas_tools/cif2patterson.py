@@ -1,14 +1,14 @@
 import argparse
 
 import os, sys
-
-from .cif import reader, CifParserError
+import io
+from iotbx.cif import reader, CifParserError
 
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             structures = reader(file_object=f).build_crystal_structures()
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
@@ -108,3 +108,5 @@ print('Wrote file', fout1.name)
 
 fout1.close()
 fout2.close()
+
+sys.exit()

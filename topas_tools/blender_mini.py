@@ -1,6 +1,6 @@
 from future.utils import raise_
 import os, sys
-
+import io
 import numpy as np
 import pandas as pd
 
@@ -18,7 +18,7 @@ from cctbx.sgtbx import space_group_type
 from cctbx.miller import index_generator
 from cctbx import uctbx
 
-from .cif import reader, CifParserError
+from iotbx.cif import reader, CifParserError
 
 
 centering_vectors = {
@@ -40,7 +40,7 @@ centering_vectors = {
 def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             structures = reader(file_object=f).build_crystal_structures()
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
