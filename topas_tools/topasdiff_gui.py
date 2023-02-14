@@ -1,12 +1,15 @@
-from Tkinter import *
-from tkFileDialog import *
-from ttk import *
-
 import os
-
 from collections import namedtuple
+from tkinter import *
+from tkinter.filedialog import *
+from tkinter.ttk import *
 
-import topasdiff
+from future import standard_library
+
+from . import topasdiff
+
+standard_library.install_aliases()
+
 
 def which(program):
     def is_exe(fpath):
@@ -26,12 +29,12 @@ def which(program):
     return None
 
 
-class topasdiffDialog(Tk, object):
+class topasdiffDialog(Tk):
 
     """Dialog that provide settings window for Topasdiff"""
 
     def __init__(self, parent, drc='.'):
-        super(topasdiffDialog, self).__init__()
+        super().__init__()
 
         self.parent = parent
 
@@ -47,11 +50,11 @@ class topasdiffDialog(Tk, object):
         body.pack(fill=BOTH, anchor=CENTER, expand=True)
 
         self.buttonbox()
-        
+
         self.grab_set()
 
         self.update()
-        self.geometry(self.geometry())       
+        self.geometry(self.geometry())
 
     def init_vars(self):
         self.cif_file = StringVar()
@@ -69,8 +72,8 @@ class topasdiffDialog(Tk, object):
         self.run_superflip.set(True)
 
     def body(self, master):
-        
-        lfcif    = Labelframe(master, text="Path to cif file", padding=(10, 10, 10, 10))
+
+        lfcif = Labelframe(master, text="Path to cif file", padding=(10, 10, 10, 10))
         self.e_fname = Entry(
             lfcif, textvariable=self.cif_file)
         self.e_fname.grid(row=11, column=0, columnspan=3, sticky=E+W)
@@ -80,7 +83,8 @@ class topasdiffDialog(Tk, object):
         lfcif.columnconfigure(0, minsize=120)
         lfcif.columnconfigure(0, weight=1)
 
-        lffobs   = Labelframe(master, text="Path to observed structure factors file", padding=(10, 10, 10, 10))
+        lffobs = Labelframe(
+            master, text="Path to observed structure factors file", padding=(10, 10, 10, 10))
         self.e_fname = Entry(
             lffobs, textvariable=self.fobs_file)
         self.e_fname.grid(row=21, column=0, columnspan=3, sticky=E+W)
@@ -100,7 +104,8 @@ class topasdiffDialog(Tk, object):
         elif which("superflip.exe"):
             self.superflip_path.set("superflip.exe")
         else:
-            lfsf   = Labelframe(master, text="Path to superflip executable", padding=(10, 10, 10, 10))
+            lfsf = Labelframe(master, text="Path to superflip executable",
+                              padding=(10, 10, 10, 10))
             self.e_fname = Entry(
                 lfsf, textvariable=self.superflip_path)
             self.e_fname.grid(row=31, column=0, columnspan=3, sticky=E+W)
@@ -112,7 +117,6 @@ class topasdiffDialog(Tk, object):
 
         # self.c_run_superflip = Checkbutton(lfsf, variable=self.run_superflip, text="Run superflip?")
         # self.c_run_superflip.grid(row=32, column=0, sticky=W)
-
 
     def buttonbox(self):
         box = Frame(self)
@@ -178,9 +182,11 @@ class topasdiffDialog(Tk, object):
         if f:
             self.superflip_path.set(str(f))
 
+
 def run():
     app = topasdiffDialog(None)
     app.mainloop()
 
+
 if __name__ == '__main__':
-    print run()
+    print(run())

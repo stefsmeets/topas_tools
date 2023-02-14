@@ -1,30 +1,4 @@
-#!/usr/bin/env python
-
-#    topas_tools - set of scripts to help using Topas
-#    Copyright (C) 2015 Stef Smeets
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 from cctbx import crystal
-
-# from cmath import phase, polar, pi
-
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mmk.su.se"
-__version__ = '2015-11-07'
-
 
 centering_vectors = {
     'P': (['0.0', '0.0', '0.0'],),
@@ -67,25 +41,25 @@ def print_superflip(fcalc, fout, fdiff_file=None):
 
     - Tested and works fine with: EDI, SOD
     """
-    print >> fout, 'title', 'superflip\n'
+    print('title', 'superflip\n', file=fout)
 
-    print >> fout, 'dimension 3'
-    print >> fout, 'voxel',
+    print('dimension 3', file=fout)
+    print('voxel', end=' ', file=fout)
     for p in fcalc.unit_cell().parameters()[0:3]:
-        print >> fout, int(((p*4) // 6 + 1) * 6),
-    print >> fout
-    print >> fout, 'cell',
+        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
+    print(file=fout)
+    print('cell', end=' ', file=fout)
     for p in fcalc.unit_cell().parameters():
-        print >> fout, p,
-    print >> fout, '\n'
+        print(p, end=' ', file=fout)
+    print('\n', file=fout)
 
-    print >> fout, 'centers'
+    print('centers', file=fout)
     for cvec in centering_vectors[fcalc.space_group_info().type().group().conventional_centring_type_symbol()]:
-        print >> fout, ' '.join(cvec)
-    print >> fout, 'endcenters\n'
+        print(' '.join(cvec), file=fout)
+    print('endcenters\n', file=fout)
 
-    print >> fout, 'symmetry #', fcalc.space_group_info().symbol_and_number()
-    print >> fout, '# inverse no'
+    print('symmetry #', fcalc.space_group_info().symbol_and_number(), file=fout)
+    print('# inverse no', file=fout)
 
     # number of unique symops, no inverses
     n_smx = fcalc.space_group_info().type().group().n_smx()
@@ -101,8 +75,8 @@ def print_superflip(fcalc, fout, fdiff_file=None):
         if n == order_p:
             break
         elif n == n_smx:
-            print >> fout, '# inverse yes, please check!'
-        print >> fout, symop
+            print('# inverse yes, please check!', file=fout)
+        print(symop, file=fout)
 
         # Broken, because .inverse() doesn't work, but probably a better approach:
     # for symop in f.space_group_info().type().group().smx():
@@ -112,21 +86,21 @@ def print_superflip(fcalc, fout, fdiff_file=None):
     #   for symop in f.space_group_info().type().group().smx():
     #       print >> fout, symop.inverse() # inverse does not work?
 
-    print >> fout, 'endsymmetry\n'
+    print('endsymmetry\n', file=fout)
 
-    print >> fout, 'perform fourier'
-    print >> fout, 'terminal yes\n'
+    print('perform fourier', file=fout)
+    print('terminal yes\n', file=fout)
 
-    print >> fout, 'expandedlog yes'
-    print >> fout, 'outputfile superflip.xplor'
-    print >> fout, 'outputformat xplor\n'
+    print('expandedlog yes', file=fout)
+    print('outputfile superflip.xplor', file=fout)
+    print('outputformat xplor\n', file=fout)
 
-    print >> fout, 'dataformat amplitude phase'
+    print('dataformat amplitude phase', file=fout)
 
     if fdiff_file:
-        print >> fout, 'fbegin fdiff.out\n'
+        print('fbegin fdiff.out\n', file=fout)
     else:
-        print >> fout, 'fbegin'
+        print('fbegin', file=fout)
         print_simple(fcalc, fout, output_phases='cycles')
 
 #       for i,(h,k,l) in enumerate(f.indices()):
@@ -134,7 +108,7 @@ def print_superflip(fcalc, fout, fdiff_file=None):
 #           # phase = phase(f.data()[i]
 #           print >> fout, "%3d %3d %3d %10.6f %10.3f" % (
 #               h,k,l, abs(f.data()[i]), phase(f.data()[i]) / (2*pi) )
-        print >> fout, 'endf'
+        print('endf', file=fout)
 
 
 def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, filename='sf.inflip'):
@@ -145,25 +119,25 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
 
     fout = open(filename, 'w')
 
-    print >> fout, 'title', filename.split('.')[0]
-    print >> fout
-    print >> fout, 'dimension 3'
-    print >> fout, 'voxel',
+    print('title', filename.split('.')[0], file=fout)
+    print(file=fout)
+    print('dimension 3', file=fout)
+    print('voxel', end=' ', file=fout)
     for p in uc.parameters()[0:3]:
-        print >> fout, int(((p*4) // 6 + 1) * 6),
-    print >> fout
-    print >> fout, 'cell',
+        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
+    print(file=fout)
+    print('cell', end=' ', file=fout)
     for p in uc.parameters():
-        print >> fout, p,
-    print >> fout, '  # vol = {:.4f} A3 \n'.format(uc.volume())
+        print(p, end=' ', file=fout)
+    print(f'  # vol = {uc.volume():.4f} A3 \n', file=fout)
 
-    print >> fout, 'centers'
+    print('centers', file=fout)
     for cvec in centering_vectors[sg.conventional_centring_type_symbol()]:
-        print >> fout, '  ', ' '.join(cvec)
-    print >> fout, 'endcenters\n'
+        print('  ', ' '.join(cvec), file=fout)
+    print('endcenters\n', file=fout)
 
-    print >> fout, 'symmetry #', sg.crystal_system(), sg.info()
-    print >> fout, '# +(0 0 0) Inversion-Flag = 0'
+    print('symmetry #', sg.crystal_system(), sg.info(), file=fout)
+    print('# +(0 0 0) Inversion-Flag = 0', file=fout)
 
     n_smx = sg.n_smx()
     order_p = sg.order_p()
@@ -173,86 +147,86 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
         if n == order_p:
             break
         elif n == n_smx:
-            print >> fout, '# +(0 0 0) Inversion-Flag = 1'
-        print >> fout, '  ', symop
-    print >> fout, 'endsymmetry\n'
-    print >> fout, 'derivesymmetry yes'
-    print >> fout, 'searchsymmetry average'
-    print >> fout
-    print >> fout, 'delta AUTO'
-    print >> fout, 'weakratio 0.00'
-    print >> fout, 'biso 2.0'
-    print >> fout, 'randomseed AUTO'
-    print >> fout
+            print('# +(0 0 0) Inversion-Flag = 1', file=fout)
+        print('  ', symop, file=fout)
+    print('endsymmetry\n', file=fout)
+    print('derivesymmetry yes', file=fout)
+    print('searchsymmetry average', file=fout)
+    print(file=fout)
+    print('delta AUTO', file=fout)
+    print('weakratio 0.00', file=fout)
+    print('biso 2.0', file=fout)
+    print('randomseed AUTO', file=fout)
+    print(file=fout)
     if composition:
-        print >> fout, 'composition {}'.format(composition)
-        print >> fout, 'histogram composition'
-        print >> fout, 'hmparameters 10 5'
+        print(f'composition {composition}', file=fout)
+        print('histogram composition', file=fout)
+        print('hmparameters 10 5', file=fout)
     else:
-        print >> fout, '#composition #composition goes here'
-        print >> fout, '#histogram composition'
-        print >> fout, '#hmparameters 10 5'
-    print >> fout
-    print >> fout, 'fwhmseparation 0.3'
-    print >> fout, 'lambda {}'.format(wavelength)
-    print >> fout
-    print >> fout, 'maxcycles 200'
-    print >> fout, 'bestdensities 10'
-    print >> fout, 'repeatmode 100'
-    print >> fout
-    print >> fout, 'polish yes'
-    print >> fout, 'convergencemode never'
-    print >> fout
-    print >> fout, '#referencefile filename.cif'
-    print >> fout, '#modelfile filename.cif 0.2'
-    print >> fout
-    print >> fout, 'terminal yes'
-    print >> fout, 'expandedlog yes'
+        print('#composition #composition goes here', file=fout)
+        print('#histogram composition', file=fout)
+        print('#hmparameters 10 5', file=fout)
+    print(file=fout)
+    print('fwhmseparation 0.3', file=fout)
+    print(f'lambda {wavelength}', file=fout)
+    print(file=fout)
+    print('maxcycles 200', file=fout)
+    print('bestdensities 10', file=fout)
+    print('repeatmode 100', file=fout)
+    print(file=fout)
+    print('polish yes', file=fout)
+    print('convergencemode never', file=fout)
+    print(file=fout)
+    print('#referencefile filename.cif', file=fout)
+    print('#modelfile filename.cif 0.2', file=fout)
+    print(file=fout)
+    print('terminal yes', file=fout)
+    print('expandedlog yes', file=fout)
     outputfile = str(sg.info()).replace(' ', '').replace('/', 'o').lower()
-    print >> fout, 'outputfile {}.xplor {}.ccp4'.format(outputfile, outputfile)
-    print >> fout, 'outputformat xplor ccp4'
-    print >> fout
-    print >> fout, 'dataformat', dataformat
-    print >> fout, 'fbegin {}\n'.format(datafile)
+    print(f'outputfile {outputfile}.xplor {outputfile}.ccp4', file=fout)
+    print('outputformat xplor ccp4', file=fout)
+    print(file=fout)
+    print('dataformat', dataformat, file=fout)
+    print(f'fbegin {datafile}\n', file=fout)
 
 
 def main(filename='sf.inflip'):
     """Creates a basic superflip input file for structure solution by asking a few simple questions"""
 
-    for x in xrange(3):
-        cell = raw_input("Enter cell parameters:\n >> ")
+    for x in range(3):
+        cell = input("Enter cell parameters:\n >> ")
 
         cell = cell.split()
         if len(cell) != 6:
-            print 'Expecting 6 parameters: a b c alpha beta gamma'
+            print('Expecting 6 parameters: a b c alpha beta gamma')
             continue
         else:
             try:
                 cell = tuple(map(float, cell))
-            except ValueError, e:
-                print 'ValueError:', e
+            except ValueError as e:
+                print('ValueError:', e)
                 continue
             else:
                 break
 
-    for x in xrange(3):
-        spgr = raw_input('Enter space group:\n >> ')
+    for x in range(3):
+        spgr = input('Enter space group:\n >> ')
 
         if not spgr.split():
             continue
         else:
             break
 
-    wavelength = raw_input('Enter wavelength\n >> [1.54056] ') or '1.54056'
-    composition = raw_input('Enter composition:\n >> [skip] ') or ''
-    datafile = raw_input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
+    wavelength = input('Enter wavelength\n >> [1.54056] ') or '1.54056'
+    composition = input('Enter composition:\n >> [skip] ') or ''
+    datafile = input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
 
-    for x in xrange(3):
-        dataformat = raw_input(
+    for x in range(3):
+        dataformat = input(
             'Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
         if not all(i in ('intensity', 'amplitude', 'amplitude difference', 'a', 'b', 'phase', 'group', 'dummy', 'fwhm', 'm91', 'm90', 'shelx')
                    for i in dataformat.split()):
-            print 'Unknown dataformat, please enter any of\n intensity/amplitude/amplitude difference/a/b/phase/group/dummy/fwhm/m91/m90/shelx\n'
+            print('Unknown dataformat, please enter any of\n intensity/amplitude/amplitude difference/a/b/phase/group/dummy/fwhm/m91/m90/shelx\n')
             continue
         else:
             break

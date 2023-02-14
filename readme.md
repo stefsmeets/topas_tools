@@ -76,51 +76,31 @@ This generates a file called restraints.out that contains the restraints that ca
 
 ## Requirements
 
-- Python==2.7
-- numpy==1.10
-- matplotlib<3.0
-- pandas==0.23
-- CCTBX
+- Python>=3.9
+- numpy
+- matplotlib
+- pandas
+- [CCTBX](https://github.com/cctbx/cctbx_project)
 - superflip ([superflip.fzu.cz/](http://superflip.fzu.cz/))
 
 ## Installation
 
 1. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (pick the one suitable for your platform, Python version does not matter here).
 
-2. Download and extract: https://github.com/stefsmeets/topas_tools/archive/master.zip
+2. Install using:
+ 
+```bash
+conda create -n topas_tools -c conda-forge cctbx-base
+conda activate topas_tools
+pip install -e .
+```
 
-3. Install using:
-    
+Or use the environment file:
+
 ```bash
     conda env create -f environment.yml
     conda activate topas_tools
-    python setup.py develop
+    pip install -e .
 ```
 
-(note that every time you want to use `topas_tools`, you must activate the environment using `conda activate topas_tools`)
-
-4. Follow instructions for your platform to install CCTBX below.
-
-### Windows
-
-Download and unzip [cctbx_mini-0.1.0-x64.zip (patched version for windows)](https://github.com/stefsmeets/topas_tools/releases/download/v0.1.2/cctbx_mini-0.1.0-x64.zip)
-
-Go into the directory and run `python setup.py install`
-
-### Linux/MacOS
-
-Download and install the latest CCTBX build from here: [cci.lbl.gov/cctbx_build/](http://cci.lbl.gov/cctbx_build/)
-
-Before running the programs listed here, you must run `cctbx_env.sh` / `cctbx_env.csh` to ensure CCTBX modules can be found.
-
-If you use bash:
-
-    source /usr/local/cctbx-dev-xxx/cctbx_env.sh
-
-If you use tcsh/csh:
-
-    source /usr/local/cctbx-dev-xxx/cctbx_env.sh
-
-
-
-
+(note that every time you want to use `topas_tools`, you must always activate the environment using `conda activate topas_tools`)

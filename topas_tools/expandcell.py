@@ -1,72 +1,39 @@
-#!/usr/bin/env python
-
-#    topas_tools - set of scripts to help using Topas
-#    Copyright (C) 2015 Stef Smeets
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-from __future__ import division
-
 import argparse
+import io
+import os
+import sys
 
-from cctbx import xray
-from cctbx import crystal
+from cctbx import crystal, xray
 from cctbx.array_family import flex
-import os, sys
-
-#from IPython.terminal.embed import InteractiveShellEmbed
-#InteractiveShellEmbed.confirm_exit = False
-#ipshell = InteractiveShellEmbed(banner1='')
-
-from cif import reader, CifParserError
-
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mmk.su.se"
-__version__ = "11-03-2015"
+from iotbx.cif import CifParserError, reader
 
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
     try:
-        if isinstance(f, file):
+        if isinstance(f, io.IOBase):
             structures = reader(file_object=f).build_crystal_structures()
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
         else:
-            raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
+            raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
-    for key, val in structures.items():
-        print "\nstructure:", key
+    for key, val in list(structures.items()):
+        print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
 
-usage = """"""
 
 description = """Notes:
 """
 
-epilog = 'Updated: {}'.format(__version__)
 
-parser = argparse.ArgumentParser(  # usage=usage,
+parser = argparse.ArgumentParser(
     description=description,
-    epilog=epilog,
-    formatter_class=argparse.RawDescriptionHelpFormatter,
-    version=__version__)
+    formatter_class=argparse.RawDescriptionHelpFormatter)
 
 
 parser.add_argument("args",
@@ -110,7 +77,7 @@ parser.set_defaults(
 options = parser.parse_args()
 
 cif = options.args
-s = read_cif(cif).values()[0]
+s = list(read_cif(cif).values())[0]
 
 excluded = []
 if options.exclude:
@@ -119,8 +86,8 @@ if options.exclude:
             excluded.append(atom)
 
 s = s.expand_to_p1()
-print "Expanded to P1 => {} atoms".format(s.scatterers().size())
-print
+print(f"Expanded to P1 => {s.scatterers().size()} atoms")
+print()
 
 root, ext = os.path.splitext(cif)
 
@@ -152,17 +119,17 @@ cell = s.unit_cell().parameters()
 new_cell = (cell[0] * expand_x, cell[1] * expand_y,
             cell[2] * expand_z, cell[3], cell[4], cell[5])
 
-print "old cell:"
-print cell
-print
-print "new cell:"
-print new_cell
-print
+print("old cell:")
+print(cell)
+print()
+print("new cell:")
+print(new_cell)
+print()
 
 
 def expand_cell(scatterers, direction, number):
     for atom in scatterers:
-        print atom.label, number
+        print(atom.label, number)
         site = list(atom.site)
 
         coord = site[direction]
@@ -178,8 +145,8 @@ def expand_cell(scatterers, direction, number):
 
 if options.exclude:
     scatterers = excluded
-    print ">> Excluding these atoms:", ", ".join(options.exclude)
-    print
+    print(">> Excluding these atoms:", ", ".join(options.exclude))
+    print()
     for atom in s.scatterers():
         if atom.element_symbol() in options.exclude:
             continue
@@ -188,21 +155,21 @@ if options.exclude:
 else:
     scatterers = s.scatterers()
 
-print "Starting with {} scatterers".format(len(scatterers))
-print
+print(f"Starting with {len(scatterers)} scatterers")
+print()
 
 for direction, number in enumerate((expand_x, expand_y, expand_z)):
     if number == 1:
         continue
-    print " >> Expanding cell along {} by {}".format('xyz'[direction], number)
+    print(" >> Expanding cell along {} by {}".format('xyz'[direction], number))
     scatterers = [
         scatterer for scatterer in expand_cell(scatterers, direction, number)]
-    print 'New number of scatterers:', len(scatterers)
-    print
+    print('New number of scatterers:', len(scatterers))
+    print()
 
 
-print " >> Applying spacegroup {}".format(spgr)
-print
+print(f" >> Applying spacegroup {spgr}")
+print()
 
 sps = crystal.special_position_settings(
     crystal_symmetry=crystal.symmetry(
@@ -216,8 +183,8 @@ s = xray.structure(
 
 if shift:
     # shift = [-1*number for number in shift]
-    print ">> Applying shift {} to all atom sites".format(shift)
-    print
+    print(f">> Applying shift {shift} to all atom sites")
+    print()
     s = s.apply_shift(shift)
 
 if spgr != "P1":
@@ -225,24 +192,24 @@ if spgr != "P1":
     s = s.sites_mod_positive()
 
     asu = s.space_group_info().brick().as_string()
-    print "Asymmetric unit:"
+    print("Asymmetric unit:")
     # print box_min, "=>", box_max
-    print asu
-    print
+    print(asu)
+    print()
     asu_x, asu_y, asu_z = asu.split(';')
-    fx = lambda x: eval(asu_x)
-    fy = lambda y: eval(asu_y)
-    fz = lambda z: eval(asu_z)
+    def fx(x): return eval(asu_x)
+    def fy(y): return eval(asu_y)
+    def fz(z): return eval(asu_z)
 
     if '-' in asu:
-        print "Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)"
-        print ""
-        print "Remove a,b,c etc from atom labels in cif, then run:"
-        print " > cif2strudat", out
-        print " > kriber"
-        print " >> reacs global"
-        print " >> wricif"
-        print
+        print("Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)")
+        print("")
+        print("Remove a,b,c etc from atom labels in cif, then run:")
+        print(" > cif2strudat", out)
+        print(" > kriber")
+        print(" >> reacs global")
+        print(" >> wricif")
+        print()
     else:
         scatterers = []
         for atom in s.scatterers():
@@ -250,30 +217,32 @@ if spgr != "P1":
 
             if fx(x) and fy(y) and fz(z):
                 scatterers.append(atom)
-        
+
         sps = crystal.special_position_settings(
             crystal_symmetry=crystal.symmetry(
                 unit_cell=new_cell,
                 space_group_symbol=spgr),
             min_distance_sym_equiv=0.00001)
-        
+
         s = xray.structure(
             special_position_settings=sps,
             scatterers=flex.xray_scatterer(scatterers))
-        
-        print " >> Removing duplicate atoms, reduced number to {} atoms".format(s.scatterers().size())
-        print
+
+        print(f" >> Removing duplicate atoms, reduced number to {s.scatterers().size()} atoms")
+        print()
 
 s.as_cif_simple(out=open(out, 'w'))
-print " >> Wrote file {}".format(out)
-print
+print(f" >> Wrote file {out}")
+print()
 
 if (not shift) and (spgr == "P1"):
-    print "---"
-    print "To find the right symmetry of the expanded unit cell:"
-    print
-    print "Run Platon, and then the Addsym routine"
-    print "Select NoSubCell in sidebar, then run ADDSYMExact"
-    print "Note the space group, and Origin shift"
-    print
-    print "Rerun expandcell with --shift X Y Z --spgr SPGR"
+    print("---")
+    print("To find the right symmetry of the expanded unit cell:")
+    print()
+    print("Run Platon, and then the Addsym routine")
+    print("Select NoSubCell in sidebar, then run ADDSYMExact")
+    print("Note the space group, and Origin shift")
+    print()
+    print("Rerun expandcell with --shift X Y Z --spgr SPGR")
+
+sys.exit()

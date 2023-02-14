@@ -1,25 +1,3 @@
-#!/usr/bin/env python
-
-#    topas_tools - set of scripts to help using Topas
-#    Copyright (C) 2015 Stef Smeets
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mmk.su.se"
-
 from itertools import combinations
 
 """
@@ -71,6 +49,7 @@ if organic:
     # tolerance for X--O bond detection
     to_tol = 0.4
 
+
 def gen_section(f):
     part = []
     for line in f:
@@ -81,21 +60,21 @@ def gen_section(f):
         if a1.split():
             if len(part) > 0:
                 part = [item.replace(':', ' ') for item in part]
-                print
+                print()
                 yield part
             part = [a1]
-            print a1, '|',
+            print(a1, '|', end=' ')
 
         if to_dist-to_tol < ln < to_dist+to_tol:
             if not a1.split() and len(part) > 1:
-                print '           |',
+                print('           |', end=' ')
             part.append(a2)
-            print a2, '|', ln
+            print(a2, '|', ln)
         else:
             pass
     if len(part) > 0:
         part = [item.replace(':', ' ') for item in part]
-        print
+        print()
         yield part
 
 
@@ -110,7 +89,7 @@ def main():
     tot_w = 1/(tot_s**2)
     oto_w = 1/(oto_s**2)
 
-    f = open('bonds.txt', 'r')
+    f = open('bonds.txt')
     fout = open('restraints.out', 'w')
 
     gs = gen_section(f)
@@ -124,38 +103,41 @@ def main():
         if 'Si' in main or 'Al' in main or 'P' in main:
             match += 1
             if nbonds != 4:
-                print '*** Warning: More/less than _4_ bonds detected for {}... bonds = {}\n'.format(main, nbonds)
+                print(
+                    f'*** Warning: More/less than _4_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for ox in part[1:]:
-                print >> fout, '      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
-                    main, ox, to_dist, to_w)
+                print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
+                    main, ox, to_dist, to_w), file=fout)
 
             for ox1, ox2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    ox1, main, ox2, oto_ang, oto_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    ox1, main, ox2, oto_ang, oto_w), file=fout)
 
         if 'O' in main:
             match += 1
             if nbonds != 2:
-                print '*** Warning: More/less than _2_ bonds detected for {}... bonds = {}\n'.format(main, nbonds)
+                print(
+                    f'*** Warning: More/less than _2_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for si1, si2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    si1, main, si2, tot_ang, tot_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    si1, main, si2, tot_ang, tot_w), file=fout)
 
         if match == 0:
-            print '*** Non-Si/O detected --> {}\n'.format(main)
+            print(f'*** Non-Si/O detected --> {main}\n')
 
             for ox in part[1:]:
-                print >> fout, '      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
-                    main, ox, to_dist, to_w)
+                print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
+                    main, ox, to_dist, to_w), file=fout)
 
             for ox1, ox2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    ox1, main, ox2, oto_ang, oto_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    ox1, main, ox2, oto_ang, oto_w), file=fout)
+
 
 if __name__ == '__main__':
     main()

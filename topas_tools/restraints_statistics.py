@@ -1,28 +1,6 @@
-#!/usr/bin/env python2.7
-
-#    topas_tools - set of scripts to help using Topas
-#    Copyright (C) 2015 Stef Smeets
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 import os
 import re
 import sys
-
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mmk.su.se"
 
 
 def pbpaste():
@@ -38,11 +16,14 @@ def equals_about(val, compare_to):
 
 
 def main():
-    if sys.argv > 0:
-        text = open(sys.argv[1], "r").read()
+    if len(sys.argv) > 1:
+        text = open(sys.argv[1]).read()
     else:
         if sys.platform == "darwin":
             text = pbpaste()
+        else:
+            print('Usage: python restraints_statistics.py [filename]')
+            sys.exit()
 
     oto = 109.5
     tot = 145.0
@@ -84,7 +65,7 @@ def main():
             to_vals.append(measured)
             n_to += 1
         else:
-            print line + ' -- FAIL'
+            print(line + ' -- FAIL')
 
     if not tot_vals:
         tot_vals = [0]
@@ -93,13 +74,17 @@ def main():
     if not oto_vals:
         oto_vals = [0]
 
-    print "Parsed {} lines".format(n_lines)
-    print "{} restraints - tot: {}, oto: {}, to: {}".format(n_tot+n_oto+n_to, n_tot, n_oto, n_to)
-    print ""
-    print '        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'max', 'avg')
-    print ' T-O-T  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(tot, min(tot_vals), max(tot_vals), sum(tot_vals)/len(tot_vals))
-    print ' O-T-O  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(oto, min(oto_vals), max(oto_vals), sum(oto_vals)/len(oto_vals))
-    print '   T-O  {:10.2f} {:10.3f} {:10.3f} {:10.3f} '.format(to, min(to_vals), max(to_vals), sum(to_vals)/len(to_vals))
+    print(f"Parsed {n_lines} lines")
+    print(f"{n_tot+n_oto+n_to} restraints - tot: {n_tot}, oto: {n_oto}, to: {n_to}")
+    print("")
+    print('        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'max', 'avg'))
+    print(
+        f' T-O-T  {tot:10.1f} {min(tot_vals):10.3f} {max(tot_vals):10.3f} {sum(tot_vals)/len(tot_vals):10.3f} ')
+    print(
+        f' O-T-O  {oto:10.1f} {min(oto_vals):10.3f} {max(oto_vals):10.3f} {sum(oto_vals)/len(oto_vals):10.3f} ')
+    print(
+        f'   T-O  {to:10.2f} {min(to_vals):10.3f} {max(to_vals):10.3f} {sum(to_vals)/len(to_vals):10.3f} ')
+
 
 if __name__ == '__main__':
     main()

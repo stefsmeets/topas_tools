@@ -1,31 +1,6 @@
-#!/usr/bin/env python2.7-32
-
-#    topas_tools - set of scripts to help using Topas
-#    Copyright (C) 2015 Stef Smeets
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-
-import json
 import argparse
-
+import json
 from ast import literal_eval
-
-__author__ = "Stef Smeets"
-__email__ = "stef.smeets@mmk.su.se"
-__version__ = '02-04-2012'
 
 
 def parse_str_int_float(item):
@@ -47,13 +22,12 @@ def parse_str_int_float(item):
 
 def pprint(d):
     """pretty printing using the json module"""
-    print json.dumps(d, sort_keys=True, indent=4)
+    print(json.dumps(d, sort_keys=True, indent=4))
 
 
 def gen_lines(f):
     """return all the lines in every single file"""
-    for line in f:
-        yield line
+    yield from f
 
 
 def get_lines(lines, options):
@@ -78,9 +52,9 @@ def get_lines(lines, options):
 
 def cosort(*lsts):
     """Takes a few lists and sorts them based on the values of the first list."""
-    tmp = zip(*lsts)
+    tmp = list(zip(*lsts))
     tmp.sort()
-    return zip(*tmp)
+    return list(zip(*tmp))
 
 
 def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num']):
@@ -88,10 +62,10 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
     args = [x_key, y_key, z_key] + picker
 
     xyz_gen = (tuple([d[arg] for arg in args]) for d in iterator)
-    x, y, z, spgr, num = zip(*xyz_gen)
+    x, y, z, spgr, num = list(zip(*xyz_gen))
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
     from mpl_toolkits.mplot3d import Axes3D
 
     def onpick(event):
@@ -103,11 +77,12 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     def onkeypress(event):
         if event.key == 'x':
@@ -140,10 +115,10 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
 
     xy_gen = (tuple([d[arg] for arg in args]) for d in iterator)
 
-    x, y, spgr, num = zip(*xy_gen)
+    x, y, spgr, num = list(zip(*xy_gen))
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
 
     def onpick(event):
         ind = event.ind
@@ -153,11 +128,12 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     # col = ax.scatter(x, y, 100*s, c, picker=True) => s,c add color/size to
     # points, maybe nice for best solutions from sflog ??
@@ -180,13 +156,13 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
 
     x_gen = (tuple([d[arg] for arg in args]) for d in iterator)
 
-    x, spgr, num = zip(*x_gen)
+    x, spgr, num = list(zip(*x_gen))
 
     if sort:
         x, num, spgr = cosort(x, num, spgr)
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
 
     def onpick(event):
         ind = event.ind
@@ -195,11 +171,12 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     # col = ax.scatter(x, y, 100*s, c, picker=True) => s,c add color/size to
     # points, maybe nice for best solutions from sflog ??
@@ -220,9 +197,9 @@ def histogram(iterator, x_key, title="Histogram"):
     """plots a histogram of the specified keyword"""
     x = [d[x_key] for d in iterator]
 
-    import numpy as np
     import matplotlib.mlab as mlab
     import matplotlib.pyplot as plt
+    import numpy as np
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -244,8 +221,8 @@ def histogram(iterator, x_key, title="Histogram"):
     #   val   = n[i]
     #   print '{:12f} - {:12f} : {:12f}'.format(begin,end,val)
 
-    print "mean:", mu
-    print "sigma:", sigma
+    print("mean:", mu)
+    print("sigma:", sigma)
 
     plt.grid(True)
 
@@ -269,12 +246,12 @@ def counter(iterator, key):
 def table_out(iterator, keywords, out=None):
     """Lists output of specified keywords to stdout (or outfile if an open file object specified)"""
     header = '{:<10}'*len(keywords)
-    print >> out, header.format(*keywords)
+    print(header.format(*keywords), file=out)
 
-    fmt = ''.join(['{{{}:<10}}'.format(keyword) for keyword in keywords])
+    fmt = ''.join([f'{{{keyword}:<10}}' for keyword in keywords])
 
     for d in iterator:
-        print >> out, fmt.format(**d)
+        print(fmt.format(**d), file=out)
 
 
 def gen_filter(iterator, args):
@@ -289,7 +266,7 @@ def gen_filter(iterator, args):
     operators = {'gt': '>', 'ge': '>=', 'eq': '==',
                  'ne': '!=', 'le': '<=', 'lt': '<'}
 
-    conditional = lambda d, kw, val: eval('d[kw] {} val'.format(operators[op]))
+    def conditional(d, kw, val): return eval(f'd[kw] {operators[op]} val')
 
     for d in iterator:
         if conditional(d, kw, val):
@@ -306,13 +283,9 @@ def main():
 - Keywords/values are case sensitive
 - Based on a stripped down version of superanalyser.py, works the same way"""
 
-    epilog = 'Updated: {}'.format(__version__)
-
     parser = argparse.ArgumentParser(usage=usage,
                                      description=description,
-                                     epilog=epilog,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter,
-                                     version=__version__)
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument("keywords",
                         type=str, metavar="KEYWORD", nargs='*',
@@ -369,11 +342,11 @@ def main():
 
     options = parser.parse_args()
     args = options.keywords
-    print options, args
+    print(options, args)
 
-    f = open(options.index_out, 'r')
+    f = open(options.index_out)
 
-    print f.name, 'opened'
+    print(f.name, 'opened')
 
     lines = gen_lines(f)
     lines = get_lines(lines, options)
@@ -386,7 +359,7 @@ def main():
         colnames = ('num', 'spgr', 'status', 'unindexed',
                     'volume', 'gof', 'a', 'b', 'c', 'A', 'B', 'C')
 
-    dicts = (dict(zip(colnames, line)) for line in lines)
+    dicts = (dict(list(zip(colnames, line))) for line in lines)
 
     # for d in dicts:
     #   pprint(d)
@@ -395,9 +368,9 @@ def main():
     iterator = dicts
 
     if options.show is not None:
-        for x in xrange(options.show):
-            iterator.next()
-        pprint(iterator.next())
+        for x in range(options.show):
+            next(iterator)
+        pprint(next(iterator))
 
     elif options.table:
         table_out(iterator, args)
@@ -424,7 +397,7 @@ def main():
         s = 0
         for item in iterator:
             s += 1
-        print s
+        print(s)
 
 
 if __name__ == '__main__':
