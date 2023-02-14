@@ -1,12 +1,18 @@
 from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 from libtbx.containers import OrderedDict, OrderedSet
 from libtbx.utils import Sorry
 import sys
 import string
 import copy
-from cStringIO import StringIO
+from io import StringIO
 from UserDict import DictMixin
 
 from cctbx.array_family import flex
@@ -18,7 +24,7 @@ class cif(DictMixin):
       self.blocks = OrderedDict(blocks)
     else:
       self.blocks = OrderedDict()
-    self.keys_lower = dict([(key.lower(), key) for key in self.blocks.keys()])
+    self.keys_lower = dict([(key.lower(), key) for key in list(self.blocks.keys())])
 
   def __setitem__(self, key, value):
     assert isinstance(value, block)
@@ -44,10 +50,10 @@ class cif(DictMixin):
     del self.keys_lower[key.lower()]
 
   def keys(self):
-    return self.blocks.keys()
+    return list(self.blocks.keys())
 
   def __repr__(self):
-    return repr(OrderedDict(self.iteritems()))
+    return repr(OrderedDict(iter(self.items())))
 
   def __copy__(self):
     return cif(self.blocks.copy())
@@ -65,7 +71,7 @@ class cif(DictMixin):
            loop_format_strings=None):
     if out is None:
       out = sys.stdout
-    for name, block in self.items():
+    for name, block in list(self.items()):
       print("data_%s" %name, file=out)
       block.show(
         out=out, indent=indent, indent_row=indent_row,
@@ -83,7 +89,7 @@ class cif(DictMixin):
     errors = {}
     if error_handler is None:
       error_handler = validation.ErrorHandler()
-    for key, block in self.blocks.iteritems():
+    for key, block in self.blocks.items():
       error_handler = error_handler.__class__()
       dictionary.set_error_handler(error_handler)
       block.validate(dictionary)
@@ -93,9 +99,9 @@ class cif(DictMixin):
     return error_handler
 
   def sort(self, recursive=False, key=None, reverse=False):
-    self.blocks = OrderedDict(sorted(self.blocks.items(), key=key, reverse=reverse))
+    self.blocks = OrderedDict(sorted(list(self.blocks.items()), key=key, reverse=reverse))
     if recursive:
-      for b in self.blocks.values():
+      for b in list(self.blocks.values()):
         b.sort(recursive=recursive, reverse=reverse)
 
 class block_base(DictMixin):
@@ -110,7 +116,7 @@ class block_base(DictMixin):
       raise Sorry("%s is not a valid data name" %key)
     if isinstance(value, loop):
       self.loops[key] = value
-      for k in value.keys():
+      for k in list(value.keys()):
         self.keys_lower[k.lower()] = k
     elif isinstance(value, basestring):
       v = str(value)
@@ -127,7 +133,7 @@ class block_base(DictMixin):
       except TypeError:
         if key in self._items:
           del self._items[key]
-        for loop_ in self.loops.values():
+        for loop_ in list(self.loops.values()):
           if key in loop_:
             loop_[key] = value
         if key not in self:
@@ -142,7 +148,7 @@ class block_base(DictMixin):
     else:
       # give precedence to returning the actual data items in the event of a
       # single looped item when the loop name and data name coincide
-      for loop in self.loops.values():
+      for loop in list(self.loops.values()):
         if key in loop:
           return loop[key]
       if key in self.loops:
@@ -154,9 +160,9 @@ class block_base(DictMixin):
     if key in self._items:
       del self._items[key]
       self._set.discard(key)
-    elif key in self.keys():
+    elif key in list(self.keys()):
       # must be a looped item
-      for k, loop in self.loops.iteritems():
+      for k, loop in self.loops.items():
         if key in loop:
           if len(loop) == 1:
             # remove the now empty loop
@@ -225,17 +231,17 @@ class block_base(DictMixin):
       if key in self._items:
         keys.append(key)
       elif key in self.loops:
-        keys.extend(self.loops[key].keys())
+        keys.extend(list(self.loops[key].keys()))
     return keys
 
   def __repr__(self):
-    return repr(OrderedDict(self.iteritems()))
+    return repr(OrderedDict(iter(self.items())))
 
   def update(self, other=None, **kwargs):
     if other is None:
       return
     if isinstance(other, OrderedDict) or isinstance(other, dict):
-      for key, value in other.iteritems():
+      for key, value in other.items():
         self[key] = value
     else:
       self._items.update(other._items)
@@ -262,9 +268,9 @@ class block_base(DictMixin):
   def get_loop_with_defaults(self, loop_name, default_dict):
     loop_ = self.get_loop(loop_name)
     if loop_ is None:
-      loop_ = loop(header=default_dict.keys())
+      loop_ = loop(header=list(default_dict.keys()))
     n_rows = loop_.n_rows()
-    for key, value in default_dict.iteritems():
+    for key, value in default_dict.items():
       if key not in loop_:
         loop_.add_column(key, flex.std_string(n_rows, value))
     return loop_
@@ -296,20 +302,20 @@ class block_base(DictMixin):
     return s.getvalue()
 
   def validate(self, dictionary):
-    for key, value in self._items.iteritems():
+    for key, value in self._items.items():
       dictionary.validate_single_item(key, value, self)
-    for loop in self.loops.values():
+    for loop in list(self.loops.values()):
       dictionary.validate_loop(loop, self)
     if isinstance(self, block):
-      for value in self.saves.itervalues():
+      for value in self.saves.values():
         value.validate(dictionary)
 
   def sort(self, recursive=False, key=None, reverse=False):
     self._set = OrderedSet(
-      sorted(self._items.keys(), key=key, reverse=reverse) \
-      + sorted(self.loops.keys(), key=key, reverse=reverse))
+      sorted(list(self._items.keys()), key=key, reverse=reverse) \
+      + sorted(list(self.loops.keys()), key=key, reverse=reverse))
     if recursive:
-      for l in self.loops.values():
+      for l in list(self.loops.values()):
         l.sort(key=key, reverse=reverse)
 
   """Items that either appear in both self and other and the value has changed
@@ -317,7 +323,7 @@ class block_base(DictMixin):
   def difference(self, other):
     new = self.__class__()
     for items in (self._items, self.loops):
-      for key, value in items.iteritems():
+      for key, value in items.items():
         if key in other:
           other_value = other[key]
           if other_value == value: continue
@@ -375,7 +381,7 @@ class block(block_base):
 
   def keys(self):
     keys = block_base.keys(self)
-    keys.extend(self.saves.keys())
+    keys.extend(list(self.saves.keys()))
     return keys
 
   def update(self, other=None, **kwargs):
@@ -414,7 +420,7 @@ class block(block_base):
   def sort(self, recursive=False, key=None, reverse=False):
     block_base.sort(self, recursive=recursive, key=key, reverse=reverse)
     if recursive:
-      for s in self.saves.values():
+      for s in list(self.saves.values()):
         s.sort(recursive=recursive, key=key, reverse=reverse)
 
   def __deepcopy__(self, memo):
@@ -445,7 +451,7 @@ class loop(DictMixin):
       assert isinstance(data, dict) or isinstance(data, OrderedDict)
       self.add_columns(data)
       self.keys_lower = dict(
-        [(key.lower(), key) for key in self._columns.keys()])
+        [(key.lower(), key) for key in list(self._columns.keys())])
 
   def __setitem__(self, key, value):
     if not re.match(tag_re, key):
@@ -478,28 +484,28 @@ class loop(DictMixin):
     del self.keys_lower[key.lower()]
 
   def keys(self):
-    return self._columns.keys()
+    return list(self._columns.keys())
 
   def __repr__(self):
-    return repr(OrderedDict(self.iteritems()))
+    return repr(OrderedDict(iter(self.items())))
 
   def name(self):
-    return common_substring(self.keys()).rstrip('_').rstrip('.')
+    return common_substring(list(self.keys())).rstrip('_').rstrip('.')
 
   def size(self):
     size = 0
-    for column in self.values():
+    for column in list(self.values()):
       size = max(size, len(column))
     return size
 
   def n_rows(self):
     size = 0
-    for column in self.values():
+    for column in list(self.values()):
       size = max(size, len(column))
     return size
 
   def n_columns(self):
-    return len(self.keys())
+    return len(list(self.keys()))
 
   def add_row(self, row, default_value="?"):
     if isinstance(row, dict):
@@ -521,12 +527,12 @@ class loop(DictMixin):
 
   def add_columns(self, columns):
     assert isinstance(columns, dict) or isinstance(columns, OrderedDict)
-    for key, value in columns.iteritems():
+    for key, value in columns.items():
       self.add_column(key, value)
 
   def delete_row(self, index):
     assert index < self.n_rows()
-    for column in self._columns.values():
+    for column in list(self._columns.values()):
       del column[index]
 
   def __copy__(self):
@@ -555,9 +561,9 @@ class loop(DictMixin):
     assert indent.strip() == ""
     assert indent_row.strip() == ""
     print("loop_", file=out)
-    for k in self.keys():
+    for k in list(self.keys()):
       print(indent + k, file=out)
-    values = self._columns.values()
+    values = list(self._columns.values())
     if fmt_str is not None:
       # Pretty printing:
       #   The user is responsible for providing a valid format string.
@@ -580,7 +586,7 @@ class loop(DictMixin):
         print(fmt_str % tuple([values[j][i] for j in range(len(values))]), file=out)
     elif align_columns:
       fmt_str = []
-      for i, (k, v) in enumerate(self.iteritems()):
+      for i, (k, v) in enumerate(self.items()):
         for i_v in range(v.size()):
           v[i_v] = format_value(v[i_v])
         # exclude and semicolon text fields from column width calculation
@@ -610,20 +616,20 @@ class loop(DictMixin):
     return s.getvalue()
 
   def iterrows(self):
-    keys = self.keys()
+    keys = list(self.keys())
     for j in range(self.size()):
-      yield OrderedDict(zip(keys, [self.values()[i][j] for i in range(len(self))]))
+      yield OrderedDict(list(zip(keys, [list(self.values())[i][j] for i in range(len(self))])))
 
   def sort(self, key=None, reverse=False):
     self._columns = OrderedDict(
-      sorted(self._columns.items(), key=key, reverse=reverse))
+      sorted(list(self._columns.items()), key=key, reverse=reverse))
 
   def __eq__(self, other):
     if (len(self) != len(other) or
         self.size() != other.size() or
-        self.keys() != other.keys()):
+        list(self.keys()) != list(other.keys())):
       return False
-    for value, other_value in zip(self.values(), other.values()):
+    for value, other_value in zip(list(self.values()), list(other.values())):
       if (value == other_value).count(True) != len(value):
         return False
     return True
@@ -651,11 +657,11 @@ def LCSubstr_set(S, T):
   http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Longest_common_substring#Python"""
 
   m = len(S); n = len(T)
-  L = [[0] * (n+1) for i in xrange(m+1)]
+  L = [[0] * (n+1) for i in range(m+1)]
   LCS = set()
   longest = 0
-  for i in xrange(m):
-    for j in xrange(n):
+  for i in range(m):
+    for j in range(n):
       if S[i] == T[j]:
         v = L[i][j] + 1
         L[i+1][j+1] = v

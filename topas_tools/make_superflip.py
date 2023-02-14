@@ -1,4 +1,8 @@
 from __future__ import print_function
+from builtins import str
+from builtins import input
+from builtins import map
+from builtins import range
 from cctbx import crystal
 
 
@@ -195,8 +199,8 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
 def main(filename='sf.inflip'):
     """Creates a basic superflip input file for structure solution by asking a few simple questions"""
 
-    for x in xrange(3):
-        cell = raw_input("Enter cell parameters:\n >> ")
+    for x in range(3):
+        cell = input("Enter cell parameters:\n >> ")
 
         cell = cell.split()
         if len(cell) != 6:
@@ -211,20 +215,20 @@ def main(filename='sf.inflip'):
             else:
                 break
 
-    for x in xrange(3):
-        spgr = raw_input('Enter space group:\n >> ')
+    for x in range(3):
+        spgr = input('Enter space group:\n >> ')
 
         if not spgr.split():
             continue
         else:
             break
 
-    wavelength = raw_input('Enter wavelength\n >> [1.54056] ') or '1.54056'
-    composition = raw_input('Enter composition:\n >> [skip] ') or ''
-    datafile = raw_input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
+    wavelength = input('Enter wavelength\n >> [1.54056] ') or '1.54056'
+    composition = input('Enter composition:\n >> [skip] ') or ''
+    datafile = input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
 
-    for x in xrange(3):
-        dataformat = raw_input(
+    for x in range(3):
+        dataformat = input(
             'Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
         if not all(i in ('intensity', 'amplitude', 'amplitude difference', 'a', 'b', 'phase', 'group', 'dummy', 'fwhm', 'm91', 'm90', 'shelx')
                    for i in dataformat.split()):

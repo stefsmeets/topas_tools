@@ -1,5 +1,6 @@
 from __future__ import division
 from __future__ import absolute_import
+from builtins import object
 from cctbx.array_family import flex
 from cctbx import crystal, sgtbx
 from cctbx import covariance, geometry
@@ -187,7 +188,7 @@ class hbonds_as_cif_loop(object):
       else:
         site_cart_a = sites_cart[a_seq]
       distance_da = geometry.distance((site_cart_d, site_cart_a))
-      for h_seq, h_sym_groups in pair_asu_table.table()[hbond.d_seq].items():
+      for h_seq, h_sym_groups in list(pair_asu_table.table()[hbond.d_seq].items()):
         if site_labels[h_seq][0] not in ('H','D'):
           # XXX better to pass scattering types instead?
           continue

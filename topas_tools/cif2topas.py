@@ -21,7 +21,7 @@ def read_cif(f, verbose=False):
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     if verbose:
-        for key, val in structures.items():
+        for key, val in list(structures.items()):
             print("\nstructure:", key)
             val.show_summary().show_scatterers()
     return structures

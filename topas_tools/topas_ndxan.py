@@ -1,4 +1,7 @@
 from __future__ import print_function
+from builtins import next
+from builtins import zip
+from builtins import range
 import json
 import argparse
 
@@ -54,9 +57,9 @@ def get_lines(lines, options):
 
 def cosort(*lsts):
     """Takes a few lists and sorts them based on the values of the first list."""
-    tmp = zip(*lsts)
+    tmp = list(zip(*lsts))
     tmp.sort()
-    return zip(*tmp)
+    return list(zip(*tmp))
 
 
 def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num']):
@@ -64,7 +67,7 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
     args = [x_key, y_key, z_key] + picker
 
     xyz_gen = (tuple([d[arg] for arg in args]) for d in iterator)
-    x, y, z, spgr, num = zip(*xyz_gen)
+    x, y, z, spgr, num = list(zip(*xyz_gen))
 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -116,7 +119,7 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
 
     xy_gen = (tuple([d[arg] for arg in args]) for d in iterator)
 
-    x, y, spgr, num = zip(*xy_gen)
+    x, y, spgr, num = list(zip(*xy_gen))
 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -156,7 +159,7 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
 
     x_gen = (tuple([d[arg] for arg in args]) for d in iterator)
 
-    x, spgr, num = zip(*x_gen)
+    x, spgr, num = list(zip(*x_gen))
 
     if sort:
         x, num, spgr = cosort(x, num, spgr)
@@ -362,7 +365,7 @@ def main():
         colnames = ('num', 'spgr', 'status', 'unindexed',
                     'volume', 'gof', 'a', 'b', 'c', 'A', 'B', 'C')
 
-    dicts = (dict(zip(colnames, line)) for line in lines)
+    dicts = (dict(list(zip(colnames, line))) for line in lines)
 
     # for d in dicts:
     #   pprint(d)
@@ -371,7 +374,7 @@ def main():
     iterator = dicts
 
     if options.show is not None:
-        for x in xrange(options.show):
+        for x in range(options.show):
             next(iterator)
         pprint(next(iterator))
 

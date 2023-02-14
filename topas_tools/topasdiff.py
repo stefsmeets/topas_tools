@@ -1,5 +1,7 @@
 from __future__ import print_function
 from __future__ import absolute_import
+from builtins import str
+from builtins import input
 import argparse
 from .blender_mini import *
 import sys
@@ -126,7 +128,7 @@ def run_script(gui_options=None):
     options = parser.parse_args()
 
     if gui_options:
-        for k,v in gui_options.items():
+        for k,v in list(gui_options.items()):
             setattr(options, k, v)
 
     cif = options.args
@@ -139,7 +141,7 @@ def run_script(gui_options=None):
         print("Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)")
         sys.exit()
 
-    s = read_cif(cif).values()[0]
+    s = list(read_cif(cif).values())[0]
 
     uc = s.unit_cell()
     cell = uc.parameters()
@@ -154,7 +156,7 @@ def run_script(gui_options=None):
     if not dmin:
         dmin = calc_dspacing(df, cell, inplace=False).min()
 
-    fcalc = calc_structure_factors(cif, dmin=dmin, table=table).values()[0]
+    fcalc = list(calc_structure_factors(cif, dmin=dmin, table=table).values())[0]
 
     df = df.combine_first(fcalc)
 
@@ -164,7 +166,7 @@ def run_script(gui_options=None):
     df = df[df['fobs'].notnull()]
 
     if not topas_scale:
-        topas_scale = raw_input('Topas scale? >> [auto] ').replace(
+        topas_scale = input('Topas scale? >> [auto] ').replace(
             '`', '').replace('@', '').replace('scale', '').strip()
 
     if topas_scale:

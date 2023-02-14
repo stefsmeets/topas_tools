@@ -1,6 +1,12 @@
 from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 from future.utils import raise_
 from cctbx.array_family import flex
 from . import builders, model, errors
@@ -11,10 +17,10 @@ import os
 import shutil
 import re
 import sys
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 
-class ErrorHandler:
+class ErrorHandler(object):
   """An error handler for the validator. This class can be subclassed by clients
   that want to use their own error handlers"""
 
@@ -50,11 +56,11 @@ class ErrorHandler:
   def show(self, show_warnings=True, out=None):
     if out is None:
       out = sys.stdout
-    codes = self.errors.keys()
-    errors = self.errors.values()
+    codes = list(self.errors.keys())
+    errors = list(self.errors.values())
     if show_warnings:
-      codes.extend(self.warnings.keys())
-      errors.extend(self.warnings.values())
+      codes.extend(list(self.warnings.keys()))
+      errors.extend(list(self.warnings.values()))
     for code, errs in zip(codes, errors):
       printed_messages = set()
       for e in errs:
@@ -145,21 +151,21 @@ class dictionary(model.cif):
     self.look_up_table = {} # cached definitions for each data name
     if 'on_this_dictionary' in self:
       self.DDL_version = 1
-      for key, value in self.blocks.iteritems():
+      for key, value in self.blocks.items():
         self[key] = DDL1_definition(value)
       on_this_dict = self['on_this_dictionary']
       self.name = on_this_dict['_dictionary_name']
       self.version = on_this_dict['_dictionary_version']
     else:
       self.DDL_version = 2
-      master_block = self.values()[0]
+      master_block = list(self.values())[0]
       self.name = master_block['_dictionary.title']
       self.version = master_block['_dictionary.version']
       type_codes = master_block.get('_item_type_list.code')
       type_constructs = master_block.get('_item_type_list.construct')
       for code, construct in zip(type_codes, type_constructs):
         self.item_type_list.setdefault(code, re.compile(construct))
-      for key, save in master_block.saves.iteritems():
+      for key, save in master_block.saves.items():
         master_block[key] = DDL2_definition(save)
         children = save.get('_item_linked.child_name')
         parents = save.get('_item_linked.parent_name')
@@ -202,7 +208,7 @@ class dictionary(model.cif):
         return key_
       # otherwise we have to check every block in turn
       else:
-        for k, v in self.iteritems():
+        for k, v in self.items():
           if k == 'on_this_dictionary': continue
           elif isinstance(v['_name'], basestring):
             if v['_name'] == key:
@@ -214,7 +220,7 @@ class dictionary(model.cif):
         self.report_error(1001, key=key) # item not in dictionary
         raise_(KeyError, key)
     else:
-      if key not in self.values()[0]:
+      if key not in list(self.values())[0]:
         self.report_error(1001, key=key) # item not in dictionary
         raise_(KeyError, key)
       else:
@@ -224,7 +230,7 @@ class dictionary(model.cif):
     if self.DDL_version == 1:
       return self[self.find_definition(key)]
     elif self.DDL_version == 2:
-      return self.values()[0][self.find_definition(key)]
+      return list(self.values())[0][self.find_definition(key)]
 
   def validate_single_item(self, key, value, block):
     try:
@@ -340,7 +346,7 @@ class dictionary(model.cif):
 
   def validate_loop(self, loop, block):
     list_category = None
-    for key, value in loop.iteritems():
+    for key, value in loop.items():
       try:
         definition = self.get_definition(key)
       except KeyError: continue
@@ -407,7 +413,7 @@ class dictionary(model.cif):
     assert mode in ("strict", "replace", "overlay")
     assert self.DDL_version == other.DDL_version
     if self.DDL_version == 1:
-      for k, v in other.iteritems():
+      for k, v in other.items():
         if k == "on_this_dictionary": continue
         name = v.name
         try:
@@ -428,8 +434,8 @@ class dictionary(model.cif):
           else:
             self[k] = v
     elif self.DDL_version == 2:
-      master_block = self.values()[0]
-      for k, v in other.values()[0].saves.iteritems():
+      master_block = list(self.values())[0]
+      for k, v in list(other.values())[0].saves.iteritems():
         #name = v["_item.name"]
         name = k
         try:
@@ -457,7 +463,7 @@ class dictionary(model.cif):
   def __deepcopy__(self, memo):
     return dictionary(model.cif.__deepcopy__(self, memo))
 
-class definition_base:
+class definition_base(object):
 
   def name(self):
     return self.get(self.aliases['name'])

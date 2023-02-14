@@ -1,5 +1,8 @@
 from __future__ import print_function
 from __future__ import absolute_import
+from builtins import input
+from builtins import map
+from builtins import zip
 from future.utils import raise_
 import os, sys
 
@@ -8,7 +11,7 @@ import pandas as pd
 
 import math
 
-from itertools import izip
+
 
 from cctbx.array_family import flex
 
@@ -52,7 +55,7 @@ def read_cif(f):
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
-    for key, val in structures.items():
+    for key, val in list(structures.items()):
         print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
@@ -126,15 +129,15 @@ def load_hkl(fin, labels=None, shelx=False, savenpy=False, verbose=True):
     else:
         print('Loading data: {} => ({:5d}, {:2d})'.format(fname, inp.shape[0], inp.shape[1]))
 
-    h = map(int, inp[:, 0])
-    k = map(int, inp[:, 1])
-    l = map(int, inp[:, 2])
+    h = list(map(int, inp[:, 0]))
+    k = list(map(int, inp[:, 1]))
+    l = list(map(int, inp[:, 2]))
 
     index = list(zip(h, k, l))
 
     labels = (label for label in labels if label not in skipcols)
 
-    d = dict(zip(labels, inp[:, 3:].T))
+    d = dict(list(zip(labels, inp[:, 3:].T)))
 
     df = pd.DataFrame(d, index=index)
 
@@ -206,7 +209,7 @@ def f_calc_dspacing(a, b, c, al, be, ga, h, k, l, kind='triclinic'):
 def calc_dspacing(df, cell, col='d', kind='triclinic', inplace=True):
     """Calculate dspacing on df from indices"""
     a, b, c, al, be, ga = cell
-    h, k, l = map(np.array, zip(*df.index))
+    h, k, l = list(map(np.array, list(zip(*df.index))))
     d = f_calc_dspacing(a, b, c, al, be, ga, h, k, l, kind=kind)
     if inplace:
         df[col] = d
@@ -307,7 +310,7 @@ def calc_structure_factors(cif, dmin=1.0, combine=None, table='xray', prefix='',
     col_phases = prefix+"phases"
     col_fcalc = prefix+"fcalc"
 
-    for name, structure in structures.items():
+    for name, structure in list(structures.items()):
         fcalc, phase = f_calc_structure_factors(
             structure, dmin=dmin, scatfact_table=table, return_as="series", **kwargs)
 
@@ -422,10 +425,10 @@ def make_symmetry(cell, spgr):
     """takes cell parameters (a,b,c,A,B,C) and spacegroup (str, eg. 'cmcm'), returns cctbx
     crystal_symmetry class required for merging of reflections"""
     if not cell:
-        cell = raw_input("Please specify a cell:\n >> ")
-        cell = map(float, cell.split())
+        cell = input("Please specify a cell:\n >> ")
+        cell = list(map(float, cell.split()))
     if not spgr:
-        spgr = raw_input("Please specify space group:\n >> ")
+        spgr = input("Please specify space group:\n >> ")
 
     crystal_symmetry = crystal.symmetry(
         unit_cell=cell,

@@ -1,5 +1,10 @@
 from __future__ import division
 from __future__ import absolute_import
+from builtins import str
+from builtins import zip
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 from cctbx import adptbx, crystal, miller, sgtbx, uctbx, xray
 from cctbx.array_family import flex
 from . import model
@@ -321,7 +326,7 @@ class miller_array_builder(crystal_symmetry_builder):
       wavelength_ids = [None]
       crystal_ids = [None]
       scale_groups = [None]
-      for key, value in refln_loop.iteritems():
+      for key, value in refln_loop.items():
         # need to get these arrays first
         if (key.endswith('wavelength_id') or
             key.endswith('crystal_id') or
@@ -334,13 +339,13 @@ class miller_array_builder(crystal_symmetry_builder):
             miller.set(self.crystal_symmetry, self.indices).auto_anomalous(), data)
           if key.endswith('wavelength_id'):
             self.wavelength_id_array = array
-            wavelength_ids = counts.keys()
+            wavelength_ids = list(counts.keys())
           elif key.endswith('crystal_id'):
             self.crystal_id_array = array
-            crystal_ids = counts.keys()
+            crystal_ids = list(counts.keys())
           elif key.endswith('scale_group_code'):
             self.scale_group_array = array
-            scale_groups = counts.keys()
+            scale_groups = list(counts.keys())
       for label, value in sorted(refln_loop.items()):
         for w_id in wavelength_ids:
           for crys_id in crystal_ids:
@@ -498,7 +503,7 @@ class miller_array_builder(crystal_symmetry_builder):
                   array = array.customized_copy(data=array.data().as_double())
               array.set_info(base_array_info.customized_copy(labels=labels))
               self._arrays.setdefault(key, array)
-    for key, array in self._arrays.copy().iteritems():
+    for key, array in self._arrays.copy().items():
       if (   key.endswith('_minus') or '_minus_' in key
           or key.endswith('_plus') or '_plus_' in key):
         if '_minus' in key:
@@ -526,8 +531,8 @@ class miller_array_builder(crystal_symmetry_builder):
 
   def get_miller_indices_containing_loops(self):
     loops = []
-    for loop in self.cif_block.loops.values():
-      for key in loop.keys():
+    for loop in list(self.cif_block.loops.values()):
+      for key in list(loop.keys()):
         if 'index_h' not in key: continue
         hkl_str = [loop.get(key.replace('index_h', 'index_%s' %i)) for i in 'hkl']
         if hkl_str.count(None) > 0:

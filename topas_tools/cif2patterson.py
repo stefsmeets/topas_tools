@@ -22,7 +22,7 @@ def read_cif(f):
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
-    for key, val in structures.items():
+    for key, val in list(structures.items()):
         print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
@@ -54,7 +54,7 @@ parser.set_defaults(
 options = parser.parse_args()
 
 cif = options.args
-s = read_cif(cif).values()[0]
+s = list(read_cif(cif).values())[0]
 s = s.expand_to_p1()
 print("Expanded to P1 => {} atoms".format(s.scatterers().size()))
 print()

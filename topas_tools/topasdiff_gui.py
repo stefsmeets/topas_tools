@@ -1,8 +1,11 @@
 from __future__ import print_function
 from __future__ import absolute_import
-from Tkinter import *
-from tkFileDialog import *
-from ttk import *
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from tkinter import *
+from tkinter.filedialog import *
+from tkinter.ttk import *
 
 import os
 
