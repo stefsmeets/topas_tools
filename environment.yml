@@ -1,6 +1,8 @@
 name: topas_tools
+channels:
+  - conda-forge
 dependencies:
-  - python=2.7
+  - cctbx-base
   - matplotlib
   - numpy
   - pandas
