@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import os
 import sys
 
@@ -154,14 +156,14 @@ def cif2patterson():
         except ImportError:
             set_environment_variables_windows()
 
-        import cif2patterson
+        from . import cif2patterson
     elif platform == "linux2":
         set_environment_variables_linux()
 
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'cif2patterson.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 
 def cif2topas():
@@ -180,7 +182,7 @@ def cif2topas():
         except ImportError:
             set_environment_variables_windows()
 
-        import cif2topas
+        from . import cif2topas
         cif2topas.main()
     elif platform == "linux2":
         set_environment_variables_linux()
@@ -188,7 +190,7 @@ def cif2topas():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'cif2topas.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 
 def expandcell():
@@ -207,14 +209,14 @@ def expandcell():
         except ImportError:
             set_environment_variables_windows()
 
-        import expandcell
+        from . import expandcell
     elif platform == "linux2":
         set_environment_variables_linux()
 
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'expandcell.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 
 def stripcif():
@@ -233,7 +235,7 @@ def stripcif():
             import cctbx
         except ImportError:
             set_environment_variables_windows()
-        import stripcif
+        from . import stripcif
         stripcif.main()
     elif platform == "linux2":
         set_environment_variables_linux()
@@ -242,7 +244,7 @@ def stripcif():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'stripcif.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 
 def topasdiff():
@@ -262,7 +264,7 @@ def topasdiff():
         except ImportError:
             set_environment_variables_windows()
 
-        import topasdiff
+        from . import topasdiff
         topasdiff.main()
     elif platform == "linux2":
         set_environment_variables_linux()
@@ -271,7 +273,7 @@ def topasdiff():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'topasdiff.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 
 def make_superflip():
@@ -291,7 +293,7 @@ def make_superflip():
         except ImportError:
             set_environment_variables_windows()
 
-        import make_superflip
+        from . import make_superflip
         make_superflip.main()
     elif platform == "linux2":
         set_environment_variables_linux()
@@ -300,11 +302,11 @@ def make_superflip():
         sp.call([sys.executable, os.path.join(
             os.path.dirname(__file__), 'make_superflip.py')] + sys.argv[1:])  # call self
     else:
-        print "Operating system not supported!"
+        print("Operating system not supported!")
 
 if __name__ == '__main__':
-    print "Running..."
-    print
+    print("Running...")
+    print()
     topasdiff()
-    print
-    print "Done!"
+    print()
+    print("Done!")

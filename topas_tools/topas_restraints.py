@@ -1,3 +1,4 @@
+from __future__ import print_function
 from itertools import combinations
 
 """
@@ -59,21 +60,21 @@ def gen_section(f):
         if a1.split():
             if len(part) > 0:
                 part = [item.replace(':', ' ') for item in part]
-                print
+                print()
                 yield part
             part = [a1]
-            print a1, '|',
+            print(a1, '|', end=' ')
 
         if to_dist-to_tol < ln < to_dist+to_tol:
             if not a1.split() and len(part) > 1:
-                print '           |',
+                print('           |', end=' ')
             part.append(a2)
-            print a2, '|', ln
+            print(a2, '|', ln)
         else:
             pass
     if len(part) > 0:
         part = [item.replace(':', ' ') for item in part]
-        print
+        print()
         yield part
 
 
@@ -102,38 +103,38 @@ def main():
         if 'Si' in main or 'Al' in main or 'P' in main:
             match += 1
             if nbonds != 4:
-                print '*** Warning: More/less than _4_ bonds detected for {}... bonds = {}\n'.format(main, nbonds)
+                print('*** Warning: More/less than _4_ bonds detected for {}... bonds = {}\n'.format(main, nbonds))
 
             for ox in part[1:]:
-                print >> fout, '      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
-                    main, ox, to_dist, to_w)
+                print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
+                    main, ox, to_dist, to_w), file=fout)
 
             for ox1, ox2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    ox1, main, ox2, oto_ang, oto_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    ox1, main, ox2, oto_ang, oto_w), file=fout)
 
         if 'O' in main:
             match += 1
             if nbonds != 2:
-                print '*** Warning: More/less than _2_ bonds detected for {}... bonds = {}\n'.format(main, nbonds)
+                print('*** Warning: More/less than _2_ bonds detected for {}... bonds = {}\n'.format(main, nbonds))
 
             for si1, si2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    si1, main, si2, tot_ang, tot_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    si1, main, si2, tot_ang, tot_w), file=fout)
 
         if match == 0:
-            print '*** Non-Si/O detected --> {}\n'.format(main)
+            print('*** Non-Si/O detected --> {}\n'.format(main))
 
             for ox in part[1:]:
-                print >> fout, '      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
-                    main, ox, to_dist, to_w)
+                print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
+                    main, ox, to_dist, to_w), file=fout)
 
             for ox1, ox2 in combinations(part[1:], 2):
 
-                print >> fout, '      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
-                    ox1, main, ox2, oto_ang, oto_w)
+                print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
+                    ox1, main, ox2, oto_ang, oto_w), file=fout)
 
 if __name__ == '__main__':
     main()

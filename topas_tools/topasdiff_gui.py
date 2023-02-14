@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 from Tkinter import *
 from tkFileDialog import *
 from ttk import *
@@ -6,7 +8,7 @@ import os
 
 from collections import namedtuple
 
-import topasdiff
+from . import topasdiff
 
 def which(program):
     def is_exe(fpath):
@@ -183,4 +185,4 @@ def run():
     app.mainloop()
 
 if __name__ == '__main__':
-    print run()
+    print(run())

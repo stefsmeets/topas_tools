@@ -1,10 +1,12 @@
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import argparse
 
 import os, sys
 
-from cif import reader, CifParserError
+from .cif import reader, CifParserError
 
 
 def read_cif(f):
@@ -17,11 +19,11 @@ def read_cif(f):
         else:
             raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     for key, val in structures.items():
-        print "\nstructure:", key
+        print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
 
@@ -54,8 +56,8 @@ options = parser.parse_args()
 cif = options.args
 s = read_cif(cif).values()[0]
 s = s.expand_to_p1()
-print "Expanded to P1 => {} atoms".format(s.scatterers().size())
-print
+print("Expanded to P1 => {} atoms".format(s.scatterers().size()))
+print()
 
 root, ext = os.path.splitext(cif)
 
@@ -73,7 +75,7 @@ for atom1 in scatterers:
     x1, y1, z1 = atom1.site
 
     if verbose:
-        print
+        print()
         atom1.show()
     distances = []
     for atom2 in scatterers:
@@ -93,7 +95,7 @@ for atom1 in scatterers:
         distances.append((atom2.label, dx, dy, dz, length))
 
         if verbose:
-            print ' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(atom2.label, dx, dy, dz, length)
+            print(' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(atom2.label, dx, dy, dz, length))
 
         # print atom1.label, '-->', atom2.label, '=', uc.length((dx,dy,dz))
 
@@ -101,16 +103,16 @@ for atom1 in scatterers:
 
     atom1.show(fout2)
     for label, dx, dy, dz, distance in sorted(distances, key=lambda x: x[-1]):
-        print >> fout2, ' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(
-            label, dx, dy, dz, distance)
-    print >> fout2
+        print(' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(
+            label, dx, dy, dz, distance), file=fout2)
+    print(file=fout2)
 
-print 'Wrote file', fout2.name
+print('Wrote file', fout2.name)
 
 for label, dx, dy, dz, distance in sorted(distances_all, key=lambda x: x[-1]):
-    print >> fout1, '{:9.5f}'.format(distance)
+    print('{:9.5f}'.format(distance), file=fout1)
 
-print 'Wrote file', fout1.name
+print('Wrote file', fout1.name)
 
 fout1.close()
 fout2.close()

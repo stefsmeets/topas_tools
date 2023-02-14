@@ -1,7 +1,9 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import argparse
 import os, sys
 
-from cif import reader, CifParserError
+from .cif import reader, CifParserError
 
 
 def read_cif(f):
@@ -14,12 +16,12 @@ def read_cif(f):
         else:
             raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     structures = r.build_crystal_structures()
     for key, val in structures.items():
-        print "\nstructure:", key
+        print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
 
@@ -51,7 +53,7 @@ def main():
     out = root + "_simple" + ext
 
     s.as_cif_simple(out=open(out, 'w'))
-    print " >> Wrote file {}".format(out)
+    print(" >> Wrote file {}".format(out))
 
 if __name__ == '__main__':
     main()

@@ -1,8 +1,9 @@
 from __future__ import division
+from __future__ import absolute_import
 from cctbx.array_family import flex
 from cctbx import crystal, sgtbx
 from cctbx import covariance, geometry
-import model
+from . import model
 from libtbx.utils import format_float_with_standard_uncertainty \
      as format_float_with_su
 from libtbx import adopt_init_args

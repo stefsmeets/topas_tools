@@ -1,7 +1,9 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import sys
 cifs = sys.argv[1:]
 
-from cif import reader, CifParserError
+from .cif import reader, CifParserError
 
 
 def read_cif(f, verbose=False):
@@ -15,24 +17,24 @@ def read_cif(f, verbose=False):
             raise TypeError(
                 'read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     if verbose:
         for key, val in structures.items():
-            print "\nstructure:", key
+            print("\nstructure:", key)
             val.show_summary().show_scatterers()
     return structures
 
 
 def main():
     if len(cifs) == 0:
-        print "cif2topas - tool for converting cif files to Topas format (.inp)"
-        print "Takes any number of cif files and writes to stdout"
-        print ""
-        print "usage: cif2topas cif1 [cif2 ...]"
-        print
-        print "version", __version__
+        print("cif2topas - tool for converting cif files to Topas format (.inp)")
+        print("Takes any number of cif files and writes to stdout")
+        print("")
+        print("usage: cif2topas cif1 [cif2 ...]")
+        print()
+        print("version", __version__)
         sys.exit()
 
     for cif in cifs:
@@ -45,7 +47,7 @@ def main():
             sps = structure.special_position_settings()
             scatterers = structure.scatterers()
 
-            print """
+            print("""
    str
       Out_X_Yobs(x_yobs.xy)
       Out_X_Ycalc(x_ycalc.xy)
@@ -54,12 +56,12 @@ def main():
 
       Out_fobs(fobs.hkl)
 
-      Out_CIF_STR(structure.cif)"""
+      Out_CIF_STR(structure.cif)""")
 
-            print """       
+            print("""       
       scale  @  1.0
-      r_bragg  1.0"""
-            print
+      r_bragg  1.0""")
+            print()
 
             s400 = "      'prm s400 1.0 \n"
             s040 = "      'prm s040 1.0 \n"
@@ -93,10 +95,10 @@ def main():
             else:
                 string = ""
                 macro = ""
-            print string,
-            print macro
+            print(string, end=' ')
+            print(macro)
 
-            print """
+            print("""
       PV_Peak_Type(
       ha,    0.02,
       !hb,   0.0,
@@ -107,16 +109,16 @@ def main():
 
       'Simple_Axial_Model(axial, 0.0)
 
-      Phase_Density_g_on_cm3( 1.0)"""
+      Phase_Density_g_on_cm3( 1.0)""")
 
-            print """
+            print("""
       view_structure
 
       'fourier_map 1
-      '   fourier_map_formula = Fobs - Fcalc;"""
-            print
-            print '      space_group "{}"'.format(sg.type().universal_hermann_mauguin_symbol().replace(" ", ""))
-            print
+      '   fourier_map_formula = Fobs - Fcalc;""")
+            print()
+            print('      space_group "{}"'.format(sg.type().universal_hermann_mauguin_symbol().replace(" ", "")))
+            print()
             a, b, c, al, be, ga = uc.parameters()
             if sg.crystal_system() == 'Cubic':
                 string = "      Cubic(@ {a})"
@@ -139,13 +141,13 @@ def main():
             refal = "" if al == 90 else "@"
             refbe = "" if be == 90 else "@"
             refga = "" if ga == 90 else "@"
-            print string.format(a=a, b=b, c=c, refal=refal, al=al, refbe=refbe, be=be, refga=refga, ga=ga)
-            print
-            print "      volume {:.2f}".format(uc.volume())
-            print
+            print(string.format(a=a, b=b, c=c, refal=refal, al=al, refbe=refbe, be=be, refga=refga, ga=ga))
+            print()
+            print("      volume {:.2f}".format(uc.volume()))
+            print()
             for element in set(scatterers.extract_scattering_types()):
-                print "      prm beq{element:2s}  2.0  min 1.0  max 5.0".format(element=element)
-            print
+                print("      prm beq{element:2s}  2.0  min 1.0  max 5.0".format(element=element))
+            print()
 
             z_order = sg.order_z()
 
@@ -156,12 +158,12 @@ def main():
                 element = atom.element_symbol()
                 mult = atom.multiplicity()
 
-                print "      site {label:5s}  num_posns {mult:3d}  x  {x:.5f}  y  {y:.5f}  z  {z:.5f}  occ {element:2s}  1.0  beq =beq{element:2s};".format(label=label, mult=mult, x=x, y=y, z=z, element=element),
+                print("      site {label:5s}  num_posns {mult:3d}  x  {x:.5f}  y  {y:.5f}  z  {z:.5f}  occ {element:2s}  1.0  beq =beq{element:2s};".format(label=label, mult=mult, x=x, y=y, z=z, element=element), end=' ')
 
                 if mult < z_order:
-                    print "   ' {:5s} {:5s} {:5s}".format(*sps.site_symmetry(atom.site).special_op_simplified().terms)
+                    print("   ' {:5s} {:5s} {:5s}".format(*sps.site_symmetry(atom.site).special_op_simplified().terms))
                 else:
-                    print
+                    print()
 
 
 if __name__ == '__main__':

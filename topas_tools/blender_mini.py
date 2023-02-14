@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from future.utils import raise_
 import os, sys
 
 import numpy as np
@@ -17,7 +20,7 @@ from cctbx.sgtbx import space_group_type
 from cctbx.miller import index_generator
 from cctbx import uctbx
 
-from cif import reader, CifParserError
+from .cif import reader, CifParserError
 
 
 centering_vectors = {
@@ -46,11 +49,11 @@ def read_cif(f):
         else:
             raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     for key, val in structures.items():
-        print "\nstructure:", key
+        print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
 
@@ -111,17 +114,17 @@ def load_hkl(fin, labels=None, shelx=False, savenpy=False, verbose=True):
 
     if savenpy:
         if ext != '.npy' or changed:
-            print 'Writing data as npy format to {}'.format(fname)
+            print('Writing data as npy format to {}'.format(fname))
             np.save(root, inp)
 
     if verbose:
-        print ''
-        print 'Loading data: {}'.format(fname)
-        print '     usecols: {}'.format(usecols)
-        print '      labels: {}'.format(' '.join(('h', 'k', 'l')+labels))
-        print '       shape: {}'.format(inp.shape)
+        print('')
+        print('Loading data: {}'.format(fname))
+        print('     usecols: {}'.format(usecols))
+        print('      labels: {}'.format(' '.join(('h', 'k', 'l')+labels)))
+        print('       shape: {}'.format(inp.shape))
     else:
-        print 'Loading data: {} => ({:5d}, {:2d})'.format(fname, inp.shape[0], inp.shape[1])
+        print('Loading data: {} => ({:5d}, {:2d})'.format(fname, inp.shape[0], inp.shape[1]))
 
     h = map(int, inp[:, 0])
     k = map(int, inp[:, 1])
@@ -136,7 +139,7 @@ def load_hkl(fin, labels=None, shelx=False, savenpy=False, verbose=True):
     df = pd.DataFrame(d, index=index)
 
     if not df.index.is_unique:
-        print "\n** Warning: Duplicate indices detected in {} **\n".format(fname)
+        print("\n** Warning: Duplicate indices detected in {} **\n".format(fname))
 
         # useful, but very slow for large data sets!
         # index = list(df.index)
@@ -159,22 +162,22 @@ def f_calc_dspacing(a, b, c, al, be, ga, h, k, l, kind='triclinic'):
     """
 
     if kind == 'cubic':
-        print '\n** Warning: cubic dspacing calculation unverified!! **\n'
+        print('\n** Warning: cubic dspacing calculation unverified!! **\n')
         idsq = (h**2 + k**2 + l**2) / a**2
 
     elif kind == 'tetragonal':
-        print '\n** Warning: tetragonal dspacing calculation unverified!! **\n'
+        print('\n** Warning: tetragonal dspacing calculation unverified!! **\n')
         idsq = (h**2 + k**2) / a**2 + l**2 / c**2
 
     elif kind == 'orthorhombic':
         idsq = h**2 / a**2 + k**2 / b**2 + l**2 / c**2
 
     elif kind == 'hexagonal':
-        print '\n** Warning: hexagonal dspacing calculation unverified!! **\n'
+        print('\n** Warning: hexagonal dspacing calculation unverified!! **\n')
         idsq = (4/3) * (h**2 + h*k + k**2) * (1/a**2) + l**2 / c**2
 
     elif kind == 'monoclinic':
-        print '\n** Warning: monoclinic dspacing calculation unverified!! **\n'
+        print('\n** Warning: monoclinic dspacing calculation unverified!! **\n')
         be = math.radians(be)
         idsq = (1/math.sin(be)**2) * (h**2/a**2 + k**2 * math.sin(be)
                                       ** 2 / b**2 + l**2/c**2 - (2*h*l*math.cos(be)) / (a*c))
@@ -261,9 +264,9 @@ def f_calc_structure_factors(structure, **kwargs):
         algorithm=algorithm)
     f_calc = f_calc_manager.f_calc()
 
-    print "\nScattering table:", structure.scattering_type_registry_params.table
+    print("\nScattering table:", structure.scattering_type_registry_params.table)
     structure.scattering_type_registry().show()
-    print "Minimum d-spacing: %g" % f_calc.d_min()
+    print("Minimum d-spacing: %g" % f_calc.d_min())
 
     if return_as == "miller":
         return f_calc
@@ -277,7 +280,7 @@ def f_calc_structure_factors(structure, **kwargs):
         dffcal['phase'] = np.angle(f_calc.data())
         return dffcal
     else:
-        raise ValueError, "Unknown argument for 'return_as':{}".format(return_as)
+        raise_(ValueError, "Unknown argument for 'return_as':{}".format(return_as))
 
 
 def calc_structure_factors(cif, dmin=1.0, combine=None, table='xray', prefix='', **kwargs):
@@ -367,12 +370,12 @@ def merge_sym_equiv(m, output='ma', algorithm=None, verbose=True):
     merging = m.merge_equivalents(algorithm=algorithm)
 
     if verbose:
-        print
+        print()
         merging.show_summary()
-        print
+        print()
 
     m_out = merging.array()
-    print '%s reflections merged/averaged to %s' % (m.size(), m_out.size())
+    print('%s reflections merged/averaged to %s' % (m.size(), m_out.size()))
     if output == 'dict':
         return miller_array_to_dict(m_out)
     elif output == 'ma':
@@ -384,26 +387,26 @@ def remove_sysabs(m, verbose=True):
     sysabs = m.select_sys_absent().sort('data')
 
     if sysabs.size() > 0 and verbose:
-        print '\nTop 10 systematic absences removed (total={}):'.format(sysabs.size())
+        print('\nTop 10 systematic absences removed (total={}):'.format(sysabs.size()))
 
         if sysabs.sigmas() == None:
             for ((h, k, l), sf) in sysabs[0:10]:
-                print '{:4}{:4}{:4} {:8.2f}'.format(h, k, l, sf)
+                print('{:4}{:4}{:4} {:8.2f}'.format(h, k, l, sf))
         else:
             for ((h, k, l), sf, sig) in sysabs[0:10]:
-                print '{:4}{:4}{:4} {:8.2f} {:8.2f}'.format(h, k, l, sf, sig)
+                print('{:4}{:4}{:4} {:8.2f} {:8.2f}'.format(h, k, l, sf, sig))
 
-        print "Compared to largest 3 reflections:"
+        print("Compared to largest 3 reflections:")
         if m.sigmas() == None:
             for ((h, k, l), sf) in m.sort('data')[0:3]:
-                print '{:4}{:4}{:4} {:8.2f}'.format(h, k, l, sf)
+                print('{:4}{:4}{:4} {:8.2f}'.format(h, k, l, sf))
         else:
             for ((h, k, l), sf, sig) in m.sort('data')[0:3]:
-                print '{:4}{:4}{:4} {:8.2f} {:8.2f}'.format(h, k, l, sf, sig)
+                print('{:4}{:4}{:4} {:8.2f} {:8.2f}'.format(h, k, l, sf, sig))
 
         return m.remove_systematic_absences()
     elif sysabs.size() > 0:
-        print "{} systematic absences removed".format(sysabs.size())
+        print("{} systematic absences removed".format(sysabs.size()))
         return m.remove_systematic_absences()
     else:
         return m
@@ -517,9 +520,9 @@ def reduce_all(df, cell, spgr, dmin=None, reindex=True, verbose=True):
     # little table with dmins
     cols = [col for col in df if col not in ('m', 'd')]
     ln = max([len(col) for col in cols])
-    print '\n{:>{}} {:>6s}'.format('', ln, 'dmin')
+    print('\n{:>{}} {:>6s}'.format('', ln, 'dmin'))
     for col, dval in zip(cols, dmins):
-        print '{:>{}} {:6.3f}'.format(col, ln, dval)
+        print('{:>{}} {:6.3f}'.format(col, ln, dval))
 
     if not dmin:
         # find the largest dmin for all data sets
@@ -538,7 +541,7 @@ def reduce_all(df, cell, spgr, dmin=None, reindex=True, verbose=True):
     for col in df:
         if col in ('m', 'd'):
             continue
-        print '\n - Merging {}: '.format(col)
+        print('\n - Merging {}: '.format(col))
         m = df2m(df, cell=cell, spgr=spgr, data=col)
         m = remove_sysabs(m, verbose=verbose)
         m = merge_sym_equiv(m, verbose=verbose)
@@ -553,7 +556,7 @@ def reduce_all(df, cell, spgr, dmin=None, reindex=True, verbose=True):
     f_calc_multiplicities(dfm, cell, spgr)
     calc_dspacing(dfm, cell)
 
-    print "\nReduced/merged data to dmin = {}, {} refs".format(dmin, len(dfm))
+    print("\nReduced/merged data to dmin = {}, {} refs".format(dmin, len(dfm)))
 
     return dfm.sort_values(by='d', ascending=False)
 
@@ -618,9 +621,9 @@ def write_hkl(df, cols=None, out=None, no_hkl=False, pre=None, post=None, data_f
         data_fmt = '{:8.3f}{:8.3f}'
 
     if pre:
-        print >> out, pre
+        print(pre, file=out)
 
-    print '>> Writing {} refs to file {}'.format(len(df), out.name if out else 'stdout')
+    print('>> Writing {} refs to file {}'.format(len(df), out.name if out else 'stdout'))
 
     for row in df.reindex(columns=cols).itertuples():
 
@@ -629,7 +632,7 @@ def write_hkl(df, cols=None, out=None, no_hkl=False, pre=None, post=None, data_f
         #     abs(row[1:][2] - row[1:][6]) < 0.0001):
         #   continue
 
-        print >> out, hkl_fmt.format(*row[0])+data_fmt.format(*row[1:])
+        print(hkl_fmt.format(*row[0])+data_fmt.format(*row[1:]), file=out)
 
     if post:
-        print >> out, post
+        print(post, file=out)

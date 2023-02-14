@@ -1,4 +1,6 @@
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import argparse
 
@@ -7,7 +9,7 @@ from cctbx import crystal
 from cctbx.array_family import flex
 import os, sys
 
-from cif import reader, CifParserError
+from .cif import reader, CifParserError
 
 def read_cif(f):
     """opens cif and returns cctbx data object"""
@@ -19,11 +21,11 @@ def read_cif(f):
         else:
             raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
     except CifParserError as e:
-        print e
-        print "Error parsing cif file, check if the data tag does not contain any spaces."
+        print(e)
+        print("Error parsing cif file, check if the data tag does not contain any spaces.")
         sys.exit()
     for key, val in structures.items():
-        print "\nstructure:", key
+        print("\nstructure:", key)
         val.show_summary().show_scatterers()
     return structures
 
@@ -91,8 +93,8 @@ if options.exclude:
             excluded.append(atom)
 
 s = s.expand_to_p1()
-print "Expanded to P1 => {} atoms".format(s.scatterers().size())
-print
+print("Expanded to P1 => {} atoms".format(s.scatterers().size()))
+print()
 
 root, ext = os.path.splitext(cif)
 
@@ -124,17 +126,17 @@ cell = s.unit_cell().parameters()
 new_cell = (cell[0] * expand_x, cell[1] * expand_y,
             cell[2] * expand_z, cell[3], cell[4], cell[5])
 
-print "old cell:"
-print cell
-print
-print "new cell:"
-print new_cell
-print
+print("old cell:")
+print(cell)
+print()
+print("new cell:")
+print(new_cell)
+print()
 
 
 def expand_cell(scatterers, direction, number):
     for atom in scatterers:
-        print atom.label, number
+        print(atom.label, number)
         site = list(atom.site)
 
         coord = site[direction]
@@ -150,8 +152,8 @@ def expand_cell(scatterers, direction, number):
 
 if options.exclude:
     scatterers = excluded
-    print ">> Excluding these atoms:", ", ".join(options.exclude)
-    print
+    print(">> Excluding these atoms:", ", ".join(options.exclude))
+    print()
     for atom in s.scatterers():
         if atom.element_symbol() in options.exclude:
             continue
@@ -160,21 +162,21 @@ if options.exclude:
 else:
     scatterers = s.scatterers()
 
-print "Starting with {} scatterers".format(len(scatterers))
-print
+print("Starting with {} scatterers".format(len(scatterers)))
+print()
 
 for direction, number in enumerate((expand_x, expand_y, expand_z)):
     if number == 1:
         continue
-    print " >> Expanding cell along {} by {}".format('xyz'[direction], number)
+    print(" >> Expanding cell along {} by {}".format('xyz'[direction], number))
     scatterers = [
         scatterer for scatterer in expand_cell(scatterers, direction, number)]
-    print 'New number of scatterers:', len(scatterers)
-    print
+    print('New number of scatterers:', len(scatterers))
+    print()
 
 
-print " >> Applying spacegroup {}".format(spgr)
-print
+print(" >> Applying spacegroup {}".format(spgr))
+print()
 
 sps = crystal.special_position_settings(
     crystal_symmetry=crystal.symmetry(
@@ -188,8 +190,8 @@ s = xray.structure(
 
 if shift:
     # shift = [-1*number for number in shift]
-    print ">> Applying shift {} to all atom sites".format(shift)
-    print
+    print(">> Applying shift {} to all atom sites".format(shift))
+    print()
     s = s.apply_shift(shift)
 
 if spgr != "P1":
@@ -197,24 +199,24 @@ if spgr != "P1":
     s = s.sites_mod_positive()
 
     asu = s.space_group_info().brick().as_string()
-    print "Asymmetric unit:"
+    print("Asymmetric unit:")
     # print box_min, "=>", box_max
-    print asu
-    print
+    print(asu)
+    print()
     asu_x, asu_y, asu_z = asu.split(';')
     fx = lambda x: eval(asu_x)
     fy = lambda y: eval(asu_y)
     fz = lambda z: eval(asu_z)
 
     if '-' in asu:
-        print "Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)"
-        print ""
-        print "Remove a,b,c etc from atom labels in cif, then run:"
-        print " > cif2strudat", out
-        print " > kriber"
-        print " >> reacs global"
-        print " >> wricif"
-        print
+        print("Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)")
+        print("")
+        print("Remove a,b,c etc from atom labels in cif, then run:")
+        print(" > cif2strudat", out)
+        print(" > kriber")
+        print(" >> reacs global")
+        print(" >> wricif")
+        print()
     else:
         scatterers = []
         for atom in s.scatterers():
@@ -233,19 +235,19 @@ if spgr != "P1":
             special_position_settings=sps,
             scatterers=flex.xray_scatterer(scatterers))
         
-        print " >> Removing duplicate atoms, reduced number to {} atoms".format(s.scatterers().size())
-        print
+        print(" >> Removing duplicate atoms, reduced number to {} atoms".format(s.scatterers().size()))
+        print()
 
 s.as_cif_simple(out=open(out, 'w'))
-print " >> Wrote file {}".format(out)
-print
+print(" >> Wrote file {}".format(out))
+print()
 
 if (not shift) and (spgr == "P1"):
-    print "---"
-    print "To find the right symmetry of the expanded unit cell:"
-    print
-    print "Run Platon, and then the Addsym routine"
-    print "Select NoSubCell in sidebar, then run ADDSYMExact"
-    print "Note the space group, and Origin shift"
-    print
-    print "Rerun expandcell with --shift X Y Z --spgr SPGR"
+    print("---")
+    print("To find the right symmetry of the expanded unit cell:")
+    print()
+    print("Run Platon, and then the Addsym routine")
+    print("Select NoSubCell in sidebar, then run ADDSYMExact")
+    print("Note the space group, and Origin shift")
+    print()
+    print("Rerun expandcell with --shift X Y Z --spgr SPGR")

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import sys
 
@@ -6,7 +7,7 @@ def main():
     pat = re.compile('[a-zA-Z]+')
 
     if len(sys.argv) == 1:
-        print "Usage: fh2topas.py ~/path/to/output.fh [n]"
+        print("Usage: fh2topas.py ~/path/to/output.fh [n]")
         sys.exit()
 
     args = sys.argv[2:]
@@ -30,7 +31,7 @@ def main():
         d = {}
         all_atoms = []
 
-        print '      rigid'
+        print('      rigid')
 
         for line in lines:
             inp = line.split()
@@ -42,7 +43,7 @@ def main():
                 continue
             n += 1
 
-            print '         z_matrix ',
+            print('         z_matrix ', end=' ')
 
             if n > 0:
                 tpe = inp[0]
@@ -53,7 +54,7 @@ def main():
 
                 scatterer = re.findall(pat, atom)[0]
                 atom = atom.replace(scatterer, scatterer+str(molnum))
-                print '{:6s}'.format(atom),
+                print('{:6s}'.format(atom), end=' ')
 
             if n > 1:
                 bonded_with, bond = inp[1:3]
@@ -61,32 +62,32 @@ def main():
                 scatterer = re.findall(pat, bonded_with)[0]
                 bonded_with = bonded_with.replace(
                     scatterer, scatterer+str(molnum))
-                print '{:6s} {:7s}'.format(bonded_with, bond),
+                print('{:6s} {:7s}'.format(bonded_with, bond), end=' ')
             if n > 2:
                 angle_with, angle = inp[3:5]
                 angle_with = d[angle_with]
                 scatterer = re.findall(pat, angle_with)[0]
                 angle_with = angle_with.replace(
                     scatterer, scatterer+str(molnum))
-                print '{:6s} {:7s}'.format(angle_with, angle),
+                print('{:6s} {:7s}'.format(angle_with, angle), end=' ')
             if n > 3:
                 torsion_with, torsion = inp[5:7]
                 torsion_with = d[torsion_with]
                 scatterer = re.findall(pat, torsion_with)[0]
                 torsion_with = torsion_with.replace(
                     scatterer, scatterer+str(molnum))
-                print '{:6s} {:>7s}'.format(torsion_with, torsion),
+                print('{:6s} {:>7s}'.format(torsion_with, torsion), end=' ')
 
-            print
+            print()
 
-        print """
+        print("""
              Rotate_about_axies(@ 0.0 randomize_on_errors,
                                 @ 0.0 randomize_on_errors,
                                 @ 0.0 randomize_on_errors)
              Translate(         @ 0.0 randomize_on_errors,
                                 @ 0.0 randomize_on_errors,
                                 @ 0.0 randomize_on_errors)
-        """
+        """)
 
         if molnum == '':
             break
@@ -99,15 +100,15 @@ def main():
             molstr = ''
         else:
             molstr = str(molnum)
-        print
-        print "      prm !occ{} 0.5 min 0.0 max  1.0".format(molnum)
-        print "      prm !beq{} 3.0 min 1.0 max 10.0".format(molnum)
-        print
+        print()
+        print("      prm !occ{} 0.5 min 0.0 max  1.0".format(molnum))
+        print("      prm !beq{} 3.0 min 1.0 max 10.0".format(molnum))
+        print()
 
         for atom in all_atoms:
             scatterer = re.findall(pat, atom)[0]
             atom = atom.replace(scatterer, scatterer+molstr)
-            print '      site {:6s} x 0.0 y 0.0 z 0.0 occ {:2s} =occ{}; beq =beq{};'.format(atom, scatterer, molnum, molnum)
+            print('      site {:6s} x 0.0 y 0.0 z 0.0 occ {:2s} =occ{}; beq =beq{};'.format(atom, scatterer, molnum, molnum))
         molnum += 1
 
 

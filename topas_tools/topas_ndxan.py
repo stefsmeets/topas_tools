@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import argparse
 
@@ -22,7 +23,7 @@ def parse_str_int_float(item):
 
 def pprint(d):
     """pretty printing using the json module"""
-    print json.dumps(d, sort_keys=True, indent=4)
+    print(json.dumps(d, sort_keys=True, indent=4))
 
 
 def gen_lines(f):
@@ -78,11 +79,11 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     def onkeypress(event):
         if event.key == 'x':
@@ -128,11 +129,11 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     # col = ax.scatter(x, y, 100*s, c, picker=True) => s,c add color/size to
     # points, maybe nice for best solutions from sflog ??
@@ -170,11 +171,11 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
         pckspgr = np.take(spgr, ind)
         pcknum = np.take(num,  ind)
 
-        print
+        print()
         for n in range(len(ind)):
-            print 'idx: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n])
+            print('idx: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
-            print 'number of points:', len(ind)
+            print('number of points:', len(ind))
 
     # col = ax.scatter(x, y, 100*s, c, picker=True) => s,c add color/size to
     # points, maybe nice for best solutions from sflog ??
@@ -219,8 +220,8 @@ def histogram(iterator, x_key, title="Histogram"):
     #   val   = n[i]
     #   print '{:12f} - {:12f} : {:12f}'.format(begin,end,val)
 
-    print "mean:", mu
-    print "sigma:", sigma
+    print("mean:", mu)
+    print("sigma:", sigma)
 
     plt.grid(True)
 
@@ -244,12 +245,12 @@ def counter(iterator, key):
 def table_out(iterator, keywords, out=None):
     """Lists output of specified keywords to stdout (or outfile if an open file object specified)"""
     header = '{:<10}'*len(keywords)
-    print >> out, header.format(*keywords)
+    print(header.format(*keywords), file=out)
 
     fmt = ''.join(['{{{}:<10}}'.format(keyword) for keyword in keywords])
 
     for d in iterator:
-        print >> out, fmt.format(**d)
+        print(fmt.format(**d), file=out)
 
 
 def gen_filter(iterator, args):
@@ -344,11 +345,11 @@ def main():
 
     options = parser.parse_args()
     args = options.keywords
-    print options, args
+    print(options, args)
 
     f = open(options.index_out, 'r')
 
-    print f.name, 'opened'
+    print(f.name, 'opened')
 
     lines = gen_lines(f)
     lines = get_lines(lines, options)
@@ -371,8 +372,8 @@ def main():
 
     if options.show is not None:
         for x in xrange(options.show):
-            iterator.next()
-        pprint(iterator.next())
+            next(iterator)
+        pprint(next(iterator))
 
     elif options.table:
         table_out(iterator, args)
@@ -399,7 +400,7 @@ def main():
         s = 0
         for item in iterator:
             s += 1
-        print s
+        print(s)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,6 @@
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 from libtbx.containers import OrderedDict, OrderedSet
 from libtbx.utils import Sorry
 import sys
@@ -64,7 +66,7 @@ class cif(DictMixin):
     if out is None:
       out = sys.stdout
     for name, block in self.items():
-      print >> out, "data_%s" %name
+      print("data_%s" %name, file=out)
       block.show(
         out=out, indent=indent, indent_row=indent_row,
         data_name_field_width=data_name_field_width,
@@ -77,7 +79,7 @@ class cif(DictMixin):
 
   def validate(self, dictionary, show_warnings=True, error_handler=None, out=None):
     if out is None: out = sys.stdout
-    import validation
+    from . import validation
     errors = {}
     if error_handler is None:
       error_handler = validation.ErrorHandler()
@@ -335,11 +337,11 @@ class save(block_base):
     for k in self._set:
       v = self._items.get(k)
       if v is not None:
-        print >> out, indent + format_str %k, format_value(v)
+        print(indent + format_str %k, format_value(v), file=out)
       else:
-        print >> out, indent,
+        print(indent, end=' ', file=out)
         self.loops[k].show(out=out, indent=(indent+indent))
-        print >> out
+        print(file=out)
 
 
 class block(block_base):
@@ -392,14 +394,14 @@ class block(block_base):
     for k in self._set:
       v = self._items.get(k)
       if v is not None:
-        print >> out, format_str %k, format_value(v)
+        print(format_str %k, format_value(v), file=out)
       elif k in self.saves:
-        print >> out
-        print >> out, "save_%s" %k
+        print(file=out)
+        print("save_%s" %k, file=out)
         self.saves[k].show(out=out, indent=indent,
                            data_name_field_width=data_name_field_width)
-        print >> out, indent + "save_"
-        print >> out
+        print(indent + "save_", file=out)
+        print(file=out)
       else:
         if loop_format_strings is not None and k in loop_format_strings:
           self.loops[k].show(
@@ -407,7 +409,7 @@ class block(block_base):
             fmt_str=loop_format_strings[k])
         else:
           self.loops[k].show(out=out, indent=indent, indent_row=indent_row)
-        print >> out
+        print(file=out)
 
   def sort(self, recursive=False, key=None, reverse=False):
     block_base.sort(self, recursive=recursive, key=key, reverse=reverse)
@@ -552,9 +554,9 @@ class loop(DictMixin):
       indent_row = indent
     assert indent.strip() == ""
     assert indent_row.strip() == ""
-    print >> out, "loop_"
+    print("loop_", file=out)
     for k in self.keys():
-      print >> out, indent + k
+      print(indent + k, file=out)
     values = self._columns.values()
     if fmt_str is not None:
       # Pretty printing:
@@ -575,7 +577,7 @@ class loop(DictMixin):
       if fmt_str is None:
         fmt_str = indent_row + ' '.join(["%s"]*len(values))
       for i in range(self.size()):
-        print >> out, fmt_str % tuple([values[j][i] for j in range(len(values))])
+        print(fmt_str % tuple([values[j][i] for j in range(len(values))]), file=out)
     elif align_columns:
       fmt_str = []
       for i, (k, v) in enumerate(self.iteritems()):
@@ -594,13 +596,13 @@ class loop(DictMixin):
         fmt_str.append("%%%is" %width)
       fmt_str = indent_row + "  ".join(fmt_str)
       for i in range(self.size()):
-        print >> out, (fmt_str %
+        print((fmt_str %
                        tuple([values[j][i]
-                              for j in range(len(values))])).rstrip()
+                              for j in range(len(values))])).rstrip(), file=out)
     else:
       for i in range(self.size()):
         values_to_print = [format_value(values[j][i]) for j in range(len(values))]
-        print >> out, ' '.join([indent] + values_to_print)
+        print(' '.join([indent] + values_to_print), file=out)
 
   def __str__(self):
     s = StringIO()

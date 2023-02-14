@@ -10,6 +10,8 @@ http://cctbx.sourceforge.net/iotbx_cif
 
 """
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import boost_adaptbx.boost.python
 ext = boost_adaptbx.boost.python.import_ext("iotbx_cif_ext")
@@ -17,7 +19,7 @@ ext = boost_adaptbx.boost.python.import_ext("iotbx_cif_ext")
 from cctbx.array_family import flex
 from cctbx import adptbx, miller
 from cctbx import covariance
-import model, builders, geometry
+from . import model, builders, geometry
 from libtbx.containers import OrderedDict
 from libtbx.utils import format_float_with_standard_uncertainty \
      as format_float_with_su
@@ -80,9 +82,9 @@ class reader(object):
   def show_errors(self, max_errors=50, out=None):
     if out is None: out = sys.stdout
     for msg in self.parser.lexer_errors()[:max_errors]:
-      print >> out, msg
+      print(msg, file=out)
     for msg in self.parser.parser_errors()[:max_errors]:
-      print >> out, msg
+      print(msg, file=out)
 
   def build_crystal_structures(self, data_block_name=None):
     xray_structures = cctbx_data_structures_from_cif(

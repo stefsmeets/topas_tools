@@ -1,5 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import argparse
-from blender_mini import *
+from .blender_mini import *
 import sys
 
 
@@ -11,25 +13,25 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
     sgi: cctbx space_group_info()
     uc : cctbx unit_cell()
     """
-    print >> fout, 'title', 'superflip\n'
+    print('title', 'superflip\n', file=fout)
 
-    print >> fout, 'dimension 3'
-    print >> fout, 'voxel',
+    print('dimension 3', file=fout)
+    print('voxel', end=' ', file=fout)
     for p in uc.parameters()[0:3]:
-        print >> fout, int(((p*4) // 6 + 1) * 6),
-    print >> fout
-    print >> fout, 'cell',
+        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
+    print(file=fout)
+    print('cell', end=' ', file=fout)
     for p in uc.parameters():
-        print >> fout, p,
-    print >> fout, '\n'
+        print(p, end=' ', file=fout)
+    print('\n', file=fout)
 
-    print >> fout, 'centers'
+    print('centers', file=fout)
     for cvec in centering_vectors[sgi.type().group().conventional_centring_type_symbol()]:
-        print >> fout, ' '.join(cvec)
-    print >> fout, 'endcenters\n'
+        print(' '.join(cvec), file=fout)
+    print('endcenters\n', file=fout)
 
-    print >> fout, 'symmetry #', sgi.symbol_and_number()
-    print >> fout, '# inverse no'
+    print('symmetry #', sgi.symbol_and_number(), file=fout)
+    print('# inverse no', file=fout)
 
     # number of unique symops, no inverses
     n_smx = sgi.type().group().n_smx()
@@ -44,8 +46,8 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
         if n == order_p:
             break
         elif n == n_smx:
-            print >> fout, '# inverse yes, please check!'
-        print >> fout, symop
+            print('# inverse yes, please check!', file=fout)
+        print(symop, file=fout)
 
     # Broken, because .inverse() doesn't work, but probably a better approach:
     # for symop in f.space_group_info().type().group().smx():
@@ -55,21 +57,21 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
     #   for symop in f.space_group_info().type().group().smx():
     #       print >> fout, symop.inverse() # inverse does not work?
 
-    print >> fout, 'endsymmetry\n'
+    print('endsymmetry\n', file=fout)
 
-    print >> fout, 'perform fourier'
-    print >> fout, 'terminal yes\n'
+    print('perform fourier', file=fout)
+    print('terminal yes\n', file=fout)
 
-    print >> fout, 'expandedlog yes'
-    print >> fout, 'outputfile superflip.xplor'
-    print >> fout, 'outputformat xplor\n'
+    print('expandedlog yes', file=fout)
+    print('outputfile superflip.xplor', file=fout)
+    print('outputformat xplor\n', file=fout)
 
-    print >> fout, 'dataformat amplitude phase'
+    print('dataformat amplitude phase', file=fout)
 
     if fdiff_file:
-        print >> fout, 'fbegin fdiff.out\n'
+        print('fbegin fdiff.out\n', file=fout)
     else:
-        print >> fout, 'fbegin'
+        print('fbegin', file=fout)
         print_simple(fcalc, fout, output_phases='cycles')
 
 #       for i,(h,k,l) in enumerate(f.indices()):
@@ -77,7 +79,7 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
 #           # phase = phase(f.data()[i]
 #           print >> fout, "%3d %3d %3d %10.6f %10.3f" % (
 #               h,k,l, abs(f.data()[i]), phase(f.data()[i]) / (2*pi) )
-        print >> fout, 'endf'
+        print('endf', file=fout)
 
 
 def run_script(gui_options=None):
@@ -134,7 +136,7 @@ def run_script(gui_options=None):
     table = options.table
 
     if not cif or not fobs_file:
-        print "Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)"
+        print("Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)")
         sys.exit()
 
     s = read_cif(cif).values()[0]
@@ -167,10 +169,10 @@ def run_script(gui_options=None):
 
     if topas_scale:
         scale = float(topas_scale)**0.5
-        print 'Fobs scaled by {} [=sqrt(1/{})]'.format(1/scale, (float(topas_scale)))
+        print('Fobs scaled by {} [=sqrt(1/{})]'.format(1/scale, (float(topas_scale))))
     else:
         scale = df['fobs'].sum() / df['fcalc'].sum()
-        print "No scale given, approximated as {} (sum(fobs) / sum(fcal))".format(scale)
+        print("No scale given, approximated as {} (sum(fobs) / sum(fcal))".format(scale))
 
     df['fdiff'] = df['fobs']/scale - df['fcalc']
     df['sfphase'] = df['phases'] / (2*np.pi)
@@ -193,7 +195,7 @@ def run_script(gui_options=None):
 
 def main(options=None):
     if len(sys.argv) > 1 and sys.argv[1] == "gui":
-        import topasdiff_gui
+        from . import topasdiff_gui
         topasdiff_gui.run()
     else:
         run_script()
