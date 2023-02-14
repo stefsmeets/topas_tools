@@ -107,7 +107,8 @@ def main():
         for atom in all_atoms:
             scatterer = re.findall(pat, atom)[0]
             atom = atom.replace(scatterer, scatterer+molstr)
-            print(f'      site {atom:6s} x 0.0 y 0.0 z 0.0 occ {scatterer:2s} =occ{molnum}; beq =beq{molnum};')
+            print(
+                f'      site {atom:6s} x 0.0 y 0.0 z 0.0 occ {scatterer:2s} =occ{molnum}; beq =beq{molnum};')
         molnum += 1
 
 

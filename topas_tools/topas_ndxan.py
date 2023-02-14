@@ -79,7 +79,8 @@ def plot_3d(iterator, x_key, y_key, z_key, title="plot", picker=['spgr', 'num'])
 
         print()
         for n in range(len(ind)):
-            print('idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n]))
+            print('idx: {}, {}: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], y_key, pcky[n], z_key, pckz[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
             print('number of points:', len(ind))
 
@@ -129,7 +130,8 @@ def plot_2d(iterator, x_key, y_key, picker=['spgr', 'num']):
 
         print()
         for n in range(len(ind)):
-            print('idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n]))
+            print('idx: {}, {}: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], y_key, pcky[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
             print('number of points:', len(ind))
 
@@ -171,7 +173,8 @@ def plot_1d(iterator, x_key, sort=None, title="Plot", picker=['spgr', 'num']):
 
         print()
         for n in range(len(ind)):
-            print('idx: {}, {}: {}, spgr: {}, #{}'.format(ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n]))
+            print('idx: {}, {}: {}, spgr: {}, #{}'.format(
+                ind[n], x_key, pckx[n], pckspgr[n].split('.')[0], pcknum[n]))
         if len(ind) > 5:
             print('number of points:', len(ind))
 
@@ -263,7 +266,7 @@ def gen_filter(iterator, args):
     operators = {'gt': '>', 'ge': '>=', 'eq': '==',
                  'ne': '!=', 'le': '<=', 'lt': '<'}
 
-    conditional = lambda d, kw, val: eval(f'd[kw] {operators[op]} val')
+    def conditional(d, kw, val): return eval(f'd[kw] {operators[op]} val')
 
     for d in iterator:
         if conditional(d, kw, val):

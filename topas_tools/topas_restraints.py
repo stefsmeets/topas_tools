@@ -49,6 +49,7 @@ if organic:
     # tolerance for X--O bond detection
     to_tol = 0.4
 
+
 def gen_section(f):
     part = []
     for line in f:
@@ -102,7 +103,8 @@ def main():
         if 'Si' in main or 'Al' in main or 'P' in main:
             match += 1
             if nbonds != 4:
-                print(f'*** Warning: More/less than _4_ bonds detected for {main}... bonds = {nbonds}\n')
+                print(
+                    f'*** Warning: More/less than _4_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for ox in part[1:]:
                 print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
@@ -116,7 +118,8 @@ def main():
         if 'O' in main:
             match += 1
             if nbonds != 2:
-                print(f'*** Warning: More/less than _2_ bonds detected for {main}... bonds = {nbonds}\n')
+                print(
+                    f'*** Warning: More/less than _2_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for si1, si2 in combinations(part[1:], 2):
 
@@ -134,6 +137,7 @@ def main():
 
                 print('      Angle_Restrain( {} {} {} , {}, 0.0, 0.0, {} )'.format(
                     ox1, main, ox2, oto_ang, oto_w), file=fout)
+
 
 if __name__ == '__main__':
     main()

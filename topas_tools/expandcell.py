@@ -27,8 +27,6 @@ def read_cif(f):
     return structures
 
 
-
-
 description = """Notes:
 """
 
@@ -199,9 +197,9 @@ if spgr != "P1":
     print(asu)
     print()
     asu_x, asu_y, asu_z = asu.split(';')
-    fx = lambda x: eval(asu_x)
-    fy = lambda y: eval(asu_y)
-    fz = lambda z: eval(asu_z)
+    def fx(x): return eval(asu_x)
+    def fy(y): return eval(asu_y)
+    def fz(z): return eval(asu_z)
 
     if '-' in asu:
         print("Did not account for negative values in asymmetric unit. Duplicate atoms cannot be removed (use Kriber)")
@@ -219,17 +217,17 @@ if spgr != "P1":
 
             if fx(x) and fy(y) and fz(z):
                 scatterers.append(atom)
-        
+
         sps = crystal.special_position_settings(
             crystal_symmetry=crystal.symmetry(
                 unit_cell=new_cell,
                 space_group_symbol=spgr),
             min_distance_sym_equiv=0.00001)
-        
+
         s = xray.structure(
             special_position_settings=sps,
             scatterers=flex.xray_scatterer(scatterers))
-        
+
         print(f" >> Removing duplicate atoms, reduced number to {s.scatterers().size()} atoms")
         print()
 

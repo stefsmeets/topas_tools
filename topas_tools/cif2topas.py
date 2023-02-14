@@ -70,7 +70,7 @@ def main():
             s301 = "      'prm s301 1.0 \n"
             s121 = "      'prm s121 1.0 \n"
             s103 = "      'prm s103 1.0 \n"
-            eta  = "      'prm !eta 0.5 min 0.0 max 1.0\n"
+            eta = "      'prm !eta 0.5 min 0.0 max 1.0\n"
             if sg.crystal_system() == 'Monoclinic':
                 string = "{s400}{s040}{s004}{s220}{s202}{s022}{s301}{s121}{s103}{eta}".format(
                     s400=s400, s040=s040, s004=s004, s220=s220, s202=s202, s022=s022, s301=s301, s121=s121, s103=s103, eta=eta)
@@ -115,7 +115,8 @@ def main():
       'fourier_map 1
       '   fourier_map_formula = Fobs - Fcalc;""")
             print()
-            print('      space_group "{}"'.format(sg.type().universal_hermann_mauguin_symbol().replace(" ", "")))
+            print('      space_group "{}"'.format(
+                sg.type().universal_hermann_mauguin_symbol().replace(" ", "")))
             print()
             a, b, c, al, be, ga = uc.parameters()
             if sg.crystal_system() == 'Cubic':
@@ -139,7 +140,8 @@ def main():
             refal = "" if al == 90 else "@"
             refbe = "" if be == 90 else "@"
             refga = "" if ga == 90 else "@"
-            print(string.format(a=a, b=b, c=c, refal=refal, al=al, refbe=refbe, be=be, refga=refga, ga=ga))
+            print(string.format(a=a, b=b, c=c, refal=refal,
+                  al=al, refbe=refbe, be=be, refga=refga, ga=ga))
             print()
             print(f"      volume {uc.volume():.2f}")
             print()
@@ -156,10 +158,12 @@ def main():
                 element = atom.element_symbol()
                 mult = atom.multiplicity()
 
-                print("      site {label:5s}  num_posns {mult:3d}  x  {x:.5f}  y  {y:.5f}  z  {z:.5f}  occ {element:2s}  1.0  beq =beq{element:2s};".format(label=label, mult=mult, x=x, y=y, z=z, element=element), end=' ')
+                print("      site {label:5s}  num_posns {mult:3d}  x  {x:.5f}  y  {y:.5f}  z  {z:.5f}  occ {element:2s}  1.0  beq =beq{element:2s};".format(
+                    label=label, mult=mult, x=x, y=y, z=z, element=element), end=' ')
 
                 if mult < z_order:
-                    print("   ' {:5s} {:5s} {:5s}".format(*sps.site_symmetry(atom.site).special_op_simplified().terms))
+                    print("   ' {:5s} {:5s} {:5s}".format(
+                        *sps.site_symmetry(atom.site).special_op_simplified().terms))
                 else:
                     print()
 

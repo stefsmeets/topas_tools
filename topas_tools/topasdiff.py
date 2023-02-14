@@ -121,7 +121,7 @@ def run_script(gui_options=None):
     options = parser.parse_args()
 
     if gui_options:
-        for k,v in list(gui_options.items()):
+        for k, v in list(gui_options.items()):
             setattr(options, k, v)
 
     cif = options.args
@@ -194,6 +194,7 @@ def main(options=None):
         topasdiff_gui.run()
     else:
         run_script()
+
 
 if __name__ == '__main__':
     main()

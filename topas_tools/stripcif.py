@@ -51,5 +51,6 @@ def main():
     s.as_cif_simple(out=open(out, 'w'))
     print(f" >> Wrote file {out}")
 
+
 if __name__ == '__main__':
     main()
