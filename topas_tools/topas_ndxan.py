@@ -280,13 +280,9 @@ def main():
 - Keywords/values are case sensitive
 - Based on a stripped down version of superanalyser.py, works the same way"""
 
-    epilog = f'Updated: {__version__}'
-
     parser = argparse.ArgumentParser(usage=usage,
                                      description=description,
-                                     epilog=epilog,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter,
-                                     version=__version__)
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument("keywords",
                         type=str, metavar="KEYWORD", nargs='*',

@@ -31,8 +31,6 @@ def main():
         print("Takes any number of cif files and writes to stdout")
         print("")
         print("usage: cif2topas cif1 [cif2 ...]")
-        print()
-        print("version", __version__)
         sys.exit()
 
     for cif in cifs:

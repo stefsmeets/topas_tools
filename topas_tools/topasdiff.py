@@ -84,13 +84,9 @@ def run_script(gui_options=None):
     description = """Notes:
     """
 
-    epilog = f'Updated: {__version__}'
-
     parser = argparse.ArgumentParser(
         description=description,
-        epilog=epilog,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        version=__version__)
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument("args",
                         type=str, metavar="FILE",

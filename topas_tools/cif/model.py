@@ -7,9 +7,20 @@ import sys
 import string
 import copy
 from io import StringIO
-from UserDict import DictMixin
 
 from cctbx.array_family import flex
+
+
+from collections.abc import MutableMapping
+
+class DictMixin(MutableMapping):
+    def __len__(self):
+        return len(self.mylist)
+
+    def __iter__(self):
+        for i in self.mylist:
+            yield i
+
 
 
 class cif(DictMixin):

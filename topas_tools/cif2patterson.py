@@ -29,13 +29,9 @@ usage = """cif2patterson structure.cif"""
 description = """Notes: Takes any cif file and generated patterson map
 """
 
-epilog = f'Updated: {__version__}'
-
 parser = argparse.ArgumentParser(  # usage=usage,
     description=description,
-    epilog=epilog,
-    formatter_class=argparse.RawDescriptionHelpFormatter,
-    version=__version__)
+    formatter_class=argparse.RawDescriptionHelpFormatter)
 
 
 parser.add_argument("args",

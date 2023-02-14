@@ -16,11 +16,14 @@ def equals_about(val, compare_to):
 
 
 def main():
-    if sys.argv > 0:
+    if len(sys.argv) > 1:
         text = open(sys.argv[1]).read()
     else:
         if sys.platform == "darwin":
             text = pbpaste()
+        else:
+            print('Usage: python restraints_statistics.py [filename]')
+            sys.exit()
 
     oto = 109.5
     tot = 145.0

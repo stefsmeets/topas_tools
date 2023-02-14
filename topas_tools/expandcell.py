@@ -30,13 +30,10 @@ usage = """"""
 description = """Notes:
 """
 
-epilog = f'Updated: {__version__}'
 
 parser = argparse.ArgumentParser(  # usage=usage,
     description=description,
-    epilog=epilog,
-    formatter_class=argparse.RawDescriptionHelpFormatter,
-    version=__version__)
+    formatter_class=argparse.RawDescriptionHelpFormatter)
 
 
 parser.add_argument("args",
