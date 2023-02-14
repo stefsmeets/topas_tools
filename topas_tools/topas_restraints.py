@@ -1,4 +1,3 @@
-from __future__ import print_function
 from itertools import combinations
 
 """
@@ -89,7 +88,7 @@ def main():
     tot_w = 1/(tot_s**2)
     oto_w = 1/(oto_s**2)
 
-    f = open('bonds.txt', 'r')
+    f = open('bonds.txt')
     fout = open('restraints.out', 'w')
 
     gs = gen_section(f)
@@ -103,7 +102,7 @@ def main():
         if 'Si' in main or 'Al' in main or 'P' in main:
             match += 1
             if nbonds != 4:
-                print('*** Warning: More/less than _4_ bonds detected for {}... bonds = {}\n'.format(main, nbonds))
+                print(f'*** Warning: More/less than _4_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for ox in part[1:]:
                 print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(
@@ -117,7 +116,7 @@ def main():
         if 'O' in main:
             match += 1
             if nbonds != 2:
-                print('*** Warning: More/less than _2_ bonds detected for {}... bonds = {}\n'.format(main, nbonds))
+                print(f'*** Warning: More/less than _2_ bonds detected for {main}... bonds = {nbonds}\n')
 
             for si1, si2 in combinations(part[1:], 2):
 
@@ -125,7 +124,7 @@ def main():
                     si1, main, si2, tot_ang, tot_w), file=fout)
 
         if match == 0:
-            print('*** Non-Si/O detected --> {}\n'.format(main))
+            print(f'*** Non-Si/O detected --> {main}\n')
 
             for ox in part[1:]:
                 print('      Distance_Restrain( {} {} , {}, 0.0, 0.0, {} )'.format(

@@ -1,5 +1,3 @@
-from __future__ import division
-from __future__ import absolute_import
 from . import reader
 from .builders import crystal_symmetry_builder
 

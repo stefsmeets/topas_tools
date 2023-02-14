@@ -1,10 +1,7 @@
-from __future__ import division
-from __future__ import print_function
-from builtins import object
 import os, sys
 op = os.path
 
-class build_hkl_cif(object):
+class build_hkl_cif:
   def __init__(self, cod_ids=None, ext=None):
     if ext is not None:
       assert ext in ('cif','hkl')

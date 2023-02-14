@@ -1,10 +1,4 @@
-from __future__ import division
-from __future__ import absolute_import
-from builtins import str
-from builtins import zip
-from builtins import range
 from past.builtins import basestring
-from builtins import object
 from cctbx import adptbx, crystal, miller, sgtbx, uctbx, xray
 from cctbx.array_family import flex
 from . import model
@@ -16,7 +10,7 @@ class CifBuilderError(Sorry):
   __module__ = Exception.__module__
 
 
-class cif_model_builder(object):
+class cif_model_builder:
 
   def __init__(self, cif_object=None):
     self._model = cif_object
@@ -66,7 +60,7 @@ class cif_model_builder(object):
     return self._model
 
 
-class builder_base(object):
+class builder_base:
 
   __equivalents__ = {
     '_space_group_symop_operation_xyz': ('_symmetry_equiv_pos_as_xyz',
@@ -545,7 +539,7 @@ class miller_array_builder(crystal_symmetry_builder):
             h_int = flex.int(h_str)
           except ValueError as e:
             raise CifBuilderError(
-              "Invalid item for Miller index %s: %s" % ("HKL"[i], str(e)))
+              "Invalid item for Miller index {}: {}".format("HKL"[i], str(e)))
           hkl_int.append(h_int)
         indices = flex.miller_index(*hkl_int)
         loops.append((indices, loop))

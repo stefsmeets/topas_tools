@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os
 import re
 import sys
@@ -18,7 +17,7 @@ def equals_about(val, compare_to):
 
 def main():
     if sys.argv > 0:
-        text = open(sys.argv[1], "r").read()
+        text = open(sys.argv[1]).read()
     else:
         if sys.platform == "darwin":
             text = pbpaste()
@@ -72,13 +71,13 @@ def main():
     if not oto_vals:
         oto_vals = [0]
 
-    print("Parsed {} lines".format(n_lines))
-    print("{} restraints - tot: {}, oto: {}, to: {}".format(n_tot+n_oto+n_to, n_tot, n_oto, n_to))
+    print(f"Parsed {n_lines} lines")
+    print(f"{n_tot+n_oto+n_to} restraints - tot: {n_tot}, oto: {n_oto}, to: {n_to}")
     print("")
     print('        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'max', 'avg'))
-    print(' T-O-T  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(tot, min(tot_vals), max(tot_vals), sum(tot_vals)/len(tot_vals)))
-    print(' O-T-O  {:10.1f} {:10.3f} {:10.3f} {:10.3f} '.format(oto, min(oto_vals), max(oto_vals), sum(oto_vals)/len(oto_vals)))
-    print('   T-O  {:10.2f} {:10.3f} {:10.3f} {:10.3f} '.format(to, min(to_vals), max(to_vals), sum(to_vals)/len(to_vals)))
+    print(f' T-O-T  {tot:10.1f} {min(tot_vals):10.3f} {max(tot_vals):10.3f} {sum(tot_vals)/len(tot_vals):10.3f} ')
+    print(f' O-T-O  {oto:10.1f} {min(oto_vals):10.3f} {max(oto_vals):10.3f} {sum(oto_vals)/len(oto_vals):10.3f} ')
+    print(f'   T-O  {to:10.2f} {min(to_vals):10.3f} {max(to_vals):10.3f} {sum(to_vals)/len(to_vals):10.3f} ')
 
 if __name__ == '__main__':
     main()

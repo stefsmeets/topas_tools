@@ -1,11 +1,5 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
 from future import standard_library
 standard_library.install_aliases()
-from builtins import zip
-from builtins import str
-from builtins import range
 from past.builtins import basestring
 from libtbx.containers import OrderedDict, OrderedSet
 from libtbx.utils import Sorry
@@ -24,7 +18,7 @@ class cif(DictMixin):
       self.blocks = OrderedDict(blocks)
     else:
       self.blocks = OrderedDict()
-    self.keys_lower = dict([(key.lower(), key) for key in list(self.blocks.keys())])
+    self.keys_lower = {key.lower(): key for key in list(self.blocks.keys())}
 
   def __setitem__(self, key, value):
     assert isinstance(value, block)
@@ -450,8 +444,8 @@ class loop(DictMixin):
     elif header is None and data is not None:
       assert isinstance(data, dict) or isinstance(data, OrderedDict)
       self.add_columns(data)
-      self.keys_lower = dict(
-        [(key.lower(), key) for key in list(self._columns.keys())])
+      self.keys_lower = {
+        key.lower(): key for key in list(self._columns.keys())}
 
   def __setitem__(self, key, value):
     if not re.match(tag_re, key):

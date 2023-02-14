@@ -1,5 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
 import os
 import sys
 
@@ -119,18 +117,18 @@ def set_environment_variables_windows():
     # on Windows this seems to work though
     if 'LIBTBX_BUILD' in os.environ:
         BASE = os.environ['LIBTBX_BUILD']
-    elif os.path.exists("C:\cctbx\cctbx_build"):
-        BASE = "C:\cctbx\cctbx_build"
+    elif os.path.exists(r"C:\cctbx\cctbx_build"):
+        BASE = r"C:\cctbx\cctbx_build"
         os.environ["LIBTBX_BUILD"] = BASE
     else:
         raise ImportError(
-            "Could not locate CCTBX, please ensure that LIBTBX_BUILD environment variable points at /cctbx/cctbx_build, or CCTBX is installed in C:\cctbx\\")
+            "Could not locate CCTBX, please ensure that LIBTBX_BUILD environment variable points at /cctbx/cctbx_build, or CCTBX is installed in C:\\cctbx\\")
 
-    for src in ["..\cctbx_sources",
-                "..\cctbx_sources\clipper_adaptbx",
-                "..\cctbx_sources\docutils",
-                "..\cctbx_sources\\boost_adaptbx",
-                "..\cctbx_sources\libtbx\pythonpath",
+    for src in [r"..\cctbx_sources",
+                r"..\cctbx_sources\clipper_adaptbx",
+                r"..\cctbx_sources\docutils",
+                "..\\cctbx_sources\\boost_adaptbx",
+                r"..\cctbx_sources\libtbx\pythonpath",
                 "lib"]:
         sys.path.insert(1, os.path.join(BASE, src))
 

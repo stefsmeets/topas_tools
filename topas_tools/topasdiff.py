@@ -1,7 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import str
-from builtins import input
 import argparse
 from .blender_mini import *
 import sys
@@ -88,7 +84,7 @@ def run_script(gui_options=None):
     description = """Notes:
     """
 
-    epilog = 'Updated: {}'.format(__version__)
+    epilog = f'Updated: {__version__}'
 
     parser = argparse.ArgumentParser(
         description=description,
@@ -171,10 +167,10 @@ def run_script(gui_options=None):
 
     if topas_scale:
         scale = float(topas_scale)**0.5
-        print('Fobs scaled by {} [=sqrt(1/{})]'.format(1/scale, (float(topas_scale))))
+        print(f'Fobs scaled by {1/scale} [=sqrt(1/{(float(topas_scale))})]')
     else:
         scale = df['fobs'].sum() / df['fcalc'].sum()
-        print("No scale given, approximated as {} (sum(fobs) / sum(fcal))".format(scale))
+        print(f"No scale given, approximated as {scale} (sum(fobs) / sum(fcal))")
 
     df['fdiff'] = df['fobs']/scale - df['fcalc']
     df['sfphase'] = df['phases'] / (2*np.pi)
@@ -192,7 +188,7 @@ def run_script(gui_options=None):
 
     if options.run_superflip:
         import subprocess as sp
-        sp.call("{} sf.inflip".format(options.superflip_path))
+        sp.call(f"{options.superflip_path} sf.inflip")
 
 
 def main(options=None):

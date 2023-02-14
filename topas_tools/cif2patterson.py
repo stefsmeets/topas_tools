@@ -1,7 +1,3 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-
 import argparse
 
 import os, sys
@@ -17,7 +13,7 @@ def read_cif(f):
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
         else:
-            raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
+            raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
@@ -33,7 +29,7 @@ usage = """cif2patterson structure.cif"""
 description = """Notes: Takes any cif file and generated patterson map
 """
 
-epilog = 'Updated: {}'.format(__version__)
+epilog = f'Updated: {__version__}'
 
 parser = argparse.ArgumentParser(  # usage=usage,
     description=description,
@@ -56,7 +52,7 @@ options = parser.parse_args()
 cif = options.args
 s = list(read_cif(cif).values())[0]
 s = s.expand_to_p1()
-print("Expanded to P1 => {} atoms".format(s.scatterers().size()))
+print(f"Expanded to P1 => {s.scatterers().size()} atoms")
 print()
 
 root, ext = os.path.splitext(cif)
@@ -95,7 +91,7 @@ for atom1 in scatterers:
         distances.append((atom2.label, dx, dy, dz, length))
 
         if verbose:
-            print(' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(atom2.label, dx, dy, dz, length))
+            print(f' --> {atom2.label:>4s} {dx:9.5f} {dy:9.5f} {dz:9.5f}  {length:9.5f}')
 
         # print atom1.label, '-->', atom2.label, '=', uc.length((dx,dy,dz))
 
@@ -110,7 +106,7 @@ for atom1 in scatterers:
 print('Wrote file', fout2.name)
 
 for label, dx, dy, dz, distance in sorted(distances_all, key=lambda x: x[-1]):
-    print('{:9.5f}'.format(distance), file=fout1)
+    print(f'{distance:9.5f}', file=fout1)
 
 print('Wrote file', fout1.name)
 

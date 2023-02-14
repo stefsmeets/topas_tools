@@ -1,9 +1,3 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-
-from builtins import chr
-from builtins import range
 import argparse
 
 from cctbx import xray
@@ -21,7 +15,7 @@ def read_cif(f):
         elif isinstance(f, str):
             structures = reader(file_path=f).build_crystal_structures()
         else:
-            raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
+            raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
@@ -36,7 +30,7 @@ usage = """"""
 description = """Notes:
 """
 
-epilog = 'Updated: {}'.format(__version__)
+epilog = f'Updated: {__version__}'
 
 parser = argparse.ArgumentParser(  # usage=usage,
     description=description,
@@ -95,7 +89,7 @@ if options.exclude:
             excluded.append(atom)
 
 s = s.expand_to_p1()
-print("Expanded to P1 => {} atoms".format(s.scatterers().size()))
+print(f"Expanded to P1 => {s.scatterers().size()} atoms")
 print()
 
 root, ext = os.path.splitext(cif)
@@ -164,7 +158,7 @@ if options.exclude:
 else:
     scatterers = s.scatterers()
 
-print("Starting with {} scatterers".format(len(scatterers)))
+print(f"Starting with {len(scatterers)} scatterers")
 print()
 
 for direction, number in enumerate((expand_x, expand_y, expand_z)):
@@ -177,7 +171,7 @@ for direction, number in enumerate((expand_x, expand_y, expand_z)):
     print()
 
 
-print(" >> Applying spacegroup {}".format(spgr))
+print(f" >> Applying spacegroup {spgr}")
 print()
 
 sps = crystal.special_position_settings(
@@ -192,7 +186,7 @@ s = xray.structure(
 
 if shift:
     # shift = [-1*number for number in shift]
-    print(">> Applying shift {} to all atom sites".format(shift))
+    print(f">> Applying shift {shift} to all atom sites")
     print()
     s = s.apply_shift(shift)
 
@@ -237,11 +231,11 @@ if spgr != "P1":
             special_position_settings=sps,
             scatterers=flex.xray_scatterer(scatterers))
         
-        print(" >> Removing duplicate atoms, reduced number to {} atoms".format(s.scatterers().size()))
+        print(f" >> Removing duplicate atoms, reduced number to {s.scatterers().size()} atoms")
         print()
 
 s.as_cif_simple(out=open(out, 'w'))
-print(" >> Wrote file {}".format(out))
+print(f" >> Wrote file {out}")
 print()
 
 if (not shift) and (spgr == "P1"):

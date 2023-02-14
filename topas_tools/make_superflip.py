@@ -1,8 +1,3 @@
-from __future__ import print_function
-from builtins import str
-from builtins import input
-from builtins import map
-from builtins import range
 from cctbx import crystal
 
 
@@ -135,7 +130,7 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
     print('cell', end=' ', file=fout)
     for p in uc.parameters():
         print(p, end=' ', file=fout)
-    print('  # vol = {:.4f} A3 \n'.format(uc.volume()), file=fout)
+    print(f'  # vol = {uc.volume():.4f} A3 \n', file=fout)
 
     print('centers', file=fout)
     for cvec in centering_vectors[sg.conventional_centring_type_symbol()]:
@@ -165,7 +160,7 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
     print('randomseed AUTO', file=fout)
     print(file=fout)
     if composition:
-        print('composition {}'.format(composition), file=fout)
+        print(f'composition {composition}', file=fout)
         print('histogram composition', file=fout)
         print('hmparameters 10 5', file=fout)
     else:
@@ -174,7 +169,7 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
         print('#hmparameters 10 5', file=fout)
     print(file=fout)
     print('fwhmseparation 0.3', file=fout)
-    print('lambda {}'.format(wavelength), file=fout)
+    print(f'lambda {wavelength}', file=fout)
     print(file=fout)
     print('maxcycles 200', file=fout)
     print('bestdensities 10', file=fout)
@@ -189,11 +184,11 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
     print('terminal yes', file=fout)
     print('expandedlog yes', file=fout)
     outputfile = str(sg.info()).replace(' ', '').replace('/', 'o').lower()
-    print('outputfile {}.xplor {}.ccp4'.format(outputfile, outputfile), file=fout)
+    print(f'outputfile {outputfile}.xplor {outputfile}.ccp4', file=fout)
     print('outputformat xplor ccp4', file=fout)
     print(file=fout)
     print('dataformat', dataformat, file=fout)
-    print('fbegin {}\n'.format(datafile), file=fout)
+    print(f'fbegin {datafile}\n', file=fout)
 
 
 def main(filename='sf.inflip'):

@@ -1,7 +1,3 @@
-from __future__ import print_function
-from builtins import next
-from builtins import zip
-from builtins import range
 import json
 import argparse
 
@@ -31,8 +27,7 @@ def pprint(d):
 
 def gen_lines(f):
     """return all the lines in every single file"""
-    for line in f:
-        yield line
+    yield from f
 
 
 def get_lines(lines, options):
@@ -250,7 +245,7 @@ def table_out(iterator, keywords, out=None):
     header = '{:<10}'*len(keywords)
     print(header.format(*keywords), file=out)
 
-    fmt = ''.join(['{{{}:<10}}'.format(keyword) for keyword in keywords])
+    fmt = ''.join([f'{{{keyword}:<10}}' for keyword in keywords])
 
     for d in iterator:
         print(fmt.format(**d), file=out)
@@ -268,7 +263,7 @@ def gen_filter(iterator, args):
     operators = {'gt': '>', 'ge': '>=', 'eq': '==',
                  'ne': '!=', 'le': '<=', 'lt': '<'}
 
-    conditional = lambda d, kw, val: eval('d[kw] {} val'.format(operators[op]))
+    conditional = lambda d, kw, val: eval(f'd[kw] {operators[op]} val')
 
     for d in iterator:
         if conditional(d, kw, val):
@@ -285,7 +280,7 @@ def main():
 - Keywords/values are case sensitive
 - Based on a stripped down version of superanalyser.py, works the same way"""
 
-    epilog = 'Updated: {}'.format(__version__)
+    epilog = f'Updated: {__version__}'
 
     parser = argparse.ArgumentParser(usage=usage,
                                      description=description,
@@ -350,7 +345,7 @@ def main():
     args = options.keywords
     print(options, args)
 
-    f = open(options.index_out, 'r')
+    f = open(options.index_out)
 
     print(f.name, 'opened')
 

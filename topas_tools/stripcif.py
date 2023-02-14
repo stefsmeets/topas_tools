@@ -1,5 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
 import argparse
 import os, sys
 
@@ -14,7 +12,7 @@ def read_cif(f):
         elif isinstance(f, str):
             r = reader(file_path=f)
         else:
-            raise TypeError('read_cif: Can not deal with type {}'.format(type(f)))
+            raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
@@ -30,7 +28,7 @@ def main():
     description = """Notes:
     """
 
-    epilog = 'Updated: {}'.format(__version__)
+    epilog = f'Updated: {__version__}'
 
     parser = argparse.ArgumentParser(  # usage=usage,
         description=description,
@@ -53,7 +51,7 @@ def main():
     out = root + "_simple" + ext
 
     s.as_cif_simple(out=open(out, 'w'))
-    print(" >> Wrote file {}".format(out))
+    print(f" >> Wrote file {out}")
 
 if __name__ == '__main__':
     main()

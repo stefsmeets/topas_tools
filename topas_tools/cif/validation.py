@@ -1,12 +1,6 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
 from future import standard_library
 standard_library.install_aliases()
-from builtins import zip
-from builtins import str
 from past.builtins import basestring
-from builtins import object
 from future.utils import raise_
 from cctbx.array_family import flex
 from . import builders, model, errors
@@ -20,7 +14,7 @@ import sys
 from urllib.request import urlopen
 
 
-class ErrorHandler(object):
+class ErrorHandler:
   """An error handler for the validator. This class can be subclassed by clients
   that want to use their own error handlers"""
 
@@ -463,7 +457,7 @@ class dictionary(model.cif):
   def __deepcopy__(self, memo):
     return dictionary(model.cif.__deepcopy__(self, memo))
 
-class definition_base(object):
+class definition_base:
 
   def name(self):
     return self.get(self.aliases['name'])

@@ -1,5 +1,3 @@
-from __future__ import print_function
-from __future__ import absolute_import
 import sys
 cifs = sys.argv[1:]
 
@@ -15,7 +13,7 @@ def read_cif(f, verbose=False):
             structures = reader(file_path=f).build_crystal_structures()
         else:
             raise TypeError(
-                'read_cif: Can not deal with type {}'.format(type(f)))
+                f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
         print("Error parsing cif file, check if the data tag does not contain any spaces.")
@@ -143,10 +141,10 @@ def main():
             refga = "" if ga == 90 else "@"
             print(string.format(a=a, b=b, c=c, refal=refal, al=al, refbe=refbe, be=be, refga=refga, ga=ga))
             print()
-            print("      volume {:.2f}".format(uc.volume()))
+            print(f"      volume {uc.volume():.2f}")
             print()
             for element in set(scatterers.extract_scattering_types()):
-                print("      prm beq{element:2s}  2.0  min 1.0  max 5.0".format(element=element))
+                print(f"      prm beq{element:2s}  2.0  min 1.0  max 5.0")
             print()
 
             z_order = sg.order_z()

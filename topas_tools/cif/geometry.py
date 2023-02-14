@@ -1,6 +1,3 @@
-from __future__ import division
-from __future__ import absolute_import
-from builtins import object
 from cctbx.array_family import flex
 from cctbx import crystal, sgtbx
 from cctbx import covariance, geometry
@@ -12,7 +9,7 @@ from libtbx import adopt_init_args
 import math
 
 
-class distances_as_cif_loop(object):
+class distances_as_cif_loop:
 
   def __init__(self,
                pair_asu_table,
@@ -65,7 +62,7 @@ class distances_as_cif_loop(object):
     self.variances = distances.variances
     self.pair_counts = distances.pair_counts
 
-class angles_as_cif_loop(object):
+class angles_as_cif_loop:
 
   def __init__(self,
                pair_asu_table,
@@ -128,7 +125,7 @@ class angles_as_cif_loop(object):
     self.variances = angles.variances
 
 
-class hbond(object):
+class hbond:
   def __init__(self, d_seq, a_seq, rt_mx=None):
     # rt_mx is the optional symmetry operator for the acceptor atom
     adopt_init_args(self, locals())
@@ -136,7 +133,7 @@ class hbond(object):
 
 unit_mx = sgtbx.rt_mx()
 
-class hbonds_as_cif_loop(object):
+class hbonds_as_cif_loop:
 
   def __init__(self,
                hbonds,

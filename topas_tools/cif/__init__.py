@@ -9,13 +9,7 @@ http://dx.doi.org/10.1107/S0021889811041161
 http://cctbx.sourceforge.net/iotbx_cif
 
 """
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
 
-from builtins import zip
-from builtins import range
-from builtins import object
 import boost_adaptbx.boost.python
 ext = boost_adaptbx.boost.python.import_ext("iotbx_cif_ext")
 
@@ -41,7 +35,7 @@ class CifParserError(Sorry):
   __orig_module__ = __module__
   __module__ = Exception.__module__
 
-class reader(object):
+class reader:
 
   def __init__(self,
                file_path=None,
@@ -143,7 +137,7 @@ class reader(object):
 
 fast_reader = reader # XXX backward compatibility 2010-08-25
 
-class crystal_symmetry_as_cif_block(object):
+class crystal_symmetry_as_cif_block:
 
   def __init__(self, crystal_symmetry,
                cell_covariance_matrix=None,
@@ -493,7 +487,7 @@ class miller_arrays_as_cif_block(crystal_symmetry_as_cif_block):
     self.refln_loop.add_columns(columns)
 
 
-class cctbx_data_structures_from_cif(object):
+class cctbx_data_structures_from_cif:
   def __init__(self,
                file_object=None,
                file_path=None,
@@ -521,7 +515,7 @@ class cctbx_data_structures_from_cif(object):
       if (file_path is None):
         msg = 'Unknown CIF data block name: "%s"' % data_block_name
       else:
-        msg = 'Unknown CIF data block name "%s" in file: "%s"' % (
+        msg = 'Unknown CIF data block name "{}" in file: "{}"'.format(
           data_block_name, file_path)
       raise RuntimeError(msg)
     errors = []
