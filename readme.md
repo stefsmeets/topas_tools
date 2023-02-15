@@ -11,7 +11,7 @@ Topasdiff is a tool to generate nice looking difference maps. First, output the 
     Out_fobs(fobs.hkl)
     Out_CIF_STR(structure.cif)
 
-Observed structure factors can be generated using this macro (add this to C:/topas5/local.inc):
+Observed structure factors can be generated using this macro (add this to `C:/topas5/local.inc`):
 
     macro Out_fobs(file)
     {
@@ -29,9 +29,9 @@ Then to calculate the difference map, run the command:
 
     topasdiff structure.cif --diff fobs.hkl
 
-or use the GUI, accessible available via topasdiff.bat (Windows). The program will ask for the scale factor provided by TOPAS, and generates an input file for the program superflip (http://superflip.fzu.cz/). Superflip is then used to perform the fourier transform, and generates an XPLOR file that can be visualized using Chimera or VESTA.
+or use the GUI, accessible available via `topasdiff.bat` (Windows). The program will ask for the scale factor provided by TOPAS, and generates an input file for the program superflip (http://superflip.fzu.cz/). Superflip is then used to perform the fourier transform, and generates an `.XPLOR` file that can be visualized using Chimera or VESTA.
 
-Note: There is a bug in Topas where the cif files it outputs cannot be read using CCTBX, because they lack the data header. A work-around is to open C:/topas5/topas.inc and modify all instances of:
+Note: There is a bug in Topas where the cif files it outputs cannot be read using CCTBX, because they lack the data header. A work-around is to open `C:/topas5/topas.inc` and modify all instances of:
 
     Out_String("\ndata_")
 
@@ -67,12 +67,43 @@ topasrestraints is a tool that can help with the generation of bond and angle re
 
     append_bond_lengths
 
-to generate all bonds and angles, including their symmetry codes for the current structure. Copy everything between the curly brackets to a new file called bonds.txt, and run:
+to generate all bonds and angles, including their symmetry codes for the current structure. Copy everything between the curly brackets to a new file called `bonds.txt`, and run:
 
     topasrestraints bonds.txt
 
-This generates a file called restraints.out that contains the restraints that can be added to TOPAS. The script checks for all distances of 1.61 +- 0.4 Angstrom to identify T-O bonds. The program checks the connectivity for every atom, and reports if there is a problem (too many / not enough distances per T-atom). There is no check for symmetrically equivalent connections, so some restraints may be redundant.
+This generates a file called restraints.out that contains the restraints that can be added to TOPAS. The script checks for all distances of `1.61 +- 0.4` Angstrom to identify T-O bonds. The program checks the connectivity for every atom, and reports if there is a problem (too many / not enough distances per T-atom). There is no check for symmetrically equivalent connections, so some restraints may be redundant.
 
+## stripcif
+
+stripcif is a tool to clean a cif file from all extra metadata. Essentially it reads a cif file and writes it back to `structure_simple.cif` with just the cell parameters and atomic coordinates.
+
+Usage:
+
+    stripcif structure.cif
+
+## expandcell
+
+expandcell is a tool to take a cif file and expand the axes along different directions to form a supercell.
+
+For example:
+
+    expandcell structure.cif -z2
+
+will write a cif in `P1` the *z* axis doubled. You can then use a tool like [PLATON](http://www.platonsoft.nl/platon/pl000000.html) to find the right symmetry for this structure (if needed). You can use:
+
+    expandcell structure.cif -z2 -s SPGR --shift X Y Z
+
+to force the new a new symmetry on the output. Here `SPGR` is the space group suggested by platon, and `--shift X Y Z` is the suggested origin shift.
+
+The option `-e` can be used to exclude elements from the result.
+
+## make_superflip
+
+This is a very simple tool that asks a couple of questions and writes an input file for superflip.
+
+Usage:
+
+    make_superflip
 
 ## Requirements
 
