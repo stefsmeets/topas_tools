@@ -1,3 +1,5 @@
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/topas_tools)](https://pypi.org/project/topas_tools/)
+[![PyPI](https://img.shields.io/pypi/v/topas_tools.svg?style=flat)](https://pypi.org/project/topas_tools/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4719228.svg)](https://doi.org/10.5281/zenodo.4719228)
 
 # Topas tools
@@ -123,7 +125,7 @@ Usage:
 ```bash
 conda create -n topas_tools -c conda-forge cctbx-base
 conda activate topas_tools
-pip install -e .
+pip install topas_tools
 ```
 
 Or use the environment file:
