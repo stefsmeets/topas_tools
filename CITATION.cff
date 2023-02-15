@@ -13,9 +13,9 @@ keywords:
     - "Topas"
     - "Structure refinement"
     - "Profile refinement"
-license: "GPL-2.0"
+license: "MIT"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://github.com/stefsmeets/topas_tools"
 title: topas_tools
-version: "1.0.0"
+version: "1.0.1"
 ...
