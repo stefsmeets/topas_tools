@@ -131,9 +131,9 @@ pip install topas_tools
 Or use the environment file:
 
 ```bash
-    conda env create -f environment.yml
-    conda activate topas_tools
-    pip install -e .
+conda env create -f environment.yml
+conda activate topas_tools
+pip install -e .
 ```
 
 (note that every time you want to use `topas_tools`, you must always activate the environment using `conda activate topas_tools`)
