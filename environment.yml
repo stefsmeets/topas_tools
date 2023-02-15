@@ -3,6 +3,3 @@ channels:
   - conda-forge
 dependencies:
   - cctbx-base
-  - matplotlib
-  - numpy
-  - pandas
