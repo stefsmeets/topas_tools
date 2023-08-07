@@ -12,6 +12,9 @@ from cctbx.sgtbx import space_group_type
 from future.utils import raise_
 from iotbx.cif import CifParserError, reader
 
+from io import IOBase as file
+
+
 centering_vectors = {
     'P': (['0.0', '0.0', '0.0'],),
     'A': (['0.0', '0.0', '0.0'], ['0.0', '0.5', '0.5']),
