@@ -112,6 +112,6 @@ search = "version: \"{current_version}\""
 replace = "version: \"{new_version}\""
 
 [[tool.bumpversion.files]]
-filename = "README.md"
+filename = "readme.md"
 search = "(Version {current_version})"
 replace = "(Version {new_version})"
