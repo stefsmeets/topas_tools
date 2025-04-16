@@ -263,7 +263,7 @@ def f_calc_structure_factors(structure, **kwargs):
     if return_as == "miller":
         return f_calc
     elif return_as == "series":
-        index = [hkl for hkl in f_calc.indices()]
+        index = list(f_calc.indices())
         fcalc = pd.Series(index=index, data=np.abs(f_calc.data()))
         phase = pd.Series(index=index, data=np.angle(f_calc.data()))
         return fcalc, phase
@@ -408,11 +408,7 @@ def remove_sysabs(m, verbose=True):
 def f_calc_multiplicities(df, cell, spgr):
     """Small function to calculate multiplicities for given dataframe"""
     m = df2m(df, cell, spgr)
-    assert m.multiplicities().data()
-
-    index = [hkl for hkl in m.indices()]
-    multiplicities = [mi for mi in m.multiplicities().data()]
-    df['m'] = pd.Series(multiplicities, index=index)
+    df['m'] = list(m.multiplicities().data())
 
 def make_symmetry(cell, spgr):
     """takes cell parameters (a,b,c,A,B,C) and spacegroup (str, eg. 'cmcm'), returns cctbx
@@ -444,9 +440,9 @@ def generate_indices(cell, spgr, dmin=1.0, ret='index'):
         unit_cell, sg_type, anomalous_flag=anomalous_flag, resolution_limit=dmin)
     indices = mig.to_array()
     if ret == 'index':  # suitable for df index
-        return indices
+        return list(indices)
     else:
-        return miller.array(miller.set(crystal_symmetry=symm, indices=indices, anomalous_flag=anomalous_flag))
+        return list(miller.array(miller.set(crystal_symmetry=symm, indices=indices, anomalous_flag=anomalous_flag)))
 
 
 def m2df(m, data='data', sigmas='sigmas'):
@@ -455,11 +451,11 @@ def m2df(m, data='data', sigmas='sigmas'):
     data and sigmas are the names for the columns in the resulting dataframe
     if no data/sigmas are present in the miller array, these are ignored.
     """
-    index = [hkl for hkl in m.indices()]
+    index = list(m.indices())
     df = pd.DataFrame(index=index)
 
     if m.data():
-        df[data] = pd.Series(list(m.data()), index=index)
+        df[data] = list(m.data())
     if m.sigmas():
         df[sigmas] = list(m.sigmas())
 
@@ -547,9 +543,9 @@ def reduce_all(df, cell, spgr, dmin=None, reindex=True, verbose=True):
         dfm = dfm.combine_first(m2df(m, data=col))
 
     if reindex:
-        index = [hkl for hkl in generate_indices(cell, spgr, dmin)]
+        index = generate_indices(cell, spgr, dmin)
         index = pd.Index(index)
-        dfm = dfm.loc[index]
+        dfm = dfm.reindex(index=index)
         dfm = dfm.reindex(columns=order)
 
     f_calc_multiplicities(dfm, cell, spgr)
