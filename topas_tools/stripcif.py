@@ -17,11 +17,11 @@ def read_cif(f):
             raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
-        print("Error parsing cif file, check if the data tag does not contain any spaces.")
+        print('Error parsing cif file, check if the data tag does not contain any spaces.')
         sys.exit()
     structures = r.build_crystal_structures()
     for key, val in list(structures.items()):
-        print("\nstructure:", key)
+        print('\nstructure:', key)
         val.show_summary().show_scatterers()
     return structures
 
@@ -31,12 +31,10 @@ def main():
     """
 
     parser = argparse.ArgumentParser(  # usage=usage,
-        description=description,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
 
-    parser.add_argument("args",
-                        type=str, metavar="FILE",
-                        help="Path to input cif")
+    parser.add_argument('args', type=str, metavar='FILE', help='Path to input cif')
 
     options = parser.parse_args()
 
@@ -46,10 +44,10 @@ def main():
     # s = s.expand_to_p1()
 
     root, ext = os.path.splitext(cif)
-    out = root + "_simple" + ext
+    out = root + '_simple' + ext
 
     s.as_cif_simple(out=open(out, 'w'))
-    print(f" >> Wrote file {out}")
+    print(f' >> Wrote file {out}')
 
 
 if __name__ == '__main__':

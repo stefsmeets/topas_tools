@@ -12,7 +12,12 @@ centering_vectors = {
     'H': (['0.0', '0.0', '0.0'], ['2/3', '1/3', '0.0'], ['1/3', '2/3', '0.0']),
     'K': (['0.0', '0.0', '0.0'], ['1/3', '0.0', '2/3'], ['2/3', '0.0', '1/3']),
     'L': (['0.0', '0.0', '0.0'], ['0.0', '2/3', '1/3'], ['0.0', '1/3', '2/3']),
-    'F': (['0.0', '0.0', '0.0'], ['0.0', '0.5', '0.5'], ['0.5', '0.0', '0.5'], ['0.5', '0.5', '0.0'])
+    'F': (
+        ['0.0', '0.0', '0.0'],
+        ['0.0', '0.5', '0.5'],
+        ['0.5', '0.0', '0.5'],
+        ['0.5', '0.5', '0.0'],
+    ),
 }
 
 
@@ -25,93 +30,25 @@ def make_special_position_settings(cell, space_group, min_dist_sym_equiv=0.00000
                 contains cell, space group and special positions
     """
 
-    assert type(cell) == tuple, 'cell must be supplied as a tuple'
+    assert isinstance(cell, tuple), 'cell must be supplied as a tuple'
     assert len(cell) == 6, 'expected 6 cell parameters'
 
     special_position_settings = crystal.special_position_settings(
-        crystal_symmetry=crystal.symmetry(
-            unit_cell=cell,
-            space_group_symbol=space_group),
-        min_distance_sym_equiv=min_dist_sym_equiv)
+        crystal_symmetry=crystal.symmetry(unit_cell=cell, space_group_symbol=space_group),
+        min_distance_sym_equiv=min_dist_sym_equiv,
+    )
     return special_position_settings
 
 
-def print_superflip(fcalc, fout, fdiff_file=None):
-    """Prints an inflip file that can directly be used with superflip for difference fourier maps
-
-    - Tested and works fine with: EDI, SOD
-    """
-    print('title', 'superflip\n', file=fout)
-
-    print('dimension 3', file=fout)
-    print('voxel', end=' ', file=fout)
-    for p in fcalc.unit_cell().parameters()[0:3]:
-        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
-    print(file=fout)
-    print('cell', end=' ', file=fout)
-    for p in fcalc.unit_cell().parameters():
-        print(p, end=' ', file=fout)
-    print('\n', file=fout)
-
-    print('centers', file=fout)
-    for cvec in centering_vectors[fcalc.space_group_info().type().group().conventional_centring_type_symbol()]:
-        print(' '.join(cvec), file=fout)
-    print('endcenters\n', file=fout)
-
-    print('symmetry #', fcalc.space_group_info().symbol_and_number(), file=fout)
-    print('# inverse no', file=fout)
-
-    # number of unique symops, no inverses
-    n_smx = fcalc.space_group_info().type().group().n_smx()
-    # number of primitive symops, includes inverses
-    order_p = fcalc.space_group_info().type().group().order_p()
-    # total number of symops
-    order_z = fcalc.space_group_info().type().group().order_z()
-
-    # this should work going by the assumption that the unique primitive symops are stored first,
-    # THEN the inverse symops and then all the symops due to centering.
-
-    for n, symop in enumerate(fcalc.space_group_info().type().group()):
-        if n == order_p:
-            break
-        elif n == n_smx:
-            print('# inverse yes, please check!', file=fout)
-        print(symop, file=fout)
-
-        # Broken, because .inverse() doesn't work, but probably a better approach:
-    # for symop in f.space_group_info().type().group().smx():
-    #   print >> fout, symop
-    # if f.space_group_info().type().group().is_centric():
-    #   print >> fout, '# inverse yes'
-    #   for symop in f.space_group_info().type().group().smx():
-    #       print >> fout, symop.inverse() # inverse does not work?
-
-    print('endsymmetry\n', file=fout)
-
-    print('perform fourier', file=fout)
-    print('terminal yes\n', file=fout)
-
-    print('expandedlog yes', file=fout)
-    print('outputfile superflip.xplor', file=fout)
-    print('outputformat xplor\n', file=fout)
-
-    print('dataformat amplitude phase', file=fout)
-
-    if fdiff_file:
-        print('fbegin fdiff.out\n', file=fout)
-    else:
-        print('fbegin', file=fout)
-        print_simple(fcalc, fout, output_phases='cycles')
-
-#       for i,(h,k,l) in enumerate(f.indices()):
-#           # structurefactor = abs(f.data()[i])
-#           # phase = phase(f.data()[i]
-#           print >> fout, "%3d %3d %3d %10.6f %10.3f" % (
-#               h,k,l, abs(f.data()[i]), phase(f.data()[i]) / (2*pi) )
-        print('endf', file=fout)
-
-
-def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, filename='sf.inflip'):
+def make_superflip(
+    cell,
+    spgr,
+    wavelength,
+    composition,
+    datafile,
+    dataformat,
+    filename='sf.inflip',
+):
     sps = make_special_position_settings(cell, spgr)
     sg = sps.space_group()
     uc = sps.unit_cell()
@@ -124,7 +61,7 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
     print('dimension 3', file=fout)
     print('voxel', end=' ', file=fout)
     for p in uc.parameters()[0:3]:
-        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
+        print(int(((p * 4) // 6 + 1) * 6), end=' ', file=fout)
     print(file=fout)
     print('cell', end=' ', file=fout)
     for p in uc.parameters():
@@ -141,7 +78,6 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
 
     n_smx = sg.n_smx()
     order_p = sg.order_p()
-    order_z = sg.order_z()
 
     for n, symop in enumerate(sg):
         if n == order_p:
@@ -191,10 +127,13 @@ def make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, fi
 
 
 def main(filename='sf.inflip'):
-    """Creates a basic superflip input file for structure solution by asking a few simple questions"""
+    """Create superflip input file for structure solution through a few simple questions"""
+    spgr = None
+    cell = None
+    dataformat = None
 
     for x in range(3):
-        cell = input("Enter cell parameters:\n >> ")
+        cell = input('Enter cell parameters:\n >> ')
 
         cell = cell.split()
         if len(cell) != 6:
@@ -222,17 +161,36 @@ def main(filename='sf.inflip'):
     datafile = input('Enter datafile:\n >> [fobs.out] ') or 'fobs.out'
 
     for x in range(3):
-        dataformat = input(
-            'Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
-        if not all(i in ('intensity', 'amplitude', 'amplitude difference', 'a', 'b', 'phase', 'group', 'dummy', 'fwhm', 'm91', 'm90', 'shelx')
-                   for i in dataformat.split()):
-            print('Unknown dataformat, please enter any of\n intensity/amplitude/amplitude difference/a/b/phase/group/dummy/fwhm/m91/m90/shelx\n')
+        dataformat = input('Enter dataformat:\n >> [intensity fwhm] ') or 'intensity fwhm'
+        data_keys = (
+            'intensity',
+            'amplitude',
+            'amplitude difference',
+            'a',
+            'b',
+            'phase',
+            'group',
+            'dummy',
+            'fwhm',
+            'm91',
+            'm90',
+            'shelx',
+        )
+        if not all(i in data_keys for i in dataformat.split()):
+            print(
+                'Unknown dataformat, please enter any of\n'
+                'intensity/amplitude/amplitude difference/\n'
+                'a/b/phase/group/dummy/fwhm/m91/m90/shelx\n'
+            )
             continue
         else:
             break
 
-    make_superflip(
-        cell, spgr, wavelength, composition, datafile, dataformat, filename=filename)
+    assert dataformat, 'dataformat not defined'
+    assert cell, 'cell not defined'
+    assert spgr, 'cpace group not defined'
+
+    make_superflip(cell, spgr, wavelength, composition, datafile, dataformat, filename=filename)
 
 
 if __name__ == '__main__':

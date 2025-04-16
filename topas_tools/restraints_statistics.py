@@ -12,14 +12,14 @@ def pbpaste():
 
 
 def equals_about(val, compare_to):
-    return compare_to * 0.9 <= val <= compare_to*1.1
+    return compare_to * 0.9 <= val <= compare_to * 1.1
 
 
 def main():
     if len(sys.argv) > 1:
         text = open(sys.argv[1]).read()
     else:
-        if sys.platform == "darwin":
+        if sys.platform == 'darwin':
             text = pbpaste()
         else:
             print('Usage: python restraints_statistics.py [filename]')
@@ -45,15 +45,15 @@ def main():
 
         if line.startswith("'"):
             continue
-        if "Restrain" not in line:
+        if 'Restrain' not in line:
             continue
-        if "Si" not in line:
+        if 'Si' not in line:
             continue
 
         stuff, restraint, measured, box, weight = line.split(',')
 
         restraint = float(restraint)
-        measured = float(measured.replace('`', '').split("_")[0])
+        measured = float(measured.replace('`', '').split('_')[0])
 
         if equals_about(restraint, oto):
             oto_vals.append(measured)
@@ -74,16 +74,22 @@ def main():
     if not oto_vals:
         oto_vals = [0]
 
-    print(f"Parsed {n_lines} lines")
-    print(f"{n_tot+n_oto+n_to} restraints - tot: {n_tot}, oto: {n_oto}, to: {n_to}")
-    print("")
+    print(f'Parsed {n_lines} lines')
+    print(f'{n_tot + n_oto + n_to} restraints - tot: {n_tot}, oto: {n_oto}, to: {n_to}')
+    print('')
     print('        {:>10s} {:>10s} {:>10s} {:>10s} '.format('restraint', 'min', 'max', 'avg'))
     print(
-        f' T-O-T  {tot:10.1f} {min(tot_vals):10.3f} {max(tot_vals):10.3f} {sum(tot_vals)/len(tot_vals):10.3f} ')
+        f' T-O-T  {tot:10.1f} {min(tot_vals):10.3f} '
+        f'{max(tot_vals):10.3f} {sum(tot_vals) / len(tot_vals):10.3f} '
+    )
     print(
-        f' O-T-O  {oto:10.1f} {min(oto_vals):10.3f} {max(oto_vals):10.3f} {sum(oto_vals)/len(oto_vals):10.3f} ')
+        f' O-T-O  {oto:10.1f} {min(oto_vals):10.3f} '
+        f'{max(oto_vals):10.3f} {sum(oto_vals) / len(oto_vals):10.3f} '
+    )
     print(
-        f'   T-O  {to:10.2f} {min(to_vals):10.3f} {max(to_vals):10.3f} {sum(to_vals)/len(to_vals):10.3f} ')
+        f'   T-O  {to:10.2f} {min(to_vals):10.3f} '
+        f'{max(to_vals):10.3f} {sum(to_vals) / len(to_vals):10.3f} '
+    )
 
 
 if __name__ == '__main__':

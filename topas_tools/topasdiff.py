@@ -1,11 +1,21 @@
 import argparse
 import sys
 
-from .blender_mini import *
+import numpy as np
+
+from .blender_mini import (
+    calc_dspacing,
+    calc_structure_factors,
+    centering_vectors,
+    load_hkl,
+    read_cif,
+    reduce_all,
+    write_hkl,
+)
 
 
 def print_superflip(sgi, uc, fout, fdiff_file=None):
-    """Prints an inflip file that can directly be used with superflip for difference fourier maps
+    """Print an inflip file to be used with superflip for difference fourier maps.
 
     - Tested and works fine with: EDI, SOD
 
@@ -17,7 +27,7 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
     print('dimension 3', file=fout)
     print('voxel', end=' ', file=fout)
     for p in uc.parameters()[0:3]:
-        print(int(((p*4) // 6 + 1) * 6), end=' ', file=fout)
+        print(int(((p * 4) // 6 + 1) * 6), end=' ', file=fout)
     print(file=fout)
     print('cell', end=' ', file=fout)
     for p in uc.parameters():
@@ -36,9 +46,9 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
     n_smx = sgi.type().group().n_smx()
     # number of primitive symops, includes inverses
     order_p = sgi.type().group().order_p()
-    order_z = sgi.type().group().order_z()      # total number of symops
 
-    # this should work going by the assumption that the unique primitive symops are stored first,
+    # this should work going by the assumption that
+    # the unique primitive symops are stored first,
     # THEN the inverse symops and then all the symops due to centering.
 
     for n, symop in enumerate(sgi.type().group()):
@@ -47,14 +57,6 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
         elif n == n_smx:
             print('# inverse yes, please check!', file=fout)
         print(symop, file=fout)
-
-    # Broken, because .inverse() doesn't work, but probably a better approach:
-    # for symop in f.space_group_info().type().group().smx():
-    #   print >> fout, symop
-    # if f.space_group_info().type().group().is_centric():
-    #   print >> fout, '# inverse yes'
-    #   for symop in f.space_group_info().type().group().smx():
-    #       print >> fout, symop.inverse() # inverse does not work?
 
     print('endsymmetry\n', file=fout)
 
@@ -67,18 +69,10 @@ def print_superflip(sgi, uc, fout, fdiff_file=None):
 
     print('dataformat amplitude phase', file=fout)
 
-    if fdiff_file:
-        print('fbegin fdiff.out\n', file=fout)
-    else:
-        print('fbegin', file=fout)
-        print_simple(fcalc, fout, output_phases='cycles')
+    if not fdiff_file:
+        raise ValueError('fdiff_file was not supplied')
 
-#       for i,(h,k,l) in enumerate(f.indices()):
-#           # structurefactor = abs(f.data()[i])
-#           # phase = phase(f.data()[i]
-#           print >> fout, "%3d %3d %3d %10.6f %10.3f" % (
-#               h,k,l, abs(f.data()[i]), phase(f.data()[i]) / (2*pi) )
-        print('endf', file=fout)
+    print('fbegin fdiff.out\n', file=fout)
 
 
 def run_script(gui_options=None):
@@ -86,27 +80,37 @@ def run_script(gui_options=None):
     """
 
     parser = argparse.ArgumentParser(
-        description=description,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
 
-    parser.add_argument("args",
-                        type=str, metavar="FILE",
-                        help="Path to input cif")
+    parser.add_argument('args', type=str, metavar='FILE', help='Path to input cif')
 
-    parser.add_argument("--diff",
-                        type=str, metavar="FILE", dest="diff",
-                        help="""Path to file with observed amplitudes to diff with the input cif. Format: h k l F [phase].
-                            This uses the indices for the observed reflections. Use the macro 'Out_fobs(fobs.out)' in TOPAS for
-                            to output observed structure factors. Scale can be directly copied from topas file or generated automatically.
-                            Full command: sfc structure.cif --diff fobs.out""")
+    parser.add_argument(
+        '--diff',
+        type=str,
+        metavar='FILE',
+        dest='diff',
+        help=(
+            'Path to file with observed amplitudes to diff with the input cif. '
+            'Format: h k l F [phase]. This uses the indices for the observed reflections. '
+            'Use the macro "Out_fobs(fobs.out)" in TOPAS for to output observed structure '
+            'factors. Scale can be directly copied from topas file or generated automatically. '
+            'Full command: sfc structure.cif --diff fobs.out'
+        ),
+    )
 
-    parser.add_argument("-r", "--dmin",
-                        type=float, metavar="d_min", dest="dmin",
-                        help="maximum resolution")
+    parser.add_argument(
+        '-r', '--dmin', type=float, metavar='d_min', dest='dmin', help='maximum resolution'
+    )
 
-    parser.add_argument("-t", "--table",
-                        type=str, metavar="TABLE", dest="table",
-                        help="Choose scattering factor table [x-ray, neutron, electron], default=X-ray")
+    parser.add_argument(
+        '-t',
+        '--table',
+        type=str,
+        metavar='TABLE',
+        dest='table',
+        help='Choose scattering factor table [x-ray, neutron, electron], default=X-ray',
+    )
 
     parser.set_defaults(
         dmin=None,
@@ -115,7 +119,7 @@ def run_script(gui_options=None):
         superflip_path=None,
         run_superflip=False,
         scale=None,
-        table="xray"
+        table='xray',
     )
 
     options = parser.parse_args()
@@ -131,7 +135,10 @@ def run_script(gui_options=None):
     table = options.table
 
     if not cif or not fobs_file:
-        print("Error: Supply cif file and use --diff fobs.out to specify file with fobs (hkl + structure factors)")
+        print(
+            'Error: Supply cif file and use `--diff fobs.out` '
+            'to specify file with fobs (hkl + structure factors)'
+        )
         sys.exit()
 
     s = list(read_cif(cif).values())[0]
@@ -159,18 +166,23 @@ def run_script(gui_options=None):
     df = df[df['fobs'].notnull()]
 
     if not topas_scale:
-        topas_scale = input('Topas scale? >> [auto] ').replace(
-            '`', '').replace('@', '').replace('scale', '').strip()
+        topas_scale = (
+            input('Topas scale? >> [auto] ')
+            .replace('`', '')
+            .replace('@', '')
+            .replace('scale', '')
+            .strip()
+        )
 
     if topas_scale:
-        scale = float(topas_scale)**0.5
-        print(f'Fobs scaled by {1/scale} [=sqrt(1/{(float(topas_scale))})]')
+        scale = float(topas_scale) ** 0.5
+        print(f'Fobs scaled by {1 / scale} [=sqrt(1/{(float(topas_scale))})]')
     else:
         scale = df['fobs'].sum() / df['fcalc'].sum()
-        print(f"No scale given, approximated as {scale} (sum(fobs) / sum(fcal))")
+        print(f'No scale given, approximated as {scale} (sum(fobs) / sum(fcal))')
 
-    df['fdiff'] = df['fobs']/scale - df['fcalc']
-    df['sfphase'] = df['phases'] / (2*np.pi)
+    df['fdiff'] = df['fobs'] / scale - df['fcalc']
+    df['sfphase'] = df['phases'] / (2 * np.pi)
 
     sel = df['fdiff'] <= 0
 
@@ -180,17 +192,18 @@ def run_script(gui_options=None):
     cols = ('fdiff', 'sfphase')
     write_hkl(df, cols=cols, out='fdiff.out')
 
-    print_superflip(
-        sgi, uc, fout=open('sf.inflip', 'w'), fdiff_file='fdiff.out')
+    print_superflip(sgi, uc, fout=open('sf.inflip', 'w'), fdiff_file='fdiff.out')
 
     if options.run_superflip:
         import subprocess as sp
-        sp.call(f"{options.superflip_path} sf.inflip")
+
+        sp.call(f'{options.superflip_path} sf.inflip')
 
 
 def main(options=None):
-    if len(sys.argv) > 1 and sys.argv[1] == "gui":
+    if len(sys.argv) > 1 and sys.argv[1] == 'gui':
         from . import topasdiff_gui
+
         topasdiff_gui.run()
     else:
         run_script()

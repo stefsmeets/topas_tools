@@ -6,7 +6,7 @@ def main():
     pat = re.compile('[a-zA-Z]+')
 
     if len(sys.argv) == 1:
-        print("Usage: fh2topas.py ~/path/to/output.fh [n]")
+        print('Usage: fh2topas.py ~/path/to/output.fh [n]')
         sys.exit()
 
     args = sys.argv[2:]
@@ -52,29 +52,26 @@ def main():
                 all_atoms.append(atom)
 
                 scatterer = re.findall(pat, atom)[0]
-                atom = atom.replace(scatterer, scatterer+str(molnum))
+                atom = atom.replace(scatterer, scatterer + str(molnum))
                 print(f'{atom:6s}', end=' ')
 
             if n > 1:
                 bonded_with, bond = inp[1:3]
                 bonded_with = d[bonded_with]
                 scatterer = re.findall(pat, bonded_with)[0]
-                bonded_with = bonded_with.replace(
-                    scatterer, scatterer+str(molnum))
+                bonded_with = bonded_with.replace(scatterer, scatterer + str(molnum))
                 print(f'{bonded_with:6s} {bond:7s}', end=' ')
             if n > 2:
                 angle_with, angle = inp[3:5]
                 angle_with = d[angle_with]
                 scatterer = re.findall(pat, angle_with)[0]
-                angle_with = angle_with.replace(
-                    scatterer, scatterer+str(molnum))
+                angle_with = angle_with.replace(scatterer, scatterer + str(molnum))
                 print(f'{angle_with:6s} {angle:7s}', end=' ')
             if n > 3:
                 torsion_with, torsion = inp[5:7]
                 torsion_with = d[torsion_with]
                 scatterer = re.findall(pat, torsion_with)[0]
-                torsion_with = torsion_with.replace(
-                    scatterer, scatterer+str(molnum))
+                torsion_with = torsion_with.replace(scatterer, scatterer + str(molnum))
                 print(f'{torsion_with:6s} {torsion:>7s}', end=' ')
 
             print()
@@ -100,15 +97,17 @@ def main():
         else:
             molstr = str(molnum)
         print()
-        print(f"      prm !occ{molnum} 0.5 min 0.0 max  1.0")
-        print(f"      prm !beq{molnum} 3.0 min 1.0 max 10.0")
+        print(f'      prm !occ{molnum} 0.5 min 0.0 max  1.0')
+        print(f'      prm !beq{molnum} 3.0 min 1.0 max 10.0')
         print()
 
         for atom in all_atoms:
             scatterer = re.findall(pat, atom)[0]
-            atom = atom.replace(scatterer, scatterer+molstr)
+            atom = atom.replace(scatterer, scatterer + molstr)
             print(
-                f'      site {atom:6s} x 0.0 y 0.0 z 0.0 occ {scatterer:2s} =occ{molnum}; beq =beq{molnum};')
+                f'      site {atom:6s} x 0.0 y 0.0 z 0.0 occ '
+                f'{scatterer:2s} =occ{molnum}; beq =beq{molnum};'
+            )
         molnum += 1
 
 

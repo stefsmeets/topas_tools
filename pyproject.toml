@@ -84,6 +84,8 @@ select = [
     "I",  # isort
 ]
 
+ignore = ["E741"]
+
 [tool.ruff.lint.isort]
 known-first-party = ["topas_tools"]
 

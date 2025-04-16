@@ -17,39 +17,32 @@ def read_cif(f):
             raise TypeError(f'read_cif: Can not deal with type {type(f)}')
     except CifParserError as e:
         print(e)
-        print("Error parsing cif file, check if the data tag does not contain any spaces.")
+        print('Error parsing cif file, check if the data tag does not contain any spaces.')
         sys.exit()
     for key, val in list(structures.items()):
-        print("\nstructure:", key)
+        print('\nstructure:', key)
         val.show_summary().show_scatterers()
     return structures
 
-def main():
-    usage = """cif2patterson structure.cif"""
 
+def main():
     description = """Notes: Takes any cif file and generated patterson map
     """
 
-    parser = argparse.ArgumentParser(  # usage=usage,
-        description=description,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-
-
-    parser.add_argument("args",
-                        type=str, metavar="FILE",
-                        help="Path to input cif")
-
-
-    parser.set_defaults(
-        spgr="P1"
+    parser = argparse.ArgumentParser(
+        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
     )
+
+    parser.add_argument('args', type=str, metavar='FILE', help='Path to input cif')
+
+    parser.set_defaults(spgr='P1')
 
     options = parser.parse_args()
 
     cif = options.args
     s = list(read_cif(cif).values())[0]
     s = s.expand_to_p1()
-    print(f"Expanded to P1 => {s.scatterers().size()} atoms")
+    print(f'Expanded to P1 => {s.scatterers().size()} atoms')
     print()
 
     root, ext = os.path.splitext(cif)
@@ -58,8 +51,8 @@ def main():
 
     scatterers = s.scatterers()
 
-    fout1 = open("patterson_dists.txt", 'w')
-    fout2 = open("patterson_full.txt", 'w')
+    fout1 = open('patterson_dists.txt', 'w')
+    fout2 = open('patterson_full.txt', 'w')
 
     distances_all = []
 
@@ -77,7 +70,7 @@ def main():
 
             x2, y2, z2 = atom2.site
 
-            dx, dy, dz = x1-x2, y1-y2, z1-z2
+            dx, dy, dz = x1 - x2, y1 - y2, z1 - z2
 
             dx = dx % 1
             dy = dy % 1
@@ -96,8 +89,12 @@ def main():
 
         atom1.show(fout2)
         for label, dx, dy, dz, distance in sorted(distances, key=lambda x: x[-1]):
-            print(' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(
-                label, dx, dy, dz, distance), file=fout2)
+            print(
+                ' --> {:>4s} {:9.5f} {:9.5f} {:9.5f}  {:9.5f}'.format(
+                    label, dx, dy, dz, distance
+                ),
+                file=fout2,
+            )
         print(file=fout2)
 
     print('Wrote file', fout2.name)

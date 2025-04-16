@@ -1,8 +1,7 @@
 import os
-from collections import namedtuple
-from tkinter import *
-from tkinter.filedialog import *
-from tkinter.ttk import *
+import tkinter as tk
+from tkinter import ttk
+from tkinter.filedialog import askopenfilename
 
 from future import standard_library
 
@@ -20,7 +19,7 @@ def which(program):
         if is_exe(program):
             return program
     else:
-        for path in os.environ["PATH"].split(os.pathsep):
+        for path in os.environ['PATH'].split(os.pathsep):
             path = path.strip('"')
             exe_file = os.path.join(path, program)
             if is_exe(exe_file):
@@ -29,8 +28,7 @@ def which(program):
     return None
 
 
-class topasdiffDialog(Tk):
-
+class topasdiffDialog(tk.Tk):
     """Dialog that provide settings window for Topasdiff"""
 
     def __init__(self, parent, drc='.'):
@@ -42,12 +40,12 @@ class topasdiffDialog(Tk):
 
         self.drc = '.'
 
-        self.title("GUI for topasdiff")
+        self.title('GUI for topasdiff')
 
-        body = Frame(self, padding=(10, 10, 10, 10))
+        body = ttk.Frame(self, padding=(10, 10, 10, 10))
         self.initial_focus = self.body(body)
         body.columnconfigure(0, weight=1)
-        body.pack(fill=BOTH, anchor=CENTER, expand=True)
+        body.pack(fill=tk.BOTH, anchor=tk.CENTER, expand=True)
 
         self.buttonbox()
 
@@ -57,79 +55,75 @@ class topasdiffDialog(Tk):
         self.geometry(self.geometry())
 
     def init_vars(self):
-        self.cif_file = StringVar()
-        self.cif_file.set("structure.cif")
+        self.cif_file = tk.StringVar()
+        self.cif_file.set('structure.cif')
 
-        self.fobs_file = StringVar()
-        self.fobs_file.set("fobs.hkl")
+        self.fobs_file = tk.StringVar()
+        self.fobs_file.set('fobs.hkl')
 
-        self.scale = DoubleVar()
+        self.scale = tk.DoubleVar()
         self.scale.set(1.0)
 
-        self.superflip_path = StringVar()
+        self.superflip_path = tk.StringVar()
 
-        self.run_superflip = BooleanVar()
+        self.run_superflip = tk.BooleanVar()
         self.run_superflip.set(True)
 
     def body(self, master):
-
-        lfcif = Labelframe(master, text="Path to cif file", padding=(10, 10, 10, 10))
-        self.e_fname = Entry(
-            lfcif, textvariable=self.cif_file)
-        self.e_fname.grid(row=11, column=0, columnspan=3, sticky=E+W)
-        but_load = Button(lfcif, text="Browse..", width=10, command=self.load_cif_file)
-        but_load.grid(row=11, column=4, sticky=E)
-        lfcif.grid(row=0, sticky=E+W)
+        lfcif = ttk.Labelframe(master, text='Path to cif file', padding=(10, 10, 10, 10))
+        self.e_fname = ttk.Entry(lfcif, textvariable=self.cif_file)
+        self.e_fname.grid(row=11, column=0, columnspan=3, sticky=tk.E + tk.W)
+        but_load = ttk.Button(lfcif, text='Browse..', width=10, command=self.load_cif_file)
+        but_load.grid(row=11, column=4, sticky=tk.E)
+        lfcif.grid(row=0, sticky=tk.E + tk.W)
         lfcif.columnconfigure(0, minsize=120)
         lfcif.columnconfigure(0, weight=1)
 
-        lffobs = Labelframe(
-            master, text="Path to observed structure factors file", padding=(10, 10, 10, 10))
-        self.e_fname = Entry(
-            lffobs, textvariable=self.fobs_file)
-        self.e_fname.grid(row=21, column=0, columnspan=3, sticky=E+W)
-        but_load = Button(lffobs, text="Browse..", width=10, command=self.load_fobs_file)
-        but_load.grid(row=21, column=4, sticky=E)
-        lffobs.grid(row=1, sticky=E+W)
+        lffobs = ttk.Labelframe(
+            master, text='Path to observed structure factors file', padding=(10, 10, 10, 10)
+        )
+        self.e_fname = ttk.Entry(lffobs, textvariable=self.fobs_file)
+        self.e_fname.grid(row=21, column=0, columnspan=3, sticky=tk.E + tk.W)
+        but_load = ttk.Button(lffobs, text='Browse..', width=10, command=self.load_fobs_file)
+        but_load.grid(row=21, column=4, sticky=tk.E)
+        lffobs.grid(row=1, sticky=tk.E + tk.W)
         lffobs.columnconfigure(0, minsize=120)
         lffobs.columnconfigure(0, weight=1)
 
-        Label(lffobs, text="Scale").grid(row=25, column=0, sticky=W)
-        self.e_fname = Entry(
-            lffobs, textvariable=self.scale)
-        self.e_fname.grid(row=25, column=1, sticky=W)
+        tk.Label(lffobs, text='Scale').grid(row=25, column=0, sticky=tk.W)
+        self.e_fname = ttk.Entry(lffobs, textvariable=self.scale)
+        self.e_fname.grid(row=25, column=1, sticky=tk.W)
 
-        if which("superflip"):
-            self.superflip_path.set("superflip")
-        elif which("superflip.exe"):
-            self.superflip_path.set("superflip.exe")
+        if which('superflip'):
+            self.superflip_path.set('superflip')
+        elif which('superflip.exe'):
+            self.superflip_path.set('superflip.exe')
         else:
-            lfsf = Labelframe(master, text="Path to superflip executable",
-                              padding=(10, 10, 10, 10))
-            self.e_fname = Entry(
-                lfsf, textvariable=self.superflip_path)
-            self.e_fname.grid(row=31, column=0, columnspan=3, sticky=E+W)
-            but_load = Button(lfsf, text="Browse..", width=10, command=self.set_superflip_path)
-            but_load.grid(row=31, column=4, sticky=E)
-            lfsf.grid(row=2, sticky=E+W)
+            lfsf = ttk.Labelframe(
+                master, text='Path to superflip executable', padding=(10, 10, 10, 10)
+            )
+            self.e_fname = ttk.Entry(lfsf, textvariable=self.superflip_path)
+            self.e_fname.grid(row=31, column=0, columnspan=3, sticky=tk.E + tk.W)
+            but_load = ttk.Button(
+                lfsf, text='Browse..', width=10, command=self.set_superflip_path
+            )
+            but_load.grid(row=31, column=4, sticky=tk.E)
+            lfsf.grid(row=2, sticky=tk.E + tk.W)
             lfsf.columnconfigure(0, minsize=120)
             lfsf.columnconfigure(0, weight=1)
 
-        # self.c_run_superflip = Checkbutton(lfsf, variable=self.run_superflip, text="Run superflip?")
-        # self.c_run_superflip.grid(row=32, column=0, sticky=W)
-
     def buttonbox(self):
-        box = Frame(self)
+        box = ttk.Frame(self)
 
-        w = Button(box, text="Run", width=10, command=self.ok, default=ACTIVE)
-        w.pack(side=RIGHT, padx=5, pady=5)
-        w = Button(box, text="Exit", width=10, command=self.cancel)
-        w.pack(side=RIGHT, padx=5, pady=5)
+        w = ttk.Button(box, text='Run', width=10, command=self.ok, default=tk.ACTIVE)
+        w.pack(side=tk.RIGHT, padx=5, pady=5)
+        w = ttk.Button(box, text='Exit', width=10, command=self.cancel)
+        w.pack(side=tk.RIGHT, padx=5, pady=5)
 
-        self.bind("<Return>", self.ok)
-        self.bind("<Escape>", self.cancel)
+        self.bind('<Return>', self.ok)
+        self.bind('<Escape>', self.cancel)
 
-        box.pack(fill=X, anchor=S, expand=False)
+        box.pack(fill=tk.X, anchor=tk.S, expand=False)
 
     def add_cell(self):
         var = self.init_cell()
@@ -156,16 +150,15 @@ class topasdiffDialog(Tk):
     def apply(self):
         os.chdir(self.drc)
         gui_options = {
-            "args": self.cif_file.get(),
-            "diff": self.fobs_file.get(),
-            "superflip_path": self.superflip_path.get(),
-            "run_superflip": self.run_superflip.get(),
-            "scale": self.scale.get()
+            'args': self.cif_file.get(),
+            'diff': self.fobs_file.get(),
+            'superflip_path': self.superflip_path.get(),
+            'run_superflip': self.run_superflip.get(),
+            'scale': self.scale.get(),
         }
         topasdiff.run_script(gui_options=gui_options)
 
     def load_cif_file(self):
-
         f = askopenfilename(initialdir=self.drc)
         if f:
             self.cif_file.set(str(f))
