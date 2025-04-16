@@ -142,4 +142,4 @@ pip install -e .
 
 If you find this software useful, please consider citing it:
 
-- Smeets, S. (2021). topas_tools (Version 1.0.2) [Computer software]. https://doi.org/10.5281/zenodo.4719229
+- Smeets, S. (2021). topas_tools (Version 1.1.0) [Computer software]. https://doi.org/10.5281/zenodo.4719229

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "topas_tools"
-version = "1.0.2"
+version = "1.1.0"
 description = "Python scripts to help structure refinement with TOPAS"
 readme = "readme.md"
 requires-python = ">=3.9"
@@ -94,7 +94,7 @@ quote-style = "single"
 indent-style = "space"
 
 [tool.bumpversion]
-current_version = "1.0.2"
+current_version = "1.1.0"
 
 [[tool.bumpversion.files]]
 filename = "topas_tools/__init__.py"
