@@ -137,3 +137,6 @@ dmypy.json
 .pyre/
 
 *.bak
+
+testing/*.inflip
+testing/fdiff.out
