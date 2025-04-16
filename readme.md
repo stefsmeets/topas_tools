@@ -38,7 +38,7 @@ Note: There is a bug in Topas where the cif files it outputs cannot be read usin
     Out_String("\ndata_")
 
 by:
-   
+
     Out_String("\ndata_topas_cif_out")
 
 ![topasdiff gui](https://cloud.githubusercontent.com/assets/873520/14959028/c68ba2e4-108d-11e6-9942-f8e6acc1559f.png)
@@ -121,7 +121,7 @@ Usage:
 1. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) (pick the one suitable for your platform, Python version does not matter here).
 
 2. Install using:
- 
+
 ```bash
 conda create -n topas_tools -c conda-forge cctbx-base
 conda activate topas_tools
@@ -137,3 +137,9 @@ pip install -e .
 ```
 
 (note that every time you want to use `topas_tools`, you must always activate the environment using `conda activate topas_tools`)
+
+## How to Cite
+
+If you find this software useful, please consider citing it:
+
+- Smeets, S. (2021). topas_tools (Version 1.0.2) [Computer software]. https://doi.org/10.5281/zenodo.4719229

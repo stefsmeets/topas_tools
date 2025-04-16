@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "topas_tools"
+version = "1.0.2"
+description = "Python scripts to help structure refinement with TOPAS"
+readme = "readme.md"
+requires-python = ">=3.9"
+authors = [
+	{name = "Stef Smeets", email = "stef.smeets@gmail.com"},
+]
+keywords = [
+    "powder-diffraction",
+    "profile-refinement",
+    "structure-refinement",
+    "topas",
+]
+license = {text = "MIT License"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "scipy",
+]
+
+[project.urls]
+homepage = "https://github.com/stefsmeets/topas_tools"
+issues = "https://github.com/stefsmeets/topas_tools/issues"
+changelog = "https://github.com/steftmeest/topas_tools/releases"
+
+[project.optional-dependencies]
+develop = [
+    "bump-my-version",
+    "pre-commit",
+]
+
+publishing = [
+    "twine",
+    "wheel",
+    "build",
+]
+
+[project.scripts]
+"fh2topas" = "topas_tools.fh2topas:main"
+"topasrestraints" = "topas_tools.topas_restraints:main"
+"topas_ndxan" = "topas_tools.topas_ndxan:main"
+"restraints_statistics" = "topas_tools.restraints_statistics:main"
+"cif2patterson" = "topas_tools.cif2patterson:main"
+"cif2topas" = "topas_tools.cif2topas:main"
+"expandcell" = "topas_tools.expandcell:main"
+"stripcif" = "topas_tools.stripcif:main"
+"topasdiff" = "topas_tools.topasdiff:main"
+"make_superflip" = "topas_tools.make_superflip:main"
+
+[tool.setuptools]
+package-dir = {"topas_tools" = "topas_tools" }
+include-package-data = true
+
+[tool.ruff]
+line-length = 96
+target-version = "py313"
+
+[tool.ruff.lint]
+# Enable Pyflakes `E` and `F` codes by default.
+select = [
+	"F",  # Pyflakes
+	"E",  # pycodestyle (error)
+	"W",  # pycodestyle (warning)
+    "I",  # isort
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["topas_tools"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.bumpversion]
+current_version = "1.0.2"
+
+[[tool.bumpversion.files]]
+filename = "topas_tools/__init__.py"
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
+
+[[tool.bumpversion.files]]
+filename = "CITATION.cff"
+search = "version: {current_version}"
+replace = "version: {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "(Version {current_version})"
+replace = "(Version {new_version})"
