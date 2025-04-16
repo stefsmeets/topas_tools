@@ -57,7 +57,7 @@ def load_hkl(fin, labels=None, shelx=False, savenpy=False, verbose=True):
 
     e.g. load_hkl('red.hkl',labels=('F','sigmas')
 
-    All columns should be labeled and columns labeled: 
+    All columns should be labeled and columns labeled:
         None,'None','none' or 'skip' will be ignored
 
     It is recommended to label all expected columns, so the algorithm will return an
@@ -263,8 +263,9 @@ def f_calc_structure_factors(structure, **kwargs):
     if return_as == "miller":
         return f_calc
     elif return_as == "series":
-        fcalc = pd.Series(index=f_calc.indices(), data=np.abs(f_calc.data()))
-        phase = pd.Series(index=f_calc.indices(), data=np.angle(f_calc.data()))
+        index = list(f_calc.indices())
+        fcalc = pd.Series(index=index, data=np.abs(f_calc.data()))
+        phase = pd.Series(index=index, data=np.angle(f_calc.data()))
         return fcalc, phase
     elif return_as == "df":
         dffcal = pd.DataFrame(index=f_calc.index)
@@ -407,8 +408,7 @@ def remove_sysabs(m, verbose=True):
 def f_calc_multiplicities(df, cell, spgr):
     """Small function to calculate multiplicities for given dataframe"""
     m = df2m(df, cell, spgr)
-    df['m'] = m.multiplicities().data()
-
+    df['m'] = list(m.multiplicities().data())
 
 def make_symmetry(cell, spgr):
     """takes cell parameters (a,b,c,A,B,C) and spacegroup (str, eg. 'cmcm'), returns cctbx
@@ -440,9 +440,9 @@ def generate_indices(cell, spgr, dmin=1.0, ret='index'):
         unit_cell, sg_type, anomalous_flag=anomalous_flag, resolution_limit=dmin)
     indices = mig.to_array()
     if ret == 'index':  # suitable for df index
-        return indices
+        return list(indices)
     else:
-        return miller.array(miller.set(crystal_symmetry=symm, indices=indices, anomalous_flag=anomalous_flag))
+        return list(miller.array(miller.set(crystal_symmetry=symm, indices=indices, anomalous_flag=anomalous_flag)))
 
 
 def m2df(m, data='data', sigmas='sigmas'):
@@ -451,11 +451,14 @@ def m2df(m, data='data', sigmas='sigmas'):
     data and sigmas are the names for the columns in the resulting dataframe
     if no data/sigmas are present in the miller array, these are ignored.
     """
-    df = pd.DataFrame(index=m.indices())
+    index = list(m.indices())
+    df = pd.DataFrame(index=index)
+
     if m.data():
-        df[data] = m.data()
+        df[data] = list(m.data())
     if m.sigmas():
-        df[sigmas] = m.sigmas()
+        df[sigmas] = list(m.sigmas())
+
     return df
 
 
@@ -493,7 +496,7 @@ def df2m(df, cell, spgr, data=None, sigmas=None):
 
 def reduce_all(df, cell, spgr, dmin=None, reindex=True, verbose=True):
     """Should be run after files2df. Takes care of some things that have to be done anyway.
-    Once data has been loaded, this function reduces and merges all the data to a single 
+    Once data has been loaded, this function reduces and merges all the data to a single
     unique set, adds dspacings and multiplicities and orders columns and sorts by the dspacing.
 
     dmin:
